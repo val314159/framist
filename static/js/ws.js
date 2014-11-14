@@ -1,6 +1,6 @@
-var WS;
 function ws() {
-    var _ws = new WebSocket("ws://localhost:8080/websocket");
+    var self=this;
+    var _ws = this._ws = new WebSocket("ws://localhost:8080/websocket");
     _ws.onopen = function() {
 	LOG('OPN');
 	_ws.send("Hello, world");
@@ -13,18 +13,14 @@ function ws() {
 	LOG('ERR');
     };
     _ws.onclose = function () {
-	LOG('CLS100');
-	if (WS && WS.reconnectDelay)
-	    setTimeout(reconnect,WS.reconnectDelay);
+	LOG('CLS100'+self);
+	if (self.reconnectDelay()) {
+	    LOG('CLS200');
+	    setTimeout(reconnect,self.reconnectDelay());
+	}
     };
-    return {self:_ws,reconnectDelay:1200};
-}
-function reconnect() {
-    LOG('RECONNECT');
-    WS=ws();
-}
-function clicky() {
-    LOG('CLICKY');
-    WS.reconnectDelay = 0;
-    WS.self.close();
+
+    self.close=function(){_ws.close();};
+
+    bindVar(this,'reconnectDelay',1200);
 }

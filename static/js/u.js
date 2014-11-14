@@ -5,3 +5,13 @@ function LOG(x){
     document.body.appendChild(elt);
 }
 function str(x){return JSON.stringify(x)}
+
+function bindVar(s,n,v) {
+    var nn='_'+n;
+    s[nn]=v;
+    s[n]=function(x){
+	if (x===undefined)
+	    return s[nn];
+	s[nn]=x;
+    };
+}
