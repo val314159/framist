@@ -2,5 +2,9 @@ bottle==0.12.7
 gevent==1.0.1
 gevent-websocket==0.9.3
 greenlet==0.4.5
+leveldb==0.193
+msgpack-python==0.4.2
+pyzmq==13.1.0
 requests==2.4.3
 wsgiref==0.1.2
+zerorpc==0.4.4

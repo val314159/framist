@@ -1,18 +1,32 @@
-import os,sys,traceback as tb,gevent,bottle
+import os,sys,traceback as tb,gevent,bottle,json
 from bottle import request
 from geventwebsocket import WebSocketError
 from app import app
 
+#############################
+from webutil import *
+from auth import *
+#############################
+
+@app.route('/login')
+def r_login():
+    print "RRR /login"
+    dump()
+    i = A.LOGIN()
+    if i:
+        return i
+    raise bottle.abort(499, errmsg("Access Denied."))
+
 @app.route('/websocket')
-def handle_websocket():
-    wsock = request.environ.get('wsgi.websocket')
-    if not wsock:
-        return bottle.abort(400, 'Expected WebSocket request.')
+def r_websocket():
+    print "RRR /websocket"
+    dump()
+    at = AUTH()
 
     print 100
-    gevent.sleep(1.2)
+    wsock = get_websocket()
+
     print 200
-    
     while True:
         try:
             message = wsock.receive()

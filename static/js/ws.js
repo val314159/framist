@@ -3,7 +3,8 @@ function ws() {
     var self=this;
     var _ws;
     bindVar(self,'reconnectDelay',1200);
-
+    bindVar(self,'accessToken');
+    self.accessToken('vat');
     self.isConnected=function() {
 	LOG("READY STATE:"+(_ws?_ws.readyState==1:false));
 	return _ws?_ws.readyState==1:false;
@@ -16,33 +17,30 @@ function ws() {
 	    self.close();
 	} else {
 	    LOG('TOGGLE CXN3');
-	    self.reconnectDelay(1200);
+	    self.reconnectDelay(null,'reset');
+	    // nice to have: self.reconnectDelay.reset();
 	    self.reconnect();
 	}
     };
     self.reconnect=function() {
 	LOG('RECONNECT');
-	_ws = new WebSocket("ws://localhost:8080/websocket");
-	_ws.onopen = function() {
-	    LOG('OPN');
-	    _ws.send("Hello, world");
+	_ws = new WebSocket("ws://localhost:8080/websocket?accessToken="
+			    +self.accessToken());
+	_ws.onopen = function() {    LOG('OPN');
+				     _ws.send("Hello, world");
 	};
-	_ws.onmessage = function (evt) {
-	    LOG('MSG:'+str(evt.data));
-	    _ws.send("Hello, world again");
+	_ws.onmessage = function (evt) {    LOG('MSG:'+str(evt.data));
+					    _ws.send("Hello, world again");
 	};
 	_ws.onerror = function (x,y,z) {
 	    LOG('ERR'+str(x)+str(y)+str(z));
 	};
-	_ws.onclose = function () {
-	    LOG('CLS:'+self);
+	_ws.onclose = function () {    LOG('CLS:'+self);
 	    if (self.reconnectDelay()) {
 		LOG('CLS:SET_RECONNECT');
 		setTimeout(self.reconnect,self.reconnectDelay());
 	    }
 	};
     };
-    self.close=function(){
-	_ws.close();
-    };
+    self.close=function(){  _ws.close();  };
 }
