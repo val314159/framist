@@ -3,22 +3,8 @@ from bottle import request
 from geventwebsocket import WebSocketError
 from app import app
 
-def dump():
-    params  = request.params
-    headers = request.headers
-    print "PARAMS ", dict(params)
-    print "HEADERS", dict(headers)
-    pass
-
-def errmsg(_): return json.dumps({"success":false,"errmsg":_})
-
-def get_websocket():
-    wsock = request.environ.get('wsgi.websocket')
-    if not wsock:
-        raise bottle.abort(499, errmsg("Expected WebSocket request."))
-    return wsock
-
 #############################
+from webutil import *
 from auth import *
 #############################
 
@@ -26,21 +12,10 @@ from auth import *
 def r_login():
     print "RRR /login"
     dump()
-    params  = request.params
-    headers = request.headers
-    u = params.get('u') or headers.get('u')
-    p = params.get('p') or headers.get('u')
-    i = login_user(u,p)
+    i = A.LOGIN()
     if i:
         return i
     raise bottle.abort(499, errmsg("Access Denied."))
-
-@app.route('/auth')
-def r_auth():
-    print "RRR /auth"
-    dump()
-    at = AUTH()
-    return ['true']
 
 @app.route('/websocket')
 def r_websocket():

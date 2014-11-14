@@ -12,7 +12,7 @@ def dump():
 def errmsg(_): return json.dumps({"success":False,"errmsg":_})
 
 def launch():
-    from app import app
+    from websvr.app import app
     from gevent.pywsgi import WSGIServer
     from geventwebsocket.handler import WebSocketHandler
     server = WSGIServer(("0.0.0.0", 8080), app,
