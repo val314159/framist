@@ -1,4 +1,5 @@
 function $$set(s,k,v){s[k]=v;return s}
+function $$reset(s,k){s[k]=s['_'+k];return s}
 function CE(x,e){return($$set(document.createElement('li'),'innerHTML',x))}
 function str(x){return JSON.stringify(x)}
 

@@ -22,7 +22,7 @@ function ws() {
     };
     self.reconnect=function() {
 	LOG('RECONNECT');
-	_ws = new WebSocket("ws://localhost:8080/websocket");
+	_ws = new WebSocket("ws://localhost:8080/websocket?accessToken=vat");
 	_ws.onopen = function() {
 	    LOG('OPN');
 	    _ws.send("Hello, world");
