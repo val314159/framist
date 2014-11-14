@@ -1,14 +1,28 @@
 function ws() {
+    if (this===window) return new ws();
     var self=this;
     var _ws;
+    bindVar(self,'reconnectDelay',1200);
+
     self.isConnected=function() {
-	LOG("READY STATE:"+_ws.readyState);
-	return _ws.readyState==1;
+	LOG("READY STATE:"+(_ws?_ws.readyState==1:false));
+	return _ws?_ws.readyState==1:false;
+    };
+    self.toggleCxn=function() {
+	LOG('TOGGLE CXN'+_ws);
+	if (self.isConnected()) {
+	    LOG('TOGGLE CXN2');
+	    self.reconnectDelay(0);
+	    self.close();
+	} else {
+	    LOG('TOGGLE CXN3');
+	    self.reconnectDelay(1200);
+	    self.reconnect();
+	}
     };
     self.reconnect=function() {
 	LOG('RECONNECT');
 	_ws = new WebSocket("ws://localhost:8080/websocket");
-	LOG('RECONNECT' + _ws.readyState);
 	_ws.onopen = function() {
 	    LOG('OPN');
 	    _ws.send("Hello, world");
@@ -31,6 +45,4 @@ function ws() {
     self.close=function(){
 	_ws.close();
     };
-    bindVar(self,'reconnectDelay',1200);
-    self.reconnect();
 }
