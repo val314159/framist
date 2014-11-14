@@ -5,7 +5,7 @@
     <script src="/js/ws.js"></script>
     <script src="/js/app.js"></script>
   </head>
-  <body qonload="reconnect()">
-    <button onclick="toggleCxn()">BUTTON</button>
+  <body id="app" onload="app=new App()">
+    <button onclick="app.toggleCxn()">BUTTON</button>
   </body>
 </html>
