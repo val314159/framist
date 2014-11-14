@@ -14,7 +14,11 @@ function bindVar(s,n,v) {
     "v (opt) = value to initialize to";
     var nn='_'+n;
     s['_'+nn]=s[nn]=v;
-    s[n]=function(x){
+    s[n]=function(x,y){
+	if (y=='reset') {
+	    s[nn]=s['_'+nn];
+	    return;
+	}
 	if (x===undefined)
 	    return s[nn];
 	s[nn]=x;

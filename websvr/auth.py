@@ -1,6 +1,3 @@
-import os,sys,traceback as tb,gevent,bottle,json,webutil
-
-#############################
 
 AuthInfo = {}
 AccessInfo = {}
@@ -19,7 +16,7 @@ def auth_user(at):
     return True if AccessInfo.get(at) else False
 
 def AUTH():
-    import bottle
+    import bottle, webutil
     params  = bottle.request.params
     headers = bottle.request.headers
     at = params.get('accessToken') or headers.get('Access-Token')
@@ -32,5 +29,3 @@ def AUTH():
 add_user('v','pass','vat')
 add_user('a','anne','aat')
 add_user('d','d00d','dat')
-
-#############################
