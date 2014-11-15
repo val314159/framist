@@ -7,9 +7,9 @@
     <script src="/js/app.js"></script>
   </head>
   <body id="app" onload="app=App({autoStart:true})">
-    <button onclick="app.toggleCxn()">BUTTON</button>
+    <button onclick="app.$ws().toggleCxn()">BUTTON</button>
     <br>
     Name:
-    <input onchange="app.ws.changeName(this.value)">
+    <input onchange="app.$ws().changeName(this.value)">
   </body>
 </html>
