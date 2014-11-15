@@ -1,3 +1,5 @@
+export AUTH_PORT=1234
+
 function freeze() {
   pip freeze >requirements.txt
 }
@@ -7,19 +9,19 @@ function run_websvr() {
 }
 
 function run_authsvr() {
-  zerorpc --server --bind tcp://*:1234 auth.ds.levelds.DS
+  zerorpc --server --bind tcp://*:$AUTH_PORT auth.ds.levelds.DS
 }
 
 function clt_auth_login1() {
-  zerorpc --client --connect tcp://127.0.0.1:1234 login_user v pass
+  zerorpc --client --connect tcp://127.0.0.1:$AUTH_PORT login_user v pass
 }
 
 function clt_auth_login2() {
-  zerorpc --client --connect tcp://127.0.0.1:1234 login_user vx pass
+  zerorpc --client --connect tcp://127.0.0.1:$AUTH_PORT login_user vx pass
 }
 
 function clt_auth_login3() {
-  zerorpc --client --connect tcp://127.0.0.1:1234 login_user v not
+  zerorpc --client --connect tcp://127.0.0.1:$AUTH_PORT login_user v not
 }
 
 . .venv/bin/activate
