@@ -13,10 +13,16 @@ class DS:
     @classmethod
     def login_user(_,u,p):
         try:
-            rec = _.DB().Get('$u.'+u)
-            if p==rec.pop('p'): return rec
+            uuid = _.DB().Get('$u.'+u)
+            rec  = json.loads(_.DB().Get(uuid))
+            print "REC", rec
+            p2=rec.pop('p')
+            if p==p2:
+                print "MATCH"
+                return rec
         except KeyError:
             pass
+        print "MISMATCH"
         return None
 
     @classmethod
