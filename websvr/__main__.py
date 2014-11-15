@@ -1,11 +1,10 @@
-import static_routes
-import websock,app
+import app
 
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler
 
 if __name__=='__main__':
-    from auth import POPULATE
+    from auth.misc import POPULATE
     POPULATE()
     server = WSGIServer(("0.0.0.0", 8080), app.app,
                         handler_class=WebSocketHandler)
