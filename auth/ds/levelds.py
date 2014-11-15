@@ -12,15 +12,23 @@ class DS:
 
     @classmethod
     def login_user(_,u,p):
+        print 'login'
         try:
-            rec = _.DB().Get('$u.'+u)
-            if p==rec.pop('p'): return rec
+            uuid = _.DB().Get('$u.'+u)
+            rec  = json.loads(_.DB().Get(uuid))
+            print "REC", rec
+            p2=rec.pop('p')
+            if p==p2:
+                print "MATCH"
+                return rec
         except KeyError:
             pass
+        print "MISMATCH"
         return None
 
     @classmethod
     def auth_user(_,at):
+        print 'auth'
         try:
             _.DB().Get('$a.'+at)
             return True
@@ -30,6 +38,7 @@ class DS:
 
     @classmethod
     def add_user(_,u,p,a):
+        print 'add user'
         rec = dict(u=u,p=p,a=a)
         uuid = str(uuid1())
 

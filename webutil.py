@@ -11,14 +11,6 @@ def dump():
 
 def errmsg(_): return json.dumps({"success":False,"errmsg":_})
 
-def launch():
-    from websvr.app import app
-    from gevent.pywsgi import WSGIServer
-    from geventwebsocket.handler import WebSocketHandler
-    server = WSGIServer(("0.0.0.0", 8080), app,
-                        handler_class=WebSocketHandler)
-    server.serve_forever()
-
 def get_websocket():
     wsock = request.environ.get('wsgi.websocket')
     if not wsock:
