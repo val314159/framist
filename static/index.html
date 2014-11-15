@@ -8,5 +8,8 @@
   </head>
   <body id="app" onload="app=App({autoStart:true})">
     <button onclick="app.toggleCxn()">BUTTON</button>
+    <br>
+    Name:
+    <input onchange="app.ws.changeName(this.value)">
   </body>
 </html>

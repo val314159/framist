@@ -10,10 +10,8 @@ class WebUser:
         while True:
             try:
                 message = _.wsock.receive()
-
                 print "GOT", message
-
-                gevent.sleep(1.2)
+                gevent.sleep(0.2)
                 d = {"ping":{"input":message}}
                 _.wsock.send(json.dumps(d))
             except WebSocketError, e:
