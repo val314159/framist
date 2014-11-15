@@ -12,6 +12,7 @@ class DS:
 
     @classmethod
     def login_user(_,u,p):
+        print 'login'
         try:
             uuid = _.DB().Get('$u.'+u)
             rec  = json.loads(_.DB().Get(uuid))
@@ -37,6 +38,7 @@ class DS:
 
     @classmethod
     def add_user(_,u,p,a):
+        print 'add user'
         rec = dict(u=u,p=p,a=a)
         uuid = str(uuid1())
 
