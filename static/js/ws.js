@@ -42,7 +42,7 @@ function ws() {
 	_ws.onmessage = function (evt) {
 	    LOG('MSG:'+str(evt.data));
 	    _ws.send("Hello, world again");
-	    self.$wu().send_data(evt.data);
+	    self.$wu().send(evt.data);
 	};
 	_ws.onerror = function (x,y,z) {
 	    LOG('ERR'+str(x)+str(y)+str(z));
@@ -54,7 +54,6 @@ function ws() {
 	    }
 	};
     };
-    self.send_data=function(data){_ws.send(data);};
     self.send=function(data){_ws.send(data);};
     self.close=function(){  _ws.close();  };
 }

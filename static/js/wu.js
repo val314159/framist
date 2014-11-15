@@ -5,9 +5,9 @@ function wu(){
     bindVar(self,'name','?');
     bindVar(self,'$ws');
 
-    self.send_data=function(data){
+    self.send=function(data){
 	LOG(":DATA:"+data);
 	LOG(":WSOCK:"+self.$ws());
-	self.$ws().send_data("QAZ");
+	self.$ws().send("QAZ");
     };
 }
