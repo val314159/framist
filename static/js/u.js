@@ -12,16 +12,17 @@ function bindVar(s,n,v) {
     "s = self object to bind";
     "n = name of property";
     "v (opt) = value to initialize to";
+    var n0=n.substr(1);
     var nn='_'+n;
-    s['_'+nn]=s[nn]=v;
+    s['_'+nn]=s[nn]=s[n0]=v;
     s[n]=function(x,y){
 	if (y=='reset') {
-	    s[nn]=s['_'+nn];
+	    s[nn]=s[n0]=s['_'+nn];
 	    return;
 	}
 	if (x===undefined)
-	    return s[nn];
-	s[nn]=x;
+	    return s[n0];
+	s[n0]=s[nn]=x;
     };
 }
 function create(o) {
