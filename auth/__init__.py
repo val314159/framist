@@ -1,7 +1,9 @@
 #from ds.mem import DS
-from ds.levelds import DS
+#from ds.levelds import DS
+from ds.remoteds import DS
 
 def AUTH():
+    print 1003
     import bottle, webutil
     params  = bottle.request.params
     headers = bottle.request.headers
@@ -13,6 +15,7 @@ def AUTH():
     return at
 
 def LOGIN():
+    print 1004
     import bottle, webutil
     params  = request.params
     headers = request.headers
@@ -20,9 +23,13 @@ def LOGIN():
     p = params.get('p') or headers.get('u')
     return DS.login_user(u,p)
 
-import os
-if not os.environ.get('NO_AUTO_POPULATE'):
+def POPULATE():
+    print 2001
     DS.add_user('v','pass','vat')
+    print 2002
     DS.add_user('a','anne','aat')
+    print 2003
     DS.add_user('d','d00d','dat')
+    print 2004
     pass
+

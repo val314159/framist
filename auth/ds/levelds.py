@@ -27,6 +27,7 @@ class DS:
 
     @classmethod
     def auth_user(_,at):
+        print 'auth'
         try:
             _.DB().Get('$a.'+at)
             return True
