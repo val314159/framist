@@ -22,12 +22,12 @@ def r_login():
     return LOGIN()
 ###################################
 from webuser import WebUser
-from webutil import get_websocket
+from webutil import WEB_SOCKET
 
 @app.route('/websocket')
 def r_websocket():
     print "RRR /websocket"
-    WebUser(AUTH(),get_websocket()).run()
+    WebUser(AUTH(),WEB_SOCKET()).run()
 ###################################
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler

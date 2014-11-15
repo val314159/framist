@@ -11,7 +11,7 @@ def dump():
 
 def errmsg(_): return json.dumps({"success":False,"errmsg":_})
 
-def get_websocket():
+def WEB_SOCKET():
     wsock = request.environ.get('wsgi.websocket')
     if not wsock:
         raise bottle.abort(499, errmsg("Expected WebSocket request."))
