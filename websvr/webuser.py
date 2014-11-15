@@ -1,6 +1,5 @@
 import os,sys,traceback as tb,gevent,bottle,json
 from geventwebsocket import WebSocketError
-from app import app
 
 class WebUser:
     def __init__(_,at,wsock):
@@ -11,6 +10,9 @@ class WebUser:
         while True:
             try:
                 message = _.wsock.receive()
+
+                print "GOT", message
+
                 gevent.sleep(1.2)
                 d = {"ping":{"input":message}}
                 _.wsock.send(json.dumps(d))
