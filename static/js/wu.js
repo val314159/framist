@@ -3,16 +3,17 @@ function wu() {
     var self=this;
     var ws;
     bindVar(self,'$reconnectDelay',1200);
-    bindVar(self,'$name',         'N00b',   '#name');
-    bindVar(self,'$channel',      'main...','#channel');
+    bindVar(self,'$name',         'N00b',   '#name',function(value){
+	    if(ws)ws.send(str([0,'chat','name',[value]]));
+	});
+    bindVar(self,'$channel',      'main...','#channel',function(value){
+	    if(ws)ws.send(str([0,'chat','channel',[value]]));
+	});
     bindVar(self,'$accessToken')('vat');
 
     self.isConnected=function() {
 	LOG("READY STATE:"+(ws?ws.readyState==1:false));
 	return ws?ws.readyState==1:false;
-    };
-    self.dump = function(){
-	LOG("DUMP:" + str(self));
     };
     self.whoList=function() {
 	ws.send(str([0,'chat','whoList',[]]));
@@ -41,6 +42,8 @@ function wu() {
 	    LOG(' !. !. !. '+str(dat));
 	} else if (key=="whisper") {
 	    LOG(' !~ !~ !~ '+str(dat));
+	} else if (key=="hello") {
+	    LOG(' !^ !^ !^ '+str(dat));
 	} else {
 	    LOG(' ?? ?? ?? '+str(dat));
 	}

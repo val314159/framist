@@ -43,33 +43,33 @@ class WebUser:
             def connect(name,channel):
                 print "XX CONNECT5", name, channel
                 _.name = name ; _.channel = channel
-                d = {"connect":{"input":msg,"myid":_.myid()}}
+                d = {"connect":{"input":msg,"id":_.myid()}}
                 _.send(d)
                 pass
             @staticmethod
             def name(name):
                 _.name = name
                 print "XX @ NAME", name
-                d = {"name":{"input":msg,"myid":_.myid()}}
+                d = {"name":{"input":msg,"id":_.myid()}}
                 _.wsock.send(encode(d))
                 pass
             @staticmethod
             def channel(channel):
                 print "XX @ CHANNEL", channel
                 _.channel = channel
-                d = {"channel":{"input":msg,"myid":_.myid()}}
+                d = {"channel":{"input":msg,"id":_.myid()}}
                 _.wsock.send(encode(d))
                 pass
             @staticmethod
             def say(msg):
                 print "XX @ SAY", msg
-                d = {"say":{"input":msg,"myid":_.myid()}}
+                d = {"say":{"input":msg,"id":_.myid()}}
                 _.send(d,_.channel)
                 pass
             @staticmethod
             def yell(msg):
                 print "XX @ YELL", msg
-                d = {"yell":{"input":msg,"myid":_.myid()}}
+                d = {"yell":{"input":msg,"id":_.myid()}}
                 _.send(d)
                 pass
             @staticmethod
@@ -81,7 +81,7 @@ class WebUser:
             @staticmethod
             def disconnect(data):
                 print "XX @ DISCONNECT", data
-                d = {"disconnect":data,"myid":_.myid()}
+                d = {"disconnect":data,"id":_.myid()}
                 _.send(d)
                 pass
             @staticmethod
@@ -121,12 +121,14 @@ class WebUser:
         print "CONNECT", _.at, _.myid(), _.wsock
         try:
             _.G[_.myid()] = _
+            d = {"hello":{"myid":_.myid()}}
+            _.wsock.send(encode(d))
             while True:
                 message = _.wsock.receive()
                 if not message:
                     print "NOT MSG", repr(message)
                     break
-                gevent.sleep(0.05)
+                #gevent.sleep(0.05)
                 _.handle(message)
         except WebSocketError, e:
             print 600, "ERR", e
