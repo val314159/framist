@@ -1,4 +1,5 @@
 export AUTH_PORT=1234
+export DS_PORT=1236
 
 function freeze() {
   pip freeze >requirements.txt
@@ -10,6 +11,10 @@ function run_websvr() {
 
 function run_authsvr() {
   zerorpc --server --bind tcp://*:$AUTH_PORT auth.ds.levelds.DS
+}
+
+function run_dssvr() {
+  zerorpc --server --bind tcp://*:$DS_PORT ds_leveldb.DS
 }
 
 function clt_auth_login1() {
