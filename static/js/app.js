@@ -20,9 +20,10 @@ function App(cfg) {
     self.yell=function(value) {
 	self.wu.send(str([0,'chat','yell',[ value ]]));
     };
-    self.whisper=function(value) {
-	var whisperTo  = $E('#whisperTo');
-	var whisperMsg = $E('#whisperMsg');
-	self.wu.send(str([0,'chat','whisper',[ whisperTo, whisperMsg ]]));
+    self.whisper=function(whisperMsg, whisperTo) {
+	whisperMsg = whisperMsg || $EV('#whisperMsg');
+	whisperTo  = whisperTo  || $EV('#whisperTo');
+	if (whisperTo && whisperMsg)
+	    self.wu.send(str([0,'chat','whisper',[ whisperTo, whisperMsg ]]));
     };
 }

@@ -5,8 +5,7 @@ function wu() {
     bindVar(self,'$reconnectDelay',1200);
     bindVar(self,'$name',         'N00b',   '#name');
     bindVar(self,'$channel',      'main...','#channel');
-    bindVar(self,'$accessToken');
-    self.$accessToken('vat');
+    bindVar(self,'$accessToken')('vat');
 
     self.isConnected=function() {
 	LOG("READY STATE:"+(ws?ws.readyState==1:false));
@@ -29,35 +28,35 @@ function wu() {
 	    self.reconnect();
 	}
     };
+    self.process=function(key,dat) {
+	if (key=="whoList") {
+	    LOG(' !* !* !* '+str(dat));
+	} else if (key=="connect") {
+	    LOG(' !+ !+ !+ '+str(dat));
+	} else if (key=="disconnect") {
+	    LOG(' !- !- !- '+str(dat));
+	} else if (key=="yell") {
+	    LOG(' !! !! !! '+str(dat));
+	} else if (key=="say") {
+	    LOG(' !. !. !. '+str(dat));
+	} else if (key=="whisper") {
+	    LOG(' !~ !~ !~ '+str(dat));
+	} else {
+	    LOG(' ?? ?? ?? '+str(dat));
+	}
+    };
     self.reconnect=function() {
 	LOG('RECONNECT'+self.accessToken);
-	ws = new WebSocket("ws://localhost:8080/websocket?"+
-			    "accessToken="+self.accessToken);
+	ws = new WebSocket("ws://localhost:8080/websocket"+
+			   "?accessToken="+self.accessToken)
 	ws.onopen = function(evt) {
 	    LOG('OPN'+str([self.name,self.channel]));
 	    ws.send(str([0,'chat','connect',[self.name,self.channel]]));
 	};
 	ws.onmessage = function (evt) {
-	    //LOG('MSG1:'+str(evt.data));
 	    var data = JSON.parse(evt.data);
 	    for (var key in data) {
-		LOG('KEY:'+key);
-		var dat = data[key];
-		if (key=="whoList") {
-		    LOG(' !* !* !* '+str(dat));
-		} else if (key=="connect") {
-		    LOG(' !+ !+ !+ '+str(dat));
-		} else if (key=="disconnect") {
-		    LOG(' !- !- !- '+str(dat));
-		} else if (key=="yell") {
-		    LOG(' !! !! !! '+str(dat));
-		} else if (key=="say") {
-		    LOG(' !. !. !. '+str(dat));
-		} else if (key=="whisper") {
-		    LOG(' !~ !~ !~ '+str(dat));
-		} else {
-		    LOG(' ?? ?? ?? '+str(dat));
-		}
+		self.process(key,data[key]);
 	    }
 	};
 	ws.onerror = function (x,y,z) {
