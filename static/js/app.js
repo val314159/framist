@@ -15,6 +15,14 @@ function App(cfg) {
 	self.wu.send(str([0,'chat','name',[ value ]]));
     };
     self.say=function(value) {
-	self.wu.send(str([0,'chat','message',[ value ]]));
+	self.wu.send(str([0,'chat','say',[ value ]]));
+    };
+    self.yell=function(value) {
+	self.wu.send(str([0,'chat','yell',[ value ]]));
+    };
+    self.whisper=function(value) {
+	var whisperTo  = $E('#whisperTo');
+	var whisperMsg = $E('#whisperMsg');
+	self.wu.send(str([0,'chat','whisper',[ whisperTo, whisperMsg ]]));
     };
 }

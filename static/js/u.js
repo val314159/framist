@@ -1,3 +1,5 @@
+var undef;
+function $E(x){return document.getElementById(x.substr(1))}
 function $$set(s,k,v){s[k]=v;return s}
 function $$reset(s,k){s[k]=s['_'+k];return s}
 function CE(x,e){return($$set(document.createElement('li'),'innerHTML',x))}
@@ -6,7 +8,6 @@ function str(x){return JSON.stringify(x)}
 function ELOG(x,e){e.appendChild(CE(x,e))}
 function DLOG(x){ELOG(x,document.body)}
 LOG=DLOG;
-
 function bindVar(s,n,v,w) {
     "Use this to bind a new property using a functional getter/setter";
     "s = self object to bind";
@@ -14,23 +15,24 @@ function bindVar(s,n,v,w) {
     "v (opt) = value to initialize to";
     var n0=n.substr(1);
     var nn='_'+n;
-    var w0;
-    if (w)
-	w0=w.substr(1);
-    s[nn]=s[n0]=v;
-    var SET = s[n] = function(x,y){
-	if (y=='reset')
-	    s[n0]=s[nn];
-	else
-	    s[n0]=x;
-	if (w0)
-	    document.getElementById(w0).value = x;
-	return SET;
-    };
-    s[n].reset=function(){
+    var SET = s[n] = function(x){
+	SET.set(x);
+	SET.sendToTarget(x);
+	return SET;    };
+    SET.set=function(x){
+	s[n0]=x;
+	return SET;    };
+    SET.sendToTarget=function(x){
+	if (w)
+	    $E(w).value = x;
+	return SET;    };
+    SET.reset=function(){
 	s[n0]=s[nn];
-	return SET;
-    };
+	return SET;    };
+    SET.clear=function(){
+	s[n0]=undefined;
+	return SET;    };
+    s[nn]=v;
     SET(v);
     return SET;
 }

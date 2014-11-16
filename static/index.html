@@ -15,8 +15,14 @@
     <input id="name"    onchange="app.$name(this.value)">
     <br>Channel:
     <input id="channel" onchange="app.$channel(this.value)">
-    <br>Message:
-    <input onchange="app.say(this.value);this.value=''">
+    <br>Say Message:
+    <input onchange="app.say( this.value);this.value='';this.focus()">
+    <br>Yell Message:
+    <input onchange="app.yell(this.value);this.value='';this.focus()">
+    <br>Whisper To:
+    <input id="whisperTo" onchange="app.whisper()}">
+    <br>Whisper Message:
+    <input id="whisper" onchange="app.whisper();this.value='';this.focus()}">
     <br>
     <button onclick="app.wu.whoList()">
       Who List</button>

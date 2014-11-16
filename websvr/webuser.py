@@ -16,6 +16,22 @@ class WebUser:
             name   = _.name,
             channel= _.channel,
             )
+    def dict2(_):
+        return dict(
+            at=_.at,
+            wsock=_.wsock,
+            name   = _.name,
+            channel= _.channel,
+            )
+
+    def send(_, d, ch=None):
+        for k,v in _.G.iteritems():
+            print "G", repr((k,v.dict2()))
+            if ch is None   or   v.channel==ch:
+                v.wsock.send( encode(d) )
+                pass
+            pass
+        pass
     
     def handle(_, message):
         print "HANDLE message ", repr(message)
@@ -26,57 +42,79 @@ class WebUser:
             @staticmethod
             def connect(name,channel):
                 print "XX CONNECT5", name, channel
-                _.name = name
-                _.channel = channel
+                _.name = name ; _.channel = channel
+                d = {"connect":{"input":msg,"myid":_.myid()}}
+                _.send(d)
                 pass
             @staticmethod
             def name(name):
                 _.name = name
-                print "XX NAME", name
+                print "XX @ NAME", name
+                d = {"name":{"input":msg,"myid":_.myid()}}
+                _.wsock.send(encode(d))
                 pass
             @staticmethod
             def channel(channel):
-                print "XX CHANNEL", channel
+                print "XX @ CHANNEL", channel
                 _.channel = channel
+                d = {"channel":{"input":msg,"myid":_.myid()}}
+                _.wsock.send(encode(d))
                 pass
             @staticmethod
-            def message(msg):
-                print "XX MESSAGE", msg
+            def say(msg):
+                print "XX @ SAY", msg
+                d = {"say":{"input":msg,"myid":_.myid()}}
+                _.send(d,_.channel)
+                pass
+            @staticmethod
+            def yell(msg):
+                print "XX @ YELL", msg
+                d = {"yell":{"input":msg,"myid":_.myid()}}
+                _.send(d)
+                pass
+            @staticmethod
+            def sys(data,channel=None):
+                print "XX @ SYS", data
+                d = {"sys":data}
+                _.send(d,channel)
+                pass
+            @staticmethod
+            def disconnect(data):
+                print "XX @ DISCONNECT", data
+                d = {"disconnect":data,"myid":_.myid()}
+                _.send(d)
                 pass
             @staticmethod
             def whoList(*a):
-                print "XX WHOLIST", a
+                print "XX @ WHO_LIST", a
                 print "G", _.G
-                g = {}
-                for k,v in _.G.iteritems():
-                    print "ggggg", repr((k,v))
-                    vv = _.dict()
-                    print "vvvvv", repr((vv,))
-                    g[k] = vv
-                    pass
-                d = {"whoList":{"input":msg,"resultSet":g}}
+                it = ((k,v.dict()) for k,v in _.G.iteritems())
+                d = {"whoList":{"input":msg,"resultMap":dict(it)}}
                 _.wsock.send(encode(d))
                 pass
+
             pass
 
         class PingPong:
             @staticmethod
             def ping():
-                print "XX PING"
-                d = {"ping":{"input":msg}}
+                print "XX @@ PING"
+                d = {"ping":{"input":msg,"result":"pong"}}
+                _.wsock.send(encode(d))
+                gevent.sleep(1.2)
+                print "XX @@ PONG"
+                d = {"pong":{"input":msg}}
                 _.wsock.send(encode(d))
                 pass
             pass
         
         namespace = dict(
             chat = Chat,
+            pingpong = PingPong,
             )
 
         ret = getattr(namespace[msg[1]],msg[2])(*msg[3])
         print "RET", ret
-
-        #d = {"ping":{"input":message}}
-        #_.wsock.send(encode(d))
         pass
 
     def run(_):

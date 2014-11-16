@@ -15,21 +15,17 @@ function wu() {
     self.dump = function(){
 	LOG("DUMP:" + str(self));
     };
-
     self.whoList=function() {
 	ws.send(str([0,'chat','whoList',[]]));
     };
-
     self.toggleCxn=function() {
-	LOG('TOGGLE CXN'+ws);
 	if (self.isConnected()) {
 	    LOG('TOGGLE CXN2');
 	    self.$reconnectDelay(0);
 	    self.close();
 	} else {
 	    LOG('TOGGLE CXN3');
-	    self.$reconnectDelay(null,'reset');
-	    // nice to have: self.$reconnectDelay.reset();
+	    self.$reconnectDelay.reset();
 	    self.reconnect();
 	}
     };
@@ -38,14 +34,31 @@ function wu() {
 	ws = new WebSocket("ws://localhost:8080/websocket?"+
 			    "accessToken="+self.accessToken);
 	ws.onopen = function(evt) {
-	    LOG('OPN'+str(evt));
 	    LOG('OPN'+str([self.name,self.channel]));
 	    ws.send(str([0,'chat','connect',[self.name,self.channel]]));
 	};
 	ws.onmessage = function (evt) {
-	    LOG('MSG1:'+str(evt.data));
+	    //LOG('MSG1:'+str(evt.data));
 	    var data = JSON.parse(evt.data);
-	    LOG('MSG9:'+str(data));
+	    for (var key in data) {
+		LOG('KEY:'+key);
+		var dat = data[key];
+		if (key=="whoList") {
+		    LOG(' !* !* !* '+str(dat));
+		} else if (key=="connect") {
+		    LOG(' !+ !+ !+ '+str(dat));
+		} else if (key=="disconnect") {
+		    LOG(' !- !- !- '+str(dat));
+		} else if (key=="yell") {
+		    LOG(' !! !! !! '+str(dat));
+		} else if (key=="say") {
+		    LOG(' !. !. !. '+str(dat));
+		} else if (key=="whisper") {
+		    LOG(' !~ !~ !~ '+str(dat));
+		} else {
+		    LOG(' ?? ?? ?? '+str(dat));
+		}
+	    }
 	};
 	ws.onerror = function (x,y,z) {
 	    LOG('ERR'+str(x)+str(y)+str(z));
