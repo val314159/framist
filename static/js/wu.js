@@ -2,22 +2,15 @@ function wu() {
     if (this===window) return new wu();
     var self=this;
     var ws;
+    var send_name = function(value){	    if(ws)ws.send(str([0,'chat','name',[value]]))    };
+    var send_channel = function(value){	if(ws)ws.send(str([0,'chat','channel',[value]]))    };
     bindVar(self,'$reconnectDelay',1200);
-    bindVar(self,'$name',         'N00b',   '#name',function(value){
-	    if(ws)ws.send(str([0,'chat','name',[value]]));
-	});
-    bindVar(self,'$channel',      'main...','#channel',function(value){
-	    if(ws)ws.send(str([0,'chat','channel',[value]]));
-	});
+    bindVar(self,'$name',         'N00b',   '#name',send_name);
+    bindVar(self,'$channel',      'main...','#channel',send_channel);
     bindVar(self,'$accessToken')('vat');
 
-    self.isConnected=function() {
-	LOG("READY STATE:"+(ws?ws.readyState==1:false));
-	return ws?ws.readyState==1:false;
-    };
-    self.whoList=function() {
-	ws.send(str([0,'chat','whoList',[]]));
-    };
+    self.isConnected=function() { return ws?ws.readyState==1:false;     };
+    self.whoList=function() {	ws.send(str([0,'chat','whoList',[]]));    };
     self.toggleCxn=function() {
 	if (self.isConnected()) {
 	    LOG('TOGGLE CXN2');
@@ -57,10 +50,8 @@ function wu() {
 	    ws.send(str([0,'chat','connect',[self.name,self.channel]]));
 	};
 	ws.onmessage = function (evt) {
-	    var data = JSON.parse(evt.data);
-	    for (var key in data) {
+	    for(var key in JSON.parse(evt.data))
 		self.process(key,data[key]);
-	    }
 	};
 	ws.onerror = function (x,y,z) {
 	    LOG('ERR'+str(x)+str(y)+str(z));

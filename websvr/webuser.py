@@ -108,9 +108,61 @@ class WebUser:
                 pass
             pass
         
+        class DataStore:
+            @staticmethod
+            def DB(__=[]):
+                print "XX @@ DB"
+                if not __:
+                    import leveldb
+                    __.append( leveldb.LevelDB('.ds') )
+                    pass
+                return __[0]
+            @classmethod
+            def put(cls,k,v):
+                print "XX @@ PUT", k, v
+                cls.DB().Put(k,v)
+                d=dict(input=msg,result=k)
+                _.wsock.send(encode({'put':d}))
+                pass
+            @classmethod
+            def get(cls,k):
+                print "XX @@ GET", k
+                try:
+                    d=dict(input=msg,result=cls.DB().Get(k))
+                except KeyError:
+                    d=dict(success=False,errmsg='Not Found.')
+                    pass
+                _.wsock.send(encode({'get':d}))
+                pass
+            @classmethod
+            def rng(cls,k0,kn='~~~~~~',limit=10):
+                print "XX @@ RNG", k0,kn,limit
+                arr = []
+                for n,rec in enumerate(cls.DB().RangeIter(k0,kn)):
+                    if n > limit:
+                        break
+                    arr.append( rec )
+                    pass
+                _.wsock.send(encode(dict(results=arr)))
+                pass
+            pass
+            @classmethod
+            def dlt(cls,k0,kn=None):
+                if kn is None: kn=k0
+                print "XX @@ DLT", k0,kn
+                arr = []
+                for n,(k,v) in enumerate(cls.DB().RangeIter(k0,kn)):
+                    cls.DB().Delete(k)
+                    arr.append(k)
+                    pass
+                _.wsock.send(encode(dict(results=arr)))
+                pass
+            pass
+        
         namespace = dict(
             chat = Chat,
             pingpong = PingPong,
+            ds = DataStore,
             )
 
         ret = getattr(namespace[msg[1]],msg[2])(*msg[3])
