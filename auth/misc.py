@@ -5,7 +5,6 @@
 from auth import DS
 
 def AUTH():
-    print 1003
     import bottle, webutil
     params  = bottle.request.params
     headers = bottle.request.headers
@@ -17,7 +16,6 @@ def AUTH():
     return at
 
 def LOGIN():
-    print 1004
     import bottle, webutil
     params  = request.params
     headers = request.headers
@@ -30,13 +28,9 @@ def LOGIN():
     return ret
 
 def POPULATE():
-    print 2001
     DS.add_user('v','pass','vat')
-    print 2002
     DS.add_user('a','anne','aat')
-    print 2003
     DS.add_user('d','d00d','dat')
-    print 2004
     pass
 
 
