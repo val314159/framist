@@ -3,8 +3,8 @@ function wu() {
     var self=this;
     var ws;
     bindVar(self,'$reconnectDelay',1200);
-    bindVar(self,'$name', 'NEWGUY');
-    bindVar(self,'$channel', 'main...');
+    bindVar(self,'$name',         'N00b',   '#name');
+    bindVar(self,'$channel',      'main...','#channel');
     bindVar(self,'$accessToken');
     self.$accessToken('vat');
 
@@ -15,6 +15,11 @@ function wu() {
     self.dump = function(){
 	LOG("DUMP:" + str(self));
     };
+
+    self.whoList=function() {
+	ws.send(str([0,'chat','whoList',[]]));
+    };
+
     self.toggleCxn=function() {
 	LOG('TOGGLE CXN'+ws);
 	if (self.isConnected()) {
@@ -29,18 +34,18 @@ function wu() {
 	}
     };
     self.reconnect=function() {
-	LOG('RECONNECT');
+	LOG('RECONNECT'+self.accessToken);
 	ws = new WebSocket("ws://localhost:8080/websocket?"+
 			    "accessToken="+self.accessToken);
 	ws.onopen = function(evt) {
-	    LOG('OPN'+evt);
 	    LOG('OPN'+str(evt));
-	    LOG('OPN'+str(self));
-	    LOG('OPN'+str(self.name));
-	    ws.send(str([0,'chat','connect',[self.name]]));
+	    LOG('OPN'+str([self.name,self.channel]));
+	    ws.send(str([0,'chat','connect',[self.name,self.channel]]));
 	};
 	ws.onmessage = function (evt) {
-	    LOG('MSG:'+str(evt.data));
+	    LOG('MSG1:'+str(evt.data));
+	    var data = JSON.parse(evt.data);
+	    LOG('MSG9:'+str(data));
 	};
 	ws.onerror = function (x,y,z) {
 	    LOG('ERR'+str(x)+str(y)+str(z));

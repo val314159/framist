@@ -6,19 +6,15 @@ function App(cfg) {
     if (cfg.autoStart) self.wu.toggleCxn();
     LOG('LAUNCH2============');
 
-    self.set_channel=function(value) {
-	LOG("QQ:"+app.wu.name);
-	LOG("Q@:"+value);
+    self.$channel=function(value) {
 	self.wu.$channel(value);
-	self.wu.send(str([0,'chat','channel',
-			  [ value ]]));
-	LOG("QQ________");
+	self.wu.send(str([0,'chat','channel',[ value ]]));
+    };
+    self.$name=function(value) {
+	self.wu.$name(value);
+	self.wu.send(str([0,'chat','name',[ value ]]));
     };
     self.say=function(value) {
-	LOG("QQ:"+app.wu.name);
-	LOG("Q@:"+value);
-	self.wu.send(str([0,'chat','message',
-			  [ app.wu.name, value ]]));
-	LOG("QQ________");
+	self.wu.send(str([0,'chat','message',[ value ]]));
     };
 }

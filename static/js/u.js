@@ -7,23 +7,32 @@ function ELOG(x,e){e.appendChild(CE(x,e))}
 function DLOG(x){ELOG(x,document.body)}
 LOG=DLOG;
 
-function bindVar(s,n,v) {
+function bindVar(s,n,v,w) {
     "Use this to bind a new property using a functional getter/setter";
     "s = self object to bind";
     "n = name of property";
     "v (opt) = value to initialize to";
     var n0=n.substr(1);
     var nn='_'+n;
-    s['_'+nn]=s[nn]=s[n0]=v;
-    s[n]=function(x,y){
-	if (y=='reset') {
-	    s[nn]=s[n0]=s['_'+nn];
-	    return;
-	}
-	if (x===undefined)
-	    return s[n0];
-	s[n0]=s[nn]=x;
+    var w0;
+    if (w)
+	w0=w.substr(1);
+    s[nn]=s[n0]=v;
+    var SET = s[n] = function(x,y){
+	if (y=='reset')
+	    s[n0]=s[nn];
+	else
+	    s[n0]=x;
+	if (w0)
+	    document.getElementById(w0).value = x;
+	return SET;
     };
+    s[n].reset=function(){
+	s[n0]=s[nn];
+	return SET;
+    };
+    SET(v);
+    return SET;
 }
 function create(o) {
     function F() {}
