@@ -28,7 +28,7 @@ class Chat:
     @staticmethod
     def say(wu,msg):
         print "XX @ SAY", msg
-        d = {"say":{"id":wu.myid(),"msg",msg}}
+        d = {"say":{"id":wu.myid(),"msg":msg}}
         wu.csend(d)
         pass
     @staticmethod
