@@ -37,6 +37,10 @@ function wu() {
 	    LOG(' !~ !~ !~ '+str(dat));
 	} else if (key=="hello") {
 	    LOG(' !^ !^ !^ '+str(dat));
+	} else if (key=="name") {
+	    LOG(' !N !N !N '+str(dat));
+	} else if (key=="channel") {
+	    LOG(' !C !C !C '+str(dat));
 	} else {
 	    LOG(' ?? ?? ?? '+str(dat));
 	}
@@ -50,7 +54,8 @@ function wu() {
 	    ws.send(str([0,'chat','connect',[self.name,self.channel]]));
 	};
 	ws.onmessage = function (evt) {
-	    for(var key in JSON.parse(evt.data))
+	    var data=JSON.parse(evt.data);
+	    for(var key in data)
 		self.process(key,data[key]);
 	};
 	ws.onerror = function (x,y,z) {

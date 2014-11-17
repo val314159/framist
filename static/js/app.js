@@ -12,8 +12,11 @@ function App(cfg) {
 	self.wu.send(str([0,'chat','yell',[ value ]]));
     };
     self.whisper=function(whisperMsg, whisperTo) {
+	console.log("x100");
 	whisperMsg = whisperMsg || $EV('#whisperMsg');
+	console.log("x102");
 	whisperTo  = whisperTo  || $EV('#whisperTo');
+	console.log("x104");
 	if (whisperTo && whisperMsg)
 	    self.wu.send(str([0,'chat','whisper',[ whisperTo, whisperMsg ]]));
     };
