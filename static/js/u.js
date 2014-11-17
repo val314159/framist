@@ -4,12 +4,20 @@ function $EV(x){return $E(x).value;}
 function $EH(x){return $E(x).innerHTML;}
 function $$set(s,k,v){s[k]=v;return s}
 function $$reset(s,k){s[k]=s['_'+k];return s}
-function CE(x,e){return($$set(document.createElement('li'),'innerHTML',x))}
+function CE(x){return($$set(document.createElement('li'),'innerHTML',x))}
 function str(x){return JSON.stringify(x)}
 
-function ELOG(x,e){e.appendChild(CE(x,e))}
+function ELOG(x,e){e.appendChild(CE(x))}
 function DLOG(x){ELOG(x,document.body)}
 LOG=DLOG;
+
+function main(){
+    var e = $E('#out');
+    LOG=function(x){
+	ELOG(x,e);
+    };
+}
+
 function bindVar(s,n,v,w,cb) {
     "Use this to bind a new property using a functional getter/setter";
     "s = self object to bind";

@@ -50,7 +50,8 @@ function wu() {
 	    ws.send(str([0,'chat','connect',[self.name,self.channel]]));
 	};
 	ws.onmessage = function (evt) {
-	    for(var key in JSON.parse(evt.data))
+	    var data=JSON.parse(evt.data);
+	    for(var key in data)
 		self.process(key,data[key]);
 	};
 	ws.onerror = function (x,y,z) {
