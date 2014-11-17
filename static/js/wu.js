@@ -37,6 +37,10 @@ function wu() {
 	    LOG(' !~ !~ !~ '+str(dat));
 	} else if (key=="hello") {
 	    LOG(' !^ !^ !^ '+str(dat));
+	} else if (key=="name") {
+	    LOG(' !N !N !N '+str(dat));
+	} else if (key=="channel") {
+	    LOG(' !C !C !C '+str(dat));
 	} else {
 	    LOG(' ?? ?? ?? '+str(dat));
 	}
