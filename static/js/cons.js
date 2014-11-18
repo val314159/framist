@@ -2,6 +2,7 @@ console.log("111-111-111");
 function loginUrl(u,p){return"/login?u="+u+"&p="+p}
 function wsockUrl(at ){return"ws://localhost:8080/ws?accessToken="+at}
 function App() {
+    console.log("0 app 0");
     if (this===window) return new App();
     var self = this;
     var app = this;

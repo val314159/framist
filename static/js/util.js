@@ -1,6 +1,13 @@
-console.log("111-111-555");
 //LOG=function(x){console.log(x)};
-LOG=function(x){document.body.innerHTML+="<li>"+x};
+//LOG=function(x){document.body.innerHTML+="<li>"+x};
+var ScrollToBottom=function(e){e.scrollTop(e.height())};
+var LOG=function(x){
+    var e=$('#out');
+    e.html( e.html() + "<li>"+x );
+    ScrollToBottom($('#outs'));
+    console.log("112");
+};
+CLR=function(){$('#out').html("")};
 function str(x){return(x===window)?"[[[WINDOW]]]":JSON.stringify(x)}
 function $GET(url) {return $.ajax({context:this,url:url})}
 var $undef, $globals=this;
@@ -24,4 +31,3 @@ function create(parent) {
     F.prototype = parent;
     return new F();
 }
-console.log("999-999-555");
