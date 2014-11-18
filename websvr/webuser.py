@@ -38,10 +38,10 @@ class WebUser:
             _.wsend(dict(method='hello',params={'uid':_.myid()}))
             while True:
                 message = _.wsock.receive()
-                if message:
-                    print "NOT MSG", repr(message)
+                print "MESSAGE", repr(message)
+                if not message:
+                    print "NOT MESSAGE", repr(message)
                     break
-                print "MSG", repr(message)
                 msg = decode(message)
                 getattr(Namespace[msg[1]],msg[2])(_,*msg[3])
                 pass
