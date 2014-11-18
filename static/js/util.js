@@ -5,17 +5,16 @@ var LOG=function(x){
     var e=$('#out');
     e.html( e.html() + "<li>"+x );
     ScrollToBottom($('#outs'));
-    console.log("112");
 };
 CLR=function(){$('#out').html("")};
 function str(x){return(x===window)?"[[[WINDOW]]]":JSON.stringify(x)}
 function $GET(url) {return $.ajax({context:this,url:url})}
 var $undef, $globals=this;
-function addWebSocket(url,self,namespace) {
+function addWebSocket(self,url,namespace) {
   LOG("URL:::"+url);
   var on=function(verb,msg){
       var fn = namespace[verb];
-      if (fn) fn.apply(self, [msg]);
+      if (fn) fn.call(self, msg);
   };
   var ws = new WebSocket(url);
   ws.onmessage=function(message){
@@ -25,9 +24,19 @@ function addWebSocket(url,self,namespace) {
   ws.onopen =function(evt){ on('$open', evt) };
   ws.onclose=function(evt){ on('$close',evt) };
   ws.onerror=function(evt){ on('$error',evt) };
+  self.send_encoded=function(msg){ws.send(str(msg))}
+  self.close=ws.close;
 }
 function create(parent) {
     function F(){}
     F.prototype = parent;
     return new F();
+}
+function fmt() {
+    var theString = arguments[0];
+    for (var i=1; i<arguments.length; ++i) {
+	var regEx = new RegExp("\\{"+(i-1)+"\\}", "gm");
+	theString = theString.replace(regEx, arguments[i]);
+    }
+    return theString;
 }
