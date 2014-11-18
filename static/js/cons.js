@@ -4,13 +4,8 @@ function wsockUrl(at ){return"ws://localhost:8080/ws?accessToken="+at}
 function App() {
     if (this===window) return new App();
     var self = this;
-    this.main = function() {
-	$GET(loginUrl('v','pass')).then
-	(
-	 function(data){
-	     LOG("DATA:"+str(data)+'//'+str(app));
-	     var d = create(
-    {
+    var app = this;
+    var NS = {
 	hello: function(params){
 	    LOG("HELLO:"+str(params));
 	},
@@ -26,8 +21,13 @@ function App() {
 	$unknown: function(params){
 	    LOG("UNKNOWN:"+str(params));
 	}
-    });
-	     addWebSocket(wsockUrl(data.a),self,d);
+    };
+    this.main = function() {
+	$GET(loginUrl('v','pass')).then
+	(
+	 function(data){
+	     LOG("DATA:"+str(data)+'//'+str(app));
+	     addWebSocket(wsockUrl(data.a),self,create(NS));
 	 },
 	 function(a,b,c){
 	     LOG("ERR");
@@ -35,5 +35,4 @@ function App() {
     }
     return this;
 }
-
 console.log("999-999-999");

@@ -1,5 +1,6 @@
 console.log("111-111-555");
-LOG=function(x){console.log(x)};
+//LOG=function(x){console.log(x)};
+LOG=function(x){document.body.innerHTML+="<li>"+x};
 function str(x){return(x===window)?"[[[WINDOW]]]":JSON.stringify(x)}
 function $GET(url) {return $.ajax({context:this,url:url})}
 var $undef, $globals=this;
