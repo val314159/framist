@@ -42,8 +42,14 @@ class WebUser:
                 if not message:
                     print "NOT MESSAGE", repr(message)
                     break
-                msg = decode(message)
-                getattr(Namespace[msg[1]],msg[2])(_,*msg[3])
+                try:
+                    msg = decode(message)
+                    getattr(Namespace[msg[1]],msg[2])(_,*msg[3])
+                except:
+                    print '*'*80
+                    tb.print_exc()
+                    print '*'*80
+                    pass
                 pass
         except WebSocketError, e:
             print 600, "ERR", e
