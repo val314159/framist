@@ -10,14 +10,14 @@ function str(x){return JSON.stringify(x)}
 function ELOG(x,e){e.appendChild(CE(x))}
 function DLOG(x){ELOG(x,document.body)}
 LOG=DLOG;
-
+/*
 function main(){
     var e = $E('#out');
     LOG=function(x){
 	ELOG(x,e);
     };
 }
-
+*/
 function bindVar(s,n,v,w,cb) {
     "Use this to bind a new property using a functional getter/setter";
     "s = self object to bind";

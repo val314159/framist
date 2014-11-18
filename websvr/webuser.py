@@ -11,10 +11,10 @@ class WebUser:
     G = {}
     def __init__(_,at,wsock): _.at=at ; _.wsock=wsock
     def __repr__(_): return encode(_.dict())
-    def myid(_): return id(_.wsock)
-    def dict(_): return dict(name=_.name,channel= _.channel)
+    def myid(_): return 'u%s'%id(_.wsock)
+    def dict(_): return dict(name=_.name,channels= _.channels)
     def dict2(_):return dict(at=_.at, wsock=_.wsock,
-                             name=_.name, channel= _.channel)
+                             name=_.name, channels= _.channels)
     def close(_):
         try:    _.wsock.close()
         except: pass
@@ -33,16 +33,18 @@ class WebUser:
         print "CONNECT", _.at, _.myid(), _.wsock
         try:
             _.G[_.myid()] = _
-            d = {"hello":{"myid":_.myid()}}
-            _.wsend(d)
+            _.name = 'Guest'
+            _.channels = ['~Basement',_.myid(),'y','s']
+            _.wsend(dict(method='hello',params={'uid':_.myid()}))
             while True:
                 message = _.wsock.receive()
-                if not message:
+                if message:
                     print "NOT MSG", repr(message)
                     break
-                #gevent.sleep(0.05)
+                print "MSG", repr(message)
                 msg = decode(message)
                 getattr(Namespace[msg[1]],msg[2])(_,*msg[3])
+                pass
         except WebSocketError, e:
             print 600, "ERR", e
 	finally:
