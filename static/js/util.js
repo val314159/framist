@@ -11,6 +11,7 @@ function str(x){return(x===window)?"[[[WINDOW]]]":JSON.stringify(x)}
 function $GET(url) {return $.ajax({context:this,url:url})}
 var $undef, $globals=this;
 function addWebSocket(self,url,namespace) {
+  LOG("SELF:::"+str(self));
   LOG("URL:::"+url);
   var on=function(verb,msg){
       var fn = namespace[verb];
@@ -24,7 +25,7 @@ function addWebSocket(self,url,namespace) {
   ws.onopen =function(evt){ on('$open', evt) };
   ws.onclose=function(evt){ on('$close',evt) };
   ws.onerror=function(evt){ on('$error',evt) };
-  self.send_encoded=function(msg){ws.send(str(msg))}
+  self.sendEnc=function(msg){ws.send(str(msg))}
   self.close=ws.close;
 }
 function create(parent) {

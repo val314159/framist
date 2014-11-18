@@ -1,17 +1,23 @@
 function App() {
-    console.log("0 app 0");
     if (this===window) return new App();
+    var app=this;
+    this.type='app';
     function loginUrl(u,p){return fmt("/login?u={0}&p={1}",u,p);}
     var wsUrlFormat="ws://localhost:8080/ws?accessToken={0}";
     function wsockUrl(at ){return fmt(wsUrlFormat,at)}
-    function $LOGIN(u,p) {
-	console.log("LOGIN THIS "+this);
-return $.ajax({context:this,url:loginUrl(u,p)})}
-    var self = this;
-    var app = this;
+    function $LOGIN(u,p) {return $.ajax({context:this,url:loginUrl(u,p)})}
+    var sid;
+    this.sendCmd=function(ns,method,params,id){
+	this.sendEnc({ns:ns,method:method,params:params,id:id});
+    }
     var NS = {
 	hello: function(params){
-	    LOG("HELLO:"+str(params));
+	    sid = params.uid;
+	    LOG("HELLO:"+str(params)+str(this)+str(app));
+	    this.sendCmd('chat','connect',{sid:sid},true);
+	    LOG("HELLO2:"+str(params)+str(this)+str(app));
+	    this.sendCmd('chat','say',{sid:sid,msg:"hey hey hey"},true);
+	    LOG("HELL32:"+str(params)+str(this)+str(app));
 	},
 	$open : function(params){
 	    LOG("OPEN:"+str(params));
@@ -27,7 +33,6 @@ return $.ajax({context:this,url:loginUrl(u,p)})}
 	}
     };
     this.main = function() {
-	console.log("PRELOGIN THIS "+this);
 	$LOGIN.call(this,'v','pass').then
 	(
 	 function(data){
