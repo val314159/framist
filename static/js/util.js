@@ -21,6 +21,7 @@ function addWebSocket(self,url,namespace) {
   ws.onmessage=function(message){
       var msg=JSON.parse(message.data);
       LOG("MSG:::"+msg+str(msg));
+      LOG("MMMMM:::"+msg.method+":::"+namespace);
       on(msg.method,msg.params);
       LOG("xMSG:::"+msg+str(msg));
   };

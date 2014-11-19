@@ -24,13 +24,14 @@ class Chat:
         old_channel = wu.channel ; wu.channel = channel
         d = {"channel":{"channel":channel,"sid":wu.sid(),
                         "oldChannel":old_channel}}
-        wu.wsend(d)
+        wu.send(d)
         pass
     @staticmethod
-    def say(wu,msg,sid):
-        print "XX @ SAY", msg, sid
-        d = {"say":{"sid":wu.sid(),"msg":msg,"name":wu.name}}
-        wu.csend(d)
+    def say(wu,msg,channel):
+        print "XX @ SAY", msg, channel
+        d = {"msg":msg,"channel":channel,"from":wu.dict()}
+        d = {"method":"say","params":d}
+        wu.send(d,channel)
         pass
     @staticmethod
     def yell(wu,msg):

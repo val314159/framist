@@ -7,23 +7,26 @@ function App() {
     function wsockUrl(at ){return fmt(wsUrlFormat,at)}
     function $LOGIN(u,p) {return $.ajax({context:this,url:loginUrl(u,p)})}
     var sid;
+    var uinfo = {};
     this.sendCmd=function(ns,method,params,id){
 	this.sendEnc({ns:ns,method:method,params:params,id:id});
     }
     var NS = {
+	hello: function(params){
+	    sid = params.sid;
+	    uinfo = {};
+	    LOG("NS:HELLO:"+str(params)+str(this)+str(app));
+	    this.sendCmd('chat','connect',{sid:sid},true);
+	    LOG("NS:HELLO2:"+str(params)+str(this)+str(app));
+	},
 	connect: function(params){
 	    LOG("NS:CONNECT:"+str(params));
-	    this.sendCmd('chat','say',{sid:sid,msg:"hey hey hey"},true);
+	    var d={sid:sid,msg:"hey hey hey"};
+	    this.sendCmd('chat','say',{channel:sid,msg:"hey hey hey"},true);
 	    LOG("NS:CONNECT2:"+str(params));
 	},
 	say: function(params){
 	    LOG("NS:SAY:"+str(params));
-	},
-	hello: function(params){
-	    sid = params.uid;
-	    LOG("NS:HELLO:"+str(params)+str(this)+str(app));
-	    this.sendCmd('chat','connect',{sid:sid},true);
-	    LOG("HELLO2:"+str(params)+str(this)+str(app));
 	},
 	$open : function(params){
 	    LOG("NS:OPEN:"+str(params));

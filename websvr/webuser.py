@@ -16,7 +16,7 @@ class WebUser:
         _.channels = ['~Basement',_.sid(),'y','s']
         pass
     def __repr__(_): return encode(_.dict())
-    def sid(_): return 'u%s'%id(_.wsock)
+    def sid(_): return 's%s'%id(_.wsock)
     def dict(_): return dict(name=_.name,channels= _.channels,sid=_.sid())
     def dict2(_):return dict(at=_.at, wsock=_.wsock, sid=_.sid(),
                              name=_.name, channels= _.channels)
@@ -30,7 +30,7 @@ class WebUser:
         print "SEND (d,ch)", repr((d,ch))
         for k,v in _.G.iteritems():
             print "G", repr((k,v.dict2()))
-            if ch is None   or   ch in v.channels:
+            if not ch   or   ch in v.channels:
                 print "s", v, d
                 v.wsend(d)
                 print "s2"
@@ -45,11 +45,7 @@ class WebUser:
     def run(_):
         print "RUN", _.at, _.sid(), _.wsock
         try:
-            #_.add_user()
-            _.wsend(dict(method='hello',
-                         params={'uid':_.sid(),
-                                 'name':_.name,
-                                 'channels':_.channels}))
+            _.wsend(dict(method='hello', params=_.dict()))
             while True:
                 message = _.wsock.receive()
                 print "MESSAGE", repr(message)
