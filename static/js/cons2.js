@@ -8,6 +8,10 @@ function App() {
     function $LOGIN(u,p) {return $.ajax({context:this,url:loginUrl(u,p)})}
     var sid;
     var uinfo = {};
+    this.execCmd=function(x) {
+	LOG('SEND CMD: ============['+x.value+']!!!');
+	x.value='';
+    };
     this.sendCmd=function(ns,method,params,id){
 	this.sendEnc({ns:ns,method:method,params:params,id:id});
     }
@@ -43,6 +47,11 @@ function App() {
 	    LOG("NS:UNKNOWN:"+str(params));
 	}
     };
+    this.bindInput = function(input) {
+	input.onchange=function(){app.execCmd(input)};
+	input.focus();
+	return this;
+    };
     this.main = function() {
 	$LOGIN.call(this,'v','pass').then
 	(
@@ -53,6 +62,7 @@ function App() {
 	 function(a,b,c){
 	     LOG("ERR");
 	 });
+	return this;
     }
     return this;
 }

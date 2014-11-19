@@ -1,0 +1,64 @@
+<div style="border:0;position:relative;bottom:0px;height:100%">
+
+  <div style="border:0;position:absolute;width:50%;height:100%;overflow:hidden">
+    <div id="content">
+      ww<br>xx<br>yy<br>zz<br>
+      qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+      qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+      qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+      qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
+      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>
+      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>
+      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>
+      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>
+      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>
+      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>
+      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>
+      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>
+      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>      ww<br>xx<br>yy<br>zz<br>ww<br>xx<br>yy<br>zz<br>
+    </div>
+  </div>
+  
+
+  <div style="border: 1px solid black;position:absolute;right:0;width:50%;height:99%;overflow:scroll;z-index:10" id="outs">
+    <div style="border:0px solid green;xmargin-left:10px;bottom:0px;position:relative">
+      <div>
+	<button onclick="CLR()">CLEAR</button>
+	Log:
+	<br>
+	<input id="inpux" style="width:100%">
+      </div>
+      <div id="out">
+	a1<br>
+	a2<br>
+	a3<br>
+	a4<br>
+	a5<br>
+	a6<br>
+	1111<br>2222<br>331111<br>442222<br>551111<br>662222<br>	1111<br>2222<br>331111<br>442222<br>551111<br>662222<br>
+	1111<br>2222<br>331111<br>442222<br>551111<br>662222<br>	1111<br>2222<br>331111<br>442222<br>551111<br>662222<br>
+	1111<br>2222<br>331111<br>442222<br>551111<br>662222<br>	1111<br>2222<br>331111<br>442222<br>551111<br>662222<br>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div style="border: 1px solid black;position:absolute;right:0;width:50%;overflow:hidden;background:yellow;z-index:10">
+      <div>
+	<button onclick="CLR()">CLEAR</button>
+	Log:
+	<br>
+	<input id="input" style="width:100%">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="js/util.js"></script>
+<script src="js/cons2.js"></script>
+<script>
+document.body.onload=function(){
+  app=App().main().bindInput($E("#input"));
+};
+</script>

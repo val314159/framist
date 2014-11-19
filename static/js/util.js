@@ -1,5 +1,6 @@
 //LOG=function(x){console.log(x)};
 //LOG=function(x){document.body.innerHTML+="<li>"+x};
+function $E(x){return document.getElementById(x.substr(1));}
 var ScrollToBottom=function(e){e.scrollTop(e.height())};
 var LOG=function(x){
     var e=$('#out');
