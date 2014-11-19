@@ -22,7 +22,9 @@ function App() {
 	connect: function(params){
 	    LOG("NS:CONNECT:"+str(params));
 	    var d={sid:sid,msg:"hey hey hey"};
-	    this.sendCmd('chat','say',{channel:sid,msg:"hey hey hey"},true);
+	    this.sendCmd('chat','say', {
+		    channel:params.channels[0],
+			msg:"hey hey hey"}, true);
 	    LOG("NS:CONNECT2:"+str(params));
 	},
 	say: function(params){
