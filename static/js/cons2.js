@@ -11,25 +11,31 @@ function App() {
 	this.sendEnc({ns:ns,method:method,params:params,id:id});
     }
     var NS = {
+	connect: function(params){
+	    LOG("NS:CONNECT:"+str(params));
+	    this.sendCmd('chat','say',{sid:sid,msg:"hey hey hey"},true);
+	    LOG("NS:CONNECT2:"+str(params));
+	},
+	say: function(params){
+	    LOG("NS:SAY:"+str(params));
+	},
 	hello: function(params){
 	    sid = params.uid;
-	    LOG("HELLO:"+str(params)+str(this)+str(app));
+	    LOG("NS:HELLO:"+str(params)+str(this)+str(app));
 	    this.sendCmd('chat','connect',{sid:sid},true);
 	    LOG("HELLO2:"+str(params)+str(this)+str(app));
-	    this.sendCmd('chat','say',{sid:sid,msg:"hey hey hey"},true);
-	    LOG("HELL32:"+str(params)+str(this)+str(app));
 	},
 	$open : function(params){
-	    LOG("OPEN:"+str(params));
+	    LOG("NS:OPEN:"+str(params));
 	},
 	$close: function(params){
-	    LOG("CLOSE:"+str(params));
+	    LOG("NS:CLOSE:"+str(params));
 	},
 	$error: function(params){
-	    LOG("ERROR:"+str(params));
+	    LOG("NS:ERROR:"+str(params));
 	},
 	$unknown: function(params){
-	    LOG("UNKNOWN:"+str(params));
+	    LOG("NS:UNKNOWN:"+str(params));
 	}
     };
     this.main = function() {

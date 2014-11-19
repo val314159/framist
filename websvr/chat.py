@@ -3,17 +3,18 @@ from geventwebsocket import WebSocketError
 decode = json.loads ; encode = json.dumps
 class Chat:
     @staticmethod
-    def connect(wu,name,channel):
-        print "XX CONNECT5", name, channel
-        wu.name = name ; wu.channel = channel
-        d = {"connect":{"id":wu.myid()}}
+    def connect(wu, sid):
+        print "XX CONNECT5", sid
+        wu.add_user()
+        d = {"method":"connect","params":wu.dict(),"id":wu.sid()}
         wu.send(d)
+        print "XX CONNECT99999", sid
         pass
     @staticmethod
     def name(wu,name):
         print "XX @ NAME", name
         old_name = wu.name ; wu.name = name
-        d = {"name":{"id":wu.myid(),"name":name,
+        d = {"name":{"sid":wu.sid(),"name":name,
                      "oldName":old_name}}
         wu.wsend(d)
         pass
@@ -21,26 +22,26 @@ class Chat:
     def channel(wu,channel):
         print "XX @ CHANNEL", channel
         old_channel = wu.channel ; wu.channel = channel
-        d = {"channel":{"channel":channel,"id":wu.myid(),
+        d = {"channel":{"channel":channel,"sid":wu.sid(),
                         "oldChannel":old_channel}}
         wu.wsend(d)
         pass
     @staticmethod
-    def say(wu,msg):
-        print "XX @ SAY", msg
-        d = {"say":{"id":wu.myid(),"msg":msg}}
+    def say(wu,msg,sid):
+        print "XX @ SAY", msg, sid
+        d = {"say":{"sid":wu.sid(),"msg":msg,"name":wu.name}}
         wu.csend(d)
         pass
     @staticmethod
     def yell(wu,msg):
         print "XX @ YELL", msg
-        d = {"yell":{"id":wu.myid(),"msg":msg}}
+        d = {"yell":{"sid":wu.sid(),"msg":msg}}
         wu.send(d)
         pass
     @staticmethod
     def whisper(wu,to,msg):
         print "XX @ WHISPER", to, msg
-        d = {"whisper":{"id":wu.myid(),"msg":msg,"to":to}}
+        d = {"whisper":{"sid":wu.sid(),"msg":msg,"to":to}}
         wu.send(d)
         pass
     @staticmethod
@@ -52,7 +53,7 @@ class Chat:
     @staticmethod
     def disconnect(wu,data):
         print "XX @ DISCONNECT", data
-        d = {"disconnect":data,"id":wu.myid()}
+        d = {"disconnect":data,"sid":wu.sid()}
         wu.send(d)
         pass
     @staticmethod

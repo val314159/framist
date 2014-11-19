@@ -20,7 +20,9 @@ function addWebSocket(self,url,namespace) {
   var ws = new WebSocket(url);
   ws.onmessage=function(message){
       var msg=JSON.parse(message.data);
+      LOG("MSG:::"+msg+str(msg));
       on(msg.method,msg.params);
+      LOG("xMSG:::"+msg+str(msg));
   };
   ws.onopen =function(evt){ on('$open', evt) };
   ws.onclose=function(evt){ on('$close',evt) };

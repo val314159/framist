@@ -9,33 +9,47 @@ Namespace = dict(chat = Chat,
                  ds = DataStore)
 class WebUser:
     G = {}
-    def __init__(_,at,wsock): _.at=at ; _.wsock=wsock
+    def __init__(_,at,wsock):
+        _.at=at
+        _.wsock=wsock
+        _.name = 'Guest'
+        _.channels = ['~Basement',_.sid(),'y','s']
+        pass
     def __repr__(_): return encode(_.dict())
-    def myid(_): return 'u%s'%id(_.wsock)
-    def dict(_): return dict(name=_.name,channels= _.channels)
-    def dict2(_):return dict(at=_.at, wsock=_.wsock,
+    def sid(_): return 'u%s'%id(_.wsock)
+    def dict(_): return dict(name=_.name,channels= _.channels,sid=_.sid())
+    def dict2(_):return dict(at=_.at, wsock=_.wsock, sid=_.sid(),
                              name=_.name, channels= _.channels)
     def close(_):
         try:    _.wsock.close()
         except: pass
         pass
     def wsend(_, d): _.wsock.send( encode(d) )
-    def csend(_, d): _.send(d,_.channel)
+    def csend(_, d): _.send(d,_.channels[0])
     def send(_, d, ch=None):
+        print "SEND (d,ch)", repr((d,ch))
         for k,v in _.G.iteritems():
             print "G", repr((k,v.dict2()))
-            if ch is None   or   v.channel==ch:
+            if ch is None   or   ch in v.channels:
+                print "s", v, d
                 v.wsend(d)
+                print "s2"
                 pass
             pass
         pass
+    def add_user(_): _.G[_.sid()] = _
+    def del_user(_):
+        _.close(); 
+        if _.sid() in _.G: del _.G[_.sid()]
+        pass
     def run(_):
-        print "CONNECT", _.at, _.myid(), _.wsock
+        print "RUN", _.at, _.sid(), _.wsock
         try:
-            _.G[_.myid()] = _
-            _.name = 'Guest'
-            _.channels = ['~Basement',_.myid(),'y','s']
-            _.wsend(dict(method='hello',params={'uid':_.myid()}))
+            #_.add_user()
+            _.wsend(dict(method='hello',
+                         params={'uid':_.sid(),
+                                 'name':_.name,
+                                 'channels':_.channels}))
             while True:
                 message = _.wsock.receive()
                 print "MESSAGE", repr(message)
@@ -44,7 +58,15 @@ class WebUser:
                     break
                 try:
                     msg = decode(message)
-                    getattr(Namespace[msg[1]],msg[2])(_,*msg[3])
+                    ns=Namespace[msg['ns']]
+                    params=msg.get('params',[])
+                    method=getattr(ns,msg['method'])
+                    if type(params)==type([]):
+                        method(_,*params)
+                    elif type(params)==type({}):
+                        method(_,**params)
+                    else:
+                        raise Exception("BAD TYPE")
                 except:
                     print '*'*80
                     tb.print_exc()
@@ -54,9 +76,8 @@ class WebUser:
         except WebSocketError, e:
             print 600, "ERR", e
 	finally:
-            print "CLOSE--", _.at, _.myid(), _.wsock
-            _.close()
-            del _.G[_.myid()]
+            print "CLOSE--", _.at, _.sid(), _.wsock
+            _.del_user()
             pass
         pass
     pass # end class WebUser
