@@ -7,30 +7,50 @@ function App() {
     function wsockUrl(at ){return fmt(wsUrlFormat,at)}
     function $LOGIN(u,p) {return $.ajax({context:this,url:loginUrl(u,p)})}
     var sid;
+    var uinfo = {};
+    this.execCmd=function(x) {
+	LOG('SEND CMD: ============['+x.value+']!!!');
+	x.value='';
+    };
     this.sendCmd=function(ns,method,params,id){
 	this.sendEnc({ns:ns,method:method,params:params,id:id});
     }
     var NS = {
 	hello: function(params){
-	    sid = params.uid;
-	    LOG("HELLO:"+str(params)+str(this)+str(app));
+	    sid = params.sid;
+	    uinfo = {};
+	    LOG("NS:HELLO:"+str(params)+str(this)+str(app));
 	    this.sendCmd('chat','connect',{sid:sid},true);
-	    LOG("HELLO2:"+str(params)+str(this)+str(app));
-	    this.sendCmd('chat','say',{sid:sid,msg:"hey hey hey"},true);
-	    LOG("HELL32:"+str(params)+str(this)+str(app));
+	    LOG("NS:HELLO2:"+str(params)+str(this)+str(app));
+	},
+	connect: function(params){
+	    LOG("NS:CONNECT:"+str(params));
+	    var d={sid:sid,msg:"hey hey hey"};
+	    this.sendCmd('chat','say', {
+		    channel:params.channels[0],
+			msg:"hey hey hey"}, true);
+	    LOG("NS:CONNECT2:"+str(params));
+	},
+	say: function(params){
+	    LOG("NS:SAY:"+str(params));
 	},
 	$open : function(params){
-	    LOG("OPEN:"+str(params));
+	    LOG("NS:OPEN:"+str(params));
 	},
 	$close: function(params){
-	    LOG("CLOSE:"+str(params));
+	    LOG("NS:CLOSE:"+str(params));
 	},
 	$error: function(params){
-	    LOG("ERROR:"+str(params));
+	    LOG("NS:ERROR:"+str(params));
 	},
 	$unknown: function(params){
-	    LOG("UNKNOWN:"+str(params));
+	    LOG("NS:UNKNOWN:"+str(params));
 	}
+    };
+    this.bindInput = function(input) {
+	input.onchange=function(){app.execCmd(input)};
+	input.focus();
+	return this;
     };
     this.main = function() {
 	$LOGIN.call(this,'v','pass').then
@@ -42,6 +62,7 @@ function App() {
 	 function(a,b,c){
 	     LOG("ERR");
 	 });
+	return this;
     }
     return this;
 }

@@ -3,56 +3,39 @@ from geventwebsocket import WebSocketError
 decode = json.loads ; encode = json.dumps
 class Chat:
     @staticmethod
-    def connect(wu,name,channel):
-        print "XX CONNECT5", name, channel
-        wu.name = name ; wu.channel = channel
-        d = {"connect":{"id":wu.myid()}}
-        wu.send(d)
+    def connect(wu, sid):
+        print "XX CONNECT5", sid
+        wu.add_user()
+        wu.send({"method":"connect",
+                 "params":wu.dict(),"id":wu.sid()})
+        print "XX CONNECT99999", sid
         pass
     @staticmethod
     def name(wu,name):
         print "XX @ NAME", name
         old_name = wu.name ; wu.name = name
-        d = {"name":{"id":wu.myid(),"name":name,
-                     "oldName":old_name}}
-        wu.wsend(d)
+        wu.send({"method":"name",
+                 "params":{"from":wu.dict(),
+                           "oldName":old_name}})
         pass
     @staticmethod
     def channel(wu,channel):
         print "XX @ CHANNEL", channel
         old_channel = wu.channel ; wu.channel = channel
-        d = {"channel":{"channel":channel,"id":wu.myid(),
-                        "oldChannel":old_channel}}
-        wu.wsend(d)
+        wu.send({"method":"channel",
+                 "params":{"from":wu.dict(),
+                           "oldChannel":old_channel}})
         pass
     @staticmethod
-    def say(wu,msg):
-        print "XX @ SAY", msg
-        d = {"say":{"id":wu.myid(),"msg":msg}}
-        wu.csend(d)
-        pass
-    @staticmethod
-    def yell(wu,msg):
-        print "XX @ YELL", msg
-        d = {"yell":{"id":wu.myid(),"msg":msg}}
-        wu.send(d)
-        pass
-    @staticmethod
-    def whisper(wu,to,msg):
-        print "XX @ WHISPER", to, msg
-        d = {"whisper":{"id":wu.myid(),"msg":msg,"to":to}}
-        wu.send(d)
-        pass
-    @staticmethod
-    def sys(wu,data,channel=None):
-        print "XX @ SYS", data
-        d = {"sys":data}
-        wu.send(d,channel)
+    def say(wu,msg,channel):
+        print "XX @ SAY", msg, channel
+        d = {"msg":msg,"channel":channel,"from":wu.dict()}
+        wu.send({"method":"say","params":d},channel)
         pass
     @staticmethod
     def disconnect(wu,data):
         print "XX @ DISCONNECT", data
-        d = {"disconnect":data,"id":wu.myid()}
+        d = {"disconnect":data,"sid":wu.sid()}
         wu.send(d)
         pass
     @staticmethod

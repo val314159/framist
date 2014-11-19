@@ -1,5 +1,6 @@
 //LOG=function(x){console.log(x)};
 //LOG=function(x){document.body.innerHTML+="<li>"+x};
+function $E(x){return document.getElementById(x.substr(1));}
 var ScrollToBottom=function(e){e.scrollTop(e.height())};
 var LOG=function(x){
     var e=$('#out');
@@ -20,7 +21,10 @@ function addWebSocket(self,url,namespace) {
   var ws = new WebSocket(url);
   ws.onmessage=function(message){
       var msg=JSON.parse(message.data);
+      LOG("MSG:::"+msg+str(msg));
+      LOG("MMMMM:::"+msg.method+":::"+namespace);
       on(msg.method,msg.params);
+      LOG("xMSG:::"+msg+str(msg));
   };
   ws.onopen =function(evt){ on('$open', evt) };
   ws.onclose=function(evt){ on('$close',evt) };

@@ -4,7 +4,7 @@ app = Bottle()
 
 @app.route('/')
 def index():
-    return static_file('index.html', root='./static')
+    return static_file('main.html', root='./static')
 
 @app.route('/js/<filename>')
 def server_static(filename):
