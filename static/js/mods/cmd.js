@@ -13,10 +13,15 @@ CMD=function(x){
 	for(var k in NS)
 	    LOG(" - "+k+" : "+NS[k].docstr);
 	return}
-    if (x[0]=="!") { LOG("XXXX EVAL:" + x);
-		     var ret = eval(x.substr(1));
-		     LOG("RET:"+str(ret));
-		     return}
+    if (x[0]=="!")try{
+	    LOG("XXXX EVAL:" + x);
+	    var ret = eval(x.substr(1));
+	    LOG("RET:"+str(ret));
+	    return;
+	}catch(e){
+	    LOG("ERR:"+str(e));
+	    return;
+	}}
     var arr = x.split();
     LOG("XXXX CMD:" + str(arr));
     var cmd = arr.shift();
