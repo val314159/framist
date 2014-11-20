@@ -1,6 +1,9 @@
 NS={
     connect:function(){
 	ws.connect();
+    },
+    clear:function(){
+	LOG.clear();
     }
 };
 CMD=function(x){
