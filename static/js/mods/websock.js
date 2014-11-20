@@ -15,13 +15,15 @@ function WebSock(){
     self.addPlugin=function(plugin,ns){
 	self.addListener(plugin,ns);
 	plugin.sendEnc=function(data){self.sendEnc(ns,data);return plugin};
-	plugin.addSpeaker(self);
 	plugin.ns=ns;
 	return self;};
-    var on=function(verb,msg){
-	LOG(" @@@@ ON = "+verb+"[["+msg+"]]");
-	//var fn = namespace[verb];
-	///if (fn) fn.call(self, msg);
+    var on=function(ns,verb,msg){
+	LOG(" @@@@ ON = "+ns+"::"+verb+"[["+msg+"]]");
+	var nspace=listeners[ns];
+	if(!nspace)return;
+	var fn=nspace[verb];
+	if(!fn)return;
+	fn.call(self, msg);
     };
     self.isClosed=function() {
 	if(ws===closed)return true;
@@ -34,9 +36,9 @@ function WebSock(){
     self.login=function(){
 	succeeded=!succeeded;
 	if (succeeded)
-	    self._loginSuccess('vat');
+	    self._loginSuccess(self,'vat');
 	else
-	    self._loginFailure();
+	    self._loginFailure(self);
 	return self};
     self.loginSuccess=function(x){self._loginSuccess=x;return self};
     self.loginFailure=function(x){self._loginFailure=x;return self};
@@ -45,7 +47,7 @@ function WebSock(){
 	ws.onmessage=function(message){
 	    var msg=JSON.parse(message.data);
 	    LOG("+++MSG:::"+msg+str(msg));
-	    on(msg.method,msg.params);
+	    on(msg.ns,msg.method,msg.params);
 	    LOG("---MSG:::"+msg+str(msg));
 	};
 	ws.onopen =function(evt){on('$open', evt)};
