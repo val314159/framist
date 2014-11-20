@@ -31,7 +31,14 @@ function WebSock(){
 	if(!nspace)return;
 	var fn=nspace[verb];
 	if(!fn)return;
-	fn.call(self, msg);    };
+	try{
+	    LOG("  START @ ON = "+ns+"::"+verb+"<"+str(msg)+">");
+	    fn.call(self, msg);
+	    LOG("  -END- @ ON = "+ns+"::"+verb+"<"+str(msg)+">");
+	}catch(e){
+	    LOG("  ERR 8 @ ON = "+ns+"::"+verb+"<"+str(msg)+"> err="+e);
+	}
+    };
     self.isClosed=function() {
 	if(ws===closed)return true;
 	return ws.closed();    };
