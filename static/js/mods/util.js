@@ -1,3 +1,4 @@
+G={};function loop(x,f){for(k in x){f(k,x[k])}}
 function $E(x){return document.getElementById(x.substr(1))};
 function LOG(x){$E('#out').innerHTML+="<li>"+x+"</li>"}
 LOG("Loading util.js");

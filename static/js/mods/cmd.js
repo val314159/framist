@@ -5,6 +5,7 @@ NS={connect:doc('connect websock',function(){
     clear:doc('clear screen',function(){
 	    LOG.clear();
 	})};
+G.prototype=NS;
 CMD=function(x){
     if (!x) { LOG("XXXX NOOP"); return}
     if (x=="?"){

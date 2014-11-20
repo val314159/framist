@@ -4,11 +4,11 @@ function WebSock(){
     if (this===window) return new WebSock();
     var self=this;
     var ws = closed;
-    var url,listeners=self.listeners={};
+    var url = '';
+    var listeners=self.listeners={};
     var closed = {
 	sendEnc:function(){LOG("websock not connected")},
-	close  :function(){LOG("websock not connected")}
-    };
+	close  :function(){LOG("websock not connected")}    };
     self.type='websock';
     self.url=function(_url,at){url=_url+at;return self};
     self.addListener=function(x,ns){listeners[ns]=x;return self};
@@ -18,17 +18,23 @@ function WebSock(){
 	plugin.ns=ns;
 	return self;};
     var on=function(ns,verb,msg){
-	LOG(" @@@@ ON = "+ns+"::"+verb+"[["+msg+"]]");
+	LOG(" @@@@ ON = "+ns+"::"+verb+"<"+str(msg)+">");
+	if(!ns){
+	    LOG(" @@@@++");
+	    loop(listeners,function(k,v){
+		    on(k,verb,msg);
+		});
+	    LOG(" @@@@--");
+	    return;
+	}
 	var nspace=listeners[ns];
 	if(!nspace)return;
 	var fn=nspace[verb];
 	if(!fn)return;
-	fn.call(self, msg);
-    };
+	fn.call(self, msg);    };
     self.isClosed=function() {
 	if(ws===closed)return true;
-	return ws.closed();
-    };
+	return ws.closed();    };
     self.loginInfo=function(u,p){
 	self.username=u;
 	self.password=p;
@@ -46,13 +52,11 @@ function WebSock(){
 	ws = new WebSocket(url);
 	ws.onmessage=function(message){
 	    var msg=JSON.parse(message.data);
-	    LOG("+++MSG:::"+msg+str(msg));
 	    on(msg.ns,msg.method,msg.params);
-	    LOG("---MSG:::"+msg+str(msg));
 	};
-	ws.onopen =function(evt){on('$open', evt)};
-	ws.onclose=function(evt){on('$close',evt)};
-	ws.onerror=function(evt){on('$error',evt)};
+	ws.onopen =function(evt){on('','$open', evt)};
+	ws.onclose=function(evt){on('','$close',evt)};
+	ws.onerror=function(evt){on('','$error',evt)};
 	return self}
     self.sendEnc=function(msg,ns){
 	if(ns)msg.ns=ns;
