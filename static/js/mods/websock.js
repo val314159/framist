@@ -1,4 +1,4 @@
-LOG("xxLoading websock.js");
+LOG("Loading websock.js");
 var succeeded = true;
 function WebSock(){
     if (this===window) return new WebSock();
