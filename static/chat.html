@@ -1,0 +1,16 @@
+<input style="width:100%" id="input" onchange="EXC(this)">
+<div id="out"></div>
+<script src="js/mods/util.js"></script>
+<script src="js/mods/websock.js"></script>
+<script src="js/mods/cmd.js"></script>
+<script src="js/mods/chat.js"></script>
+<script src="js/mods/ping.js"></script>
+<script>
+ping=Ping();
+chat=Chat();
+ws=WebSock()
+  .url("ws://localhost:8080/ws?accessToken=vat")
+  .addPlugin(chat,"chat")
+  .addPlugin(ping,"ping");
+$E('#input').focus();
+</script>
