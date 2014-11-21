@@ -4,32 +4,46 @@ from pingpong import PingPong
 from datastore import DataStore
 from chat import Chat
 decode = json.loads ; encode = json.dumps
-Namespace = dict(chat = Chat,
-                 pingpong = PingPong,
-                 ds = DataStore)
+Namespace = dict(chat = Chat('chat'),
+                 pingpong = PingPong('pingpong'),
+                 ds = DataStore('datastore'))
 class WebUser:
     G = {}
     def __init__(_,at,wsock):
         _.at=at
         _.wsock=wsock
-        _.name = 'Guest'
-        _.channels = ['~Basement',_.sid(),'y','s']
-        pass
+        _.locals={}
+        _.channels = ['~Basement',_.sid(),'nGuest','y','s','*']
+        pass    
     def __repr__(_): return encode(_.dict())
+
     def sid(_): return 's%s'%id(_.wsock)
-    def dict(_): return dict(name=_.name,channels= _.channels,sid=_.sid())
+    def name(_,v=None):
+        if v is not None: _.channels[2]='n'+v
+        return _.channels[2][1:]
+    def _name(_,v=None):
+        if v is not None: _.channels[2]=v
+        return _.channels[2]
+    def channel(_,v=None):
+        if v is not None: _.channels[0]='~'+v
+        return _.channels[0][1:]
+    def _channel(_,v=None):
+        if v is not None: _.channels[0]=v
+        return _.channels[0]
+
+    def dict(_): return dict(name=_.name(),channels= _.channels,sid=_.sid())
+    def dict1(_):return dict(name=_.name(),sid=_.sid())
     def dict2(_):return dict(at=_.at, wsock=_.wsock, sid=_.sid(),
-                             name=_.name, channels= _.channels)
+                             name=_.name(), channels= _.channels)
     def close(_):
         try:    _.wsock.close()
         except: pass
         pass
     def wsend(_, d): _.wsock.send( encode(d) )
-    def csend(_, d): _.send(d,_.channels[0])
     def send(_, d, ch=None):
         print "SEND (d,ch)", repr((d,ch))
         for k,v in _.G.iteritems():
-            print "G", repr((k,v.dict2()))
+            print "G", repr((k,v.dict2())), repr(ch)
             if not ch   or   ch in v.channels:
                 print "s", v, d
                 v.wsend(d)
@@ -39,9 +53,8 @@ class WebUser:
         pass
     def add_user(_): _.G[_.sid()] = _
     def del_user(_):
-        _.close(); 
+        _.close();
         if _.sid() in _.G: del _.G[_.sid()]
-        pass
     def run(_):
         print "RUN", _.at, _.sid(), _.wsock
         try:

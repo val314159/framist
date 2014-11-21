@@ -5,6 +5,7 @@ decode = json.loads
 encode = json.dumps
 
 class DataStore:
+    def __init__(_,name):_.name=name
     @staticmethod
     def DB(__=[]):
         print "XX @@ DB"
