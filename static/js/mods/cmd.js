@@ -38,6 +38,8 @@ CMD=function(x){
 CMD.doc=function(docstr,thing){thing.docstr=docstr;return thing};
 
 NS={connect:CMD.doc('connect websock',function(){ws.connect()}),
-    r:CMD.doc('reload page',function(){location=""}),
+    disconnect:CMD.doc('disconnect websock',function(){ws.close()}),
+    reload:CMD.doc('reload page',function(){location=""}),
     clear : CMD.doc('clear screen',   function(){LOG.clear()})};
+NS.r=NS.reload;
 G.prototype=NS;
