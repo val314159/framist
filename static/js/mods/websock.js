@@ -14,7 +14,7 @@ function WebSock(){
     self.addListener=function(x,ns){listeners[ns]=x;return self};
     self.addPlugin=function(plugin,ns){
 	self.addListener(plugin,ns);
-	plugin.sendEnc=function(data){self.sendEnc(ns,data);return plugin};
+	plugin.sendEnc=function(data){self.sendEnc(data,ns);return plugin};
 	plugin.ns=ns;
 	return self;};
     var on=function(ns,verb,msg){
@@ -33,7 +33,7 @@ function WebSock(){
 	if(!fn)return;
 	try{
 	    LOG("  START @ ON = "+ns+"::"+verb+"<"+str(msg)+">");
-	    fn.call(self, msg);
+	    fn(self, msg);
 	    LOG("  -END- @ ON = "+ns+"::"+verb+"<"+str(msg)+">");
 	}catch(e){
 	    LOG("  ERR 8 @ ON = "+ns+"::"+verb+"<"+str(msg)+"> err="+e);
@@ -59,13 +59,21 @@ function WebSock(){
 	ws = new WebSocket(url);
 	ws.onmessage=function(message){
 	    var msg=JSON.parse(message.data);
-	    on(msg.ns,msg.method,msg.params);
+	    LOG(">>>>>>>>>> ONMSG msg=" + str(msg));
+	    LOG(">>>>>>>>>> ONMSG msg.ns=" + str(msg.ns));
+	    LOG(">>>>>>>>>> ONMSG msg.meth=" + str(msg.method));
+	    LOG(">>>>>>>>>> ONMSG msg.parm=" + str(msg.params));
+	    on(msg.ns,msg.method,msg.params,self);
 	};
-	ws.onopen =function(evt){on('','$open', evt)};
+	ws.onopen =function(evt){
+	    LOG(">>>>>>>>>> ONOPN evt=" + str(evt.toString()));
+
+on('','$open', evt)};
 	ws.onclose=function(evt){on('','$close',evt)};
 	ws.onerror=function(evt){on('','$error',evt)};
 	return self}
     self.sendEnc=function(msg,ns){
+	LOG("S S SEND ENC" + str([msg,ns]));
 	if(ns)msg.ns=ns;
 	ws.send(str(msg));
 	return self}

@@ -1,11 +1,3 @@
-function doc(docstr,thing){thing.docstr=docstr;return thing}
-NS={connect:doc('connect websock',function(){
-	    ws.connect();
-	}),
-    clear:doc('clear screen',function(){
-	    LOG.clear();
-	})};
-G.prototype=NS;
 CMD=function(x){
     if (!x) { LOG("XXXX NOOP"); return}
     if (x=="?"){
@@ -20,11 +12,16 @@ CMD=function(x){
 	    return;
 	}catch(e){
 	    LOG("ERR:"+str(e));
-	    return;
-	}}
+	    return}
     var arr = x.split();
     LOG("XXXX CMD:" + str(arr));
     var cmd = arr.shift();
     var fn = NS[cmd];
+
     if (fn) fn(arr);
     else    LOG("XXXX UNKNOWN CMD:" + cmd)};
+CMD.doc=function(docstr,thing){thing.docstr=docstr;return thing};
+
+NS={connect:CMD.doc('connect websock',function(){ws.connect()}),
+    clear : CMD.doc('clear screen',   function(){LOG.clear()})};
+G.prototype=NS;

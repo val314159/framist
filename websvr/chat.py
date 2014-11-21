@@ -3,12 +3,12 @@ from geventwebsocket import WebSocketError
 decode = json.loads ; encode = json.dumps
 class Chat:
     @staticmethod
-    def connect(wu, sid):
-        print "XX CONNECT5", sid
+    def connect(wu):
+        print "XX CONNECT5", wu
         wu.add_user()
         wu.send({"method":"connect",
                  "params":wu.dict(),"id":wu.sid()})
-        print "XX CONNECT99999", sid
+        print "XX CONNECT99999", wu
         pass
     @staticmethod
     def name(wu,name):
@@ -39,10 +39,11 @@ class Chat:
         wu.send(d)
         pass
     @staticmethod
-    def whoList(wu,*a):
-        print "XX @ WHO_LIST", a
-        print "G", wu.G
+    def whoList(wu,pattern=''):
+        print "XX @ WHO_LIST", repr(pattern)
+        #print "G", wu.G
         it = ((k,v.dict()) for k,v in wu.G.iteritems())
-        d = {"whoList":{"resultMap":dict(it)}}
-        wu.wsend(d)
+        #d = {"whoList":dict(it)}
+        d = {"whoList":list(it)}
+        wu.wsend({"ns":"chat","method":"whoList","params":d})
         pass
