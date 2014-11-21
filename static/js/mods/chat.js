@@ -49,33 +49,39 @@ function Chat(){
 	LOG(" >> " + n + " user(s).");
     };
     self.execCmd=function(cmd){
-	LOG("CHAT EXEC CMD"+str(cmd));
+	//LOG("CHAT EXEC CMD"+str(cmd));
 	var ch=cmd[0];
 	var cmd_ch=cmd[1];
-	if(ch=="\""){
-	    LOG("SEND A SAY");
-	}else if(ch==":"){
-	    LOG("SEND AN EMOTE");
-	}else if(ch==";"){
-	    LOG("SEND A PEMOTE");
+	if(ch=="\""||ch=="\'"){
+	    //LOG("SEND A SAY");
+	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),
+			    channel:self.userInfo.channels[0]}})
+	}else if(ch==":"||ch==";"){
+	    //LOG("SEND A EMOTE");
+	    self.sendEnc({method:'say',params:{msg:cmd.substr(1),
+			    channel:self.userInfo.channels[0]}})
 	}else if(ch!="."){
 	    LOG("BAD COMMAND:"+cmd);
 
 	}else if(cmd_ch=="w") {
-	    LOG("SEND A WHO");
+	    //LOG("SEND A WHO");
 	    self.sendEnc({method:'whoList',params:{}})
 	}else if(cmd_ch=="y") {
-	    LOG("SEND A YELL");
+	    //LOG("SEND A YELL");
 	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:'y'}})
 	}else if(cmd_ch=="p") {
-	    LOG("SEND A WHISPER");
-	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:self.userInfo.channels[0]}})
+	    //LOG("SEND A WHISPER");
+	    var sub_cmd = cmd.substr(2);
+	    LOG("SUBCMD " + str(sub_cmd));
+	    var arr = sub_cmd.split(',',2);
+	    LOG("ARR " + str(arr));
+	    self.sendEnc({method:'say',params:{msg:arr[1],channel:arr[0]}})
 	}else if(cmd_ch=="s") {
-	    LOG("SEND A SYSTEM MSG");
+	    //LOG("SEND A SYSTEM MSG");
 	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:'s'}})
 	}else if(cmd_ch=="q") {
-	    LOG("SEND A QUIT MSG");
-	    LOG("what's quit mean right now?");
+	    //LOG("SEND A QUIT MSG");
+	    //LOG("what's quit mean right now?");
 	    self.sendEnc({method:'quit',params:{msg:cmd.substr(2)}})
 	}else{
 	    LOG("BAD COMMAND:"+cmd);
