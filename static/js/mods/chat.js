@@ -37,6 +37,34 @@ function Chat(){
 	    });
 	LOG(" >> " + n + " user(s).");
     };
+    self.execCmd=function(cmd){
+	LOG("CHAT EXEC CMD"+str(cmd));
+	var ch=cmd[0];
+	var cmd_ch=cmd[1];
+	if(ch=="\""){
+	    LOG("SEND A SAY");
+	}else if(ch==":"){
+	    LOG("SEND AN EMOTE");
+	}else if(ch==";"){
+	    LOG("SEND A PEMOTE");
+	} else if (ch!="."){
+	    LOG("BAD COMMAND:"+cmd);
+
+	} else if (cmd_ch=="w") {
+	    LOG("SEND A WHO");
+	} else if (cmd_ch=="y") {
+	    LOG("SEND A YELL");
+	} else if (cmd_ch=="p") {
+	    LOG("SEND A WHISPER");
+	} else if (cmd_ch=="S") {
+	    LOG("SEND A SYSTEM MSG");
+	} else if (cmd_ch=="q") {
+	    LOG("SEND A QUIT MSG");
+	    LOG("what's quit mean right now?");
+	} else {
+	    LOG("BAD COMMAND:"+cmd);
+	}
+    };
     self.hello=function(websock,msg){
 	LOG("CHAT HELLO"+str(msg));
 	self.userInfo = msg;
