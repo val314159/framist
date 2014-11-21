@@ -17,9 +17,14 @@ CMD=function(x){
     LOG("XXXX CMD:" + str(arr));
     var cmd = arr.shift();
     var fn = NS[cmd];
-
     if (fn) fn(arr);
-    else    LOG("XXXX UNKNOWN CMD:" + cmd)};
+    else {
+	LOG("XXXX UNKNOWN CMD:" + cmd);
+	fn = NS.$unknown;
+	if (fn) fn(arr,cmd);
+    }
+};
+
 CMD.doc=function(docstr,thing){thing.docstr=docstr;return thing};
 
 NS={connect:CMD.doc('connect websock',function(){ws.connect()}),

@@ -41,9 +41,7 @@ class Chat:
     @staticmethod
     def whoList(wu,pattern=''):
         print "XX @ WHO_LIST", repr(pattern)
-        #print "G", wu.G
-        it = ((k,v.dict()) for k,v in wu.G.iteritems())
-        #d = {"whoList":dict(it)}
-        d = {"whoList":list(it)}
-        wu.wsend({"ns":"chat","method":"whoList","params":d})
+        it = (v.dict() for k,v in wu.G.iteritems())
+        wu.wsend({"ns":"chat","method":"whoList",
+                  "params":{"whoList":list(it)}})
         pass

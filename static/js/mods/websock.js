@@ -18,23 +18,22 @@ function WebSock(){
 	plugin.ns=ns;
 	return self;};
     var on=function(ns,verb,msg){
-	LOG(" @@@@ ON = "+ns+"::"+verb+"<"+str(msg)+">");
 	if(!ns){
-	    LOG(" @@@@++");
 	    loop(listeners,function(k,v){
 		    on(k,verb,msg);
 		});
-	    LOG(" @@@@--");
 	    return;
 	}
 	var nspace=listeners[ns];
 	if(!nspace)return;
 	var fn=nspace[verb];
-	if(!fn)return;
+	if(!fn){
+	    if (nspace.$unknown)
+		nspace.$unknown(self,msg,verb);
+	    return;
+	}
 	try{
-	    LOG("  START @ ON = "+ns+"::"+verb+"<"+str(msg)+">");
 	    fn(self, msg);
-	    LOG("  -END- @ ON = "+ns+"::"+verb+"<"+str(msg)+">");
 	}catch(e){
 	    LOG("  ERR 8 @ ON = "+ns+"::"+verb+"<"+str(msg)+"> err="+e);
 	}
@@ -59,16 +58,9 @@ function WebSock(){
 	ws = new WebSocket(url);
 	ws.onmessage=function(message){
 	    var msg=JSON.parse(message.data);
-	    LOG(">>>>>>>>>> ONMSG msg=" + str(msg));
-	    LOG(">>>>>>>>>> ONMSG msg.ns=" + str(msg.ns));
-	    LOG(">>>>>>>>>> ONMSG msg.meth=" + str(msg.method));
-	    LOG(">>>>>>>>>> ONMSG msg.parm=" + str(msg.params));
 	    on(msg.ns,msg.method,msg.params,self);
 	};
-	ws.onopen =function(evt){
-	    LOG(">>>>>>>>>> ONOPN evt=" + str(evt.toString()));
-
-on('','$open', evt)};
+	ws.onopen =function(evt){on('','$open', evt)};
 	ws.onclose=function(evt){on('','$close',evt)};
 	ws.onerror=function(evt){on('','$error',evt)};
 	return self}
