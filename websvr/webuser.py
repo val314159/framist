@@ -54,6 +54,9 @@ class WebUser:
                     break
                 try:
                     msg = decode(message)
+                    print "MSG1", msg
+                    msg['ns']
+                    print "MSG2", msg
                     ns=Namespace[msg['ns']]
                     params=msg.get('params',[])
                     method=getattr(ns,msg['method'])
