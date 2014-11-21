@@ -12,8 +12,11 @@ class WebUser:
     def __init__(_,at,wsock):
         _.at=at
         _.wsock=wsock
-        _.name = 'Guest'
-        _.channels = ['~Basement',_.sid(),'y','s']
+        name = 'Guest'
+        channels = ['~Basement',_.sid(),'y','s','']
+        _.mod_chat = dict(name=name,channels=channels)
+        _.name = name
+        _.channels = channels
         pass
     def __repr__(_): return encode(_.dict())
     def sid(_): return 's%s'%id(_.wsock)
@@ -29,7 +32,7 @@ class WebUser:
     def send(_, d, ch=None):
         print "SEND (d,ch)", repr((d,ch))
         for k,v in _.G.iteritems():
-            print "G", repr((k,v.dict2()))
+            print "G", repr((k,v.dict2())), repr(ch)
             if not ch   or   ch in v.channels:
                 print "s", v, d
                 v.wsend(d)

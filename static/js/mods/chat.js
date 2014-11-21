@@ -12,14 +12,25 @@ function Chat(){
     self.$error=function(){ LOG("CHAT $ERROR"); };
     self.$unknown=function(a,b,c){ LOG("CHAT $UNKNOWN:"+[str(b),c]); };
     self.say=function(websock,msg){
-	LOG("CHAT SAY"+str(msg));
+	//LOG("CHAT SAY"+str(msg));
+	if(msg.channel=='y'){
+	    LOG("(* "+str(msg.from.name)+" *) "+msg.msg);
+	}else if(msg.channel=='s'){
+	    LOG("*> "+msg.msg);
+	}else if(msg.channel[0]=='s'){
+	    LOG("(~p, "+str(msg.from.name)+"~) "+msg.msg);
+	}else if(msg.channel[0]=='~'){
+	    LOG("( "+str(msg.from.name)+" ) "+msg.msg);
+	}else{
+	    LOG("WTF:"+msg);
+	}
 	if(msg.from.sid==self.userInfo.sid) {
-	    LOG("CHAT SAY"+str(msg.from.sid)+self.userInfo.sid);
+	    //LOG("CHAT SAY"+str(msg.from.sid)+self.userInfo.sid);
 	    //websock.close();
 	}
     };
     self.connect=function(websock,msg){
-	LOG("CHAT CONNECT"+str(msg));
+	LOG(">> New Connection ("+msg.name+") on "+str(msg.channels[0]));
 	self.users[msg.sid] = msg;
 	self.sendEnc({method:'say',params:{msg:initial_msg,channel:self.userInfo.channels[0]}})
 	self.sendEnc({method:'say',params:{msg:initial_msg,channel:'y'}})
@@ -28,11 +39,11 @@ function Chat(){
 	self.sendEnc({method:'whoList',params:{}})
     };
     self.whoList=function(websock,msg){
-	LOG("CHAT WHOLIST"+str(msg));
+	LOG(">> Who list:");
 	var n=0;
 	loop(msg['whoList'],function(k,v){
 		n++;
-		LOG(" >> "+str(v));
+		LOG(" -- "+str(v));
 		self.sendEnc({method:'say',params:{msg:initial_msg,channel:v.sid}})
 	    });
 	LOG(" >> " + n + " user(s).");
@@ -47,21 +58,26 @@ function Chat(){
 	    LOG("SEND AN EMOTE");
 	}else if(ch==";"){
 	    LOG("SEND A PEMOTE");
-	} else if (ch!="."){
+	}else if(ch!="."){
 	    LOG("BAD COMMAND:"+cmd);
 
-	} else if (cmd_ch=="w") {
+	}else if(cmd_ch=="w") {
 	    LOG("SEND A WHO");
-	} else if (cmd_ch=="y") {
+	    self.sendEnc({method:'whoList',params:{}})
+	}else if(cmd_ch=="y") {
 	    LOG("SEND A YELL");
-	} else if (cmd_ch=="p") {
+	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:'y'}})
+	}else if(cmd_ch=="p") {
 	    LOG("SEND A WHISPER");
-	} else if (cmd_ch=="S") {
+	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:self.userInfo.channels[0]}})
+	}else if(cmd_ch=="s") {
 	    LOG("SEND A SYSTEM MSG");
-	} else if (cmd_ch=="q") {
+	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:'s'}})
+	}else if(cmd_ch=="q") {
 	    LOG("SEND A QUIT MSG");
 	    LOG("what's quit mean right now?");
-	} else {
+	    self.sendEnc({method:'quit',params:{msg:cmd.substr(2)}})
+	}else{
 	    LOG("BAD COMMAND:"+cmd);
 	}
     };
