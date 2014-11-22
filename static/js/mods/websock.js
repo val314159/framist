@@ -55,6 +55,7 @@ function WebSock(){
     self.loginSuccess=function(x){self._loginSuccess=x;return self};
     self.loginFailure=function(x){self._loginFailure=x;return self};
     self.connect=function(message){
+	if (ws) ws.close();
 	ws = new WebSocket(url);
 	ws.onmessage=function(message){
 	    var msg=JSON.parse(message.data);
