@@ -30,3 +30,5 @@ function clt_auth_login3() {
 }
 
 . .venv/bin/activate
+
+$*
