@@ -3,6 +3,11 @@ framist
 
 cool framework
 
+##### Quickstart:
+```
+sh install.sh run_both
+```
+
 ##### To install:
 ```
 sh install.sh
@@ -10,8 +15,11 @@ sh install.sh
 
 ##### To run server:
 ```
-. env.sh
-python -m websvr
+sh env.sh run_websvr
+```
+##### To run server:
+```
+sh env.sh run_authsvr
 ```
 
 ##### To run client:
