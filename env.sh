@@ -19,8 +19,7 @@ run_dssvr() {
 
 ctrl_c() {
   echo
-  echo ' *CTRL_C*'
-  echo
+  echo '>> *CTRL_C* Intercepted'
 }
 
 pysleep () {
@@ -29,16 +28,22 @@ pysleep () {
 
 run_both() {
   trap ctrl_c 2
-  zerorpc --server --bind tcp://*:$AUTH_PORT auth.ds.levelds.DS &
-  python -m websvr &
+  echo '>> Starting 0.'
+  run_authsvr &
+  pysleep 0.2
+  echo '>> Starting 1.'
+  run_websvr &
+  pysleep 0.2
+  echo '>> Started.'
   wait
+  echo '>> Loop complete.  Kill kids...'
   kill %1 %2
-  echo waiting 1/2 of a second...
+  echo '>> waiting 1/2 of a second...'
   pysleep 0.5
-  echo killall python
+  echo '>> killall python'
   killall -9 python 2>/dev/null
   pysleep 0.05 # just to let the output sync up
-  echo Done.
+  echo '>> Done.'
   trap 2
 }
 
