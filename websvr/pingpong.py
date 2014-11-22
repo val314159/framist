@@ -14,7 +14,7 @@ class PingPong:
         print "XX @@ PONG"
         d = {"pong":{"input":msg}}
         wu.wsock.send(encode(dict(
-                    method="pong".
+                    method="pong",
                     ns=_.name,
                     params=dict(
                         input=msg

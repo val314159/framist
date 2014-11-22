@@ -11,18 +11,17 @@ CMD=function(x){
 	    var ret = eval(x.substr(1));
 	    LOG("RET:"+str(ret));
 	    return}
+	if (x[0]=="="){
+	    LOG("XXXX EXEC:" + x);
+	    eval(x.substr(1));
+	    return}
 	var ch = x[0];
 	var chars = ".\"\':;";
 	if (ch=="."||ch=="\""||ch=="\'"||ch==":"||ch==";"){
-	    //LOG("XXXX EVAL:" + x);
-	    //LOG("XXXX EVAL:" + str(ws));
 	    var module = ws.listeners.chat;
-	    //LOG("XXXX MODD:" + module);
 	    module.execCmd(x);
-	    //LOG("XXXX SENT");
 	    return}
 	var arr = x.split();
-	//LOG("XXXX CMD:" + str(arr));
 	var cmd = arr.shift();
 	var fn = NS[cmd];
 	if (fn) fn(arr);
