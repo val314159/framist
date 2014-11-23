@@ -10,7 +10,7 @@ def index():
 <li><a href="/restart">restart</a></li>
 <li><a href="/stop"   >stop   </a></li>
 <hr>
-<li><a href="//localhost:8080">web server</a></li>
+<li><a href="http://localhost:8080">web server</a></li>
 ''']
 
 @route('/ps')

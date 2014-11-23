@@ -67,11 +67,11 @@ function Chat(){
 	var ch=cmd[0]
 	var cmd_ch=cmd[1]
 	if(ch=="\""||ch=="\'"){
-	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),
+	    self.sendEnc({method:'pub',params:{msg:cmd,
 					       from:{name:self._name(),id:self._sid()},
 					       channel:self._channel()}})
 	}else if(ch==":"||ch==";"){
-	    self.sendEnc({method:'pub',params:{msg:cmd.substr(1),
+	    self.sendEnc({method:'pub',params:{msg:cmd,
 					       from:{name:self._name(),id:self._sid()},
 					       channel:self._channel()}})
 	}else if(ch!="."){
