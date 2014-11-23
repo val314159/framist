@@ -5,7 +5,13 @@ cool framework
 
 ##### Quickstart:
 ```
-sh install.sh run_both
+(git clone https://github.com/val314159/framist;cd framist;sh install.sh loop_procsvr)
+```
+
+##### To download:
+```
+git clone https://github.com/val314159/framist
+cd framist
 ```
 
 ##### To install:
@@ -13,15 +19,30 @@ sh install.sh run_both
 sh install.sh
 ```
 
-##### To run server:
+##### To run normally (looping the procsvr):
+```
+sh env.sh loop_procsvr
+```
+
+
+
+##### To run proc server:
+```
+sh env.sh run_procsvr
+```
+
+##### To run web server seperately:
 ```
 sh env.sh run_websvr
 ```
-##### To run server:
+
+##### To run auth server seperately:
 ```
 sh env.sh run_authsvr
 ```
 
 ##### To run client:
 
-Navigate to [http://localhost:8080](http://localhost:8080)
+- Navigate to [http://localhost:8080](http://localhost:8080)
+
+- Navigate to [http://localhost:8282](http://localhost:8282)
