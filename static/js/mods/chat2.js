@@ -22,7 +22,7 @@ function Chat(){
 	LOG("Intro:<hr><pre>"+(b.message)+"</pre><hr>")
     }
     self.$unknown=function(a,b,c){ LOG("CHAT $UNKNOWN:"+[str(b),c]) }
-    self.say=function(websock,msg){
+    self.pub=function(websock,msg){
 	if(msg.channel=='y'){
 	    LOG("(* "+str(msg.from.name)+" *) "+msg.msg)
 	}else if(msg.channel=='s'){
@@ -35,7 +35,7 @@ function Chat(){
 	    LOG("WTF:"+msg)
 	}
 	if(msg.from.sid==self.userInfo.sid) {
-	    //LOG("CHAT SAY"+str(msg.from.sid)+self.userInfo.sid)
+	    //LOG("CHAT PUB"+str(msg.from.sid)+self.userInfo.sid)
 	    //websock.close()
 	}
     }
@@ -44,16 +44,6 @@ function Chat(){
 	LOG(">> New Connection ("+msg.name+") on "+str(msg.channels[0]))
 	if(msg.from.sid==self.userInfo.sid) {
 	    LOG(">> HEY ITS ME!!!!!!")
-	   //LOG("CHAT SAY"+str(msg.from.sid)+self.userInfo.sid)
-	}
-	self.users[msg.sid] = msg
-    }
-    self.sub=function(websock,msg){
-	LOG("CHAT CONNECT SUB")
-	LOG(">> New Connection ("+msg.name+") on "+str(msg.channels[0]))
-	if(msg.from.sid==self.userInfo.sid) {
-	    LOG(">> HEY ITS ME!!!!!!")
-	   //LOG("CHAT SAY"+str(msg.from.sid)+self.userInfo.sid)
 	}
 	self.users[msg.sid] = msg
     }
@@ -72,10 +62,10 @@ function Chat(){
 	var ch=cmd[0]
 	var cmd_ch=cmd[1]
 	if(ch=="\""||ch=="\'"){
-	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),
+	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),
 			    channel:self.userInfo.channels[0]}})
 	}else if(ch==":"||ch==";"){
-	    self.sendEnc({method:'say',params:{msg:cmd.substr(1),
+	    self.sendEnc({method:'pub',params:{msg:cmd.substr(1),
 			    channel:self.userInfo.channels[0]}})
 	}else if(ch!="."){
 	    LOG("BAD COMMAND:"+cmd)
@@ -83,15 +73,15 @@ function Chat(){
 	}else if(cmd_ch=="w") {
 	    self.sendEnc({method:'whoList',params:{}})
 	}else if(cmd_ch=="y") {
-	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:'y'}})
+	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),channel:'y'}})
 	}else if(cmd_ch=="p") {
 	    var sub_cmd = cmd.substr(2)
 	    LOG("SUBCMD " + str(sub_cmd))
 	    var arr = sub_cmd.split(',',2)
 	    LOG("ARR " + str(arr))
-	    self.sendEnc({method:'say',params:{msg:arr[1],channel:arr[0]}})
+	    self.sendEnc({method:'pub',params:{msg:arr[1],channel:arr[0]}})
 	}else if(cmd_ch=="s") {
-	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:'s'}})
+	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),channel:'s'}})
 	}else if(cmd_ch=="q") {
 	    self.sendEnc({method:'quit',params:{msg:cmd.substr(2)}})
 	}else{
@@ -111,8 +101,8 @@ function Chat(){
     }
     self.breakConnection=function(){
 	LOG("CHAT BREAK CONNECTION")
-	self.sendEnc({method:'disconnect',params:{}})
-    }
+	self.sendEnc({method:'disconnect',params:{message:"so long!"}})
+   }
     self.websock=function(_ws){ws=_ws;return self}}
 //e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)
 function getChar(event) {

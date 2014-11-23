@@ -1,12 +1,26 @@
 class ChatSvc:
     def __init__(_): _.Users={}
-    def pub(_,data):
-        print "PUB DATA", data
-        for sid,user in _.Users:
+    def pub(_,data,id=None):
+        print "PUB DATA", data, id
+        if id: data['id'] = id
+        print "PUB DATA", data, id
+        for sid,user in _.Users.iteritems():
+            print "SUD USER", sid, user
+            user.send(data)
             pass
         pass
     def WebUser(svc):
         class ChatUser:
+
+            def send(_,data):
+                print ":::: WHAT TO SEND :::::",_
+                print ":::: WHAT TO SEND :::::",data
+                print ":::: WHAT TO SEND :::::",_.wu
+                print ":::: WHAT TO SEND :::::",_.wu.send_method
+                print ":::: WHAT TO SEND :::::"
+                #_.wu.send(data)
+                pass
+
             def __init__(_): _.channels = None
             def sid(_): return _.wu.sid()
             def connect(_):
@@ -57,7 +71,7 @@ class ChatSvc:
                 pass
             def h_pub(_,d):
                 print "CHAT H_PUB", d, id(_.wu)
-                svr.pub(d)
+                svc.pub(d, _.sid())
                 pass
             def not_found(_,d):
                 print "CHAT NOT FOUND", d, id(_.wu)

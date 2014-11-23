@@ -26,12 +26,22 @@ class WebSocketServices:
                     ret = f(d)
                     if ret:
                         print "RETURN", ret, name, ws
-                        d2=dict(ns=name,method=d['method'],params=ret)
-                        print "D2", d2
-                        ws.send(json.dumps(d2))
+                        _.send_method(d['method'],ret)
                         pass
                     pass
                 pass
+
+            def send_method(_,method,params):
+                print "RETURN", ret, svc.name, ws
+                d2=dict(ns=svc.name,method=method,params=params)
+                print "D2", d2
+                _.send(d2)
+                pass
+
+            def send(_,d):
+                ws.send(json.dumps(d))
+                pass
+
             def sid(_): return 's%d'%id(_)
             def run(_):
                 print "TIME TO RUN THIS THING"
