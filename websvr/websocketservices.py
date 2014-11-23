@@ -1,11 +1,7 @@
 from bottle import Bottle, static_file
 import json
-
 class WebSocketServices:
-    def __init__(_):
-        _.svc = {}
-        _.users={}
-        pass
+    def __init__(_): _.svc = {} ; _.users = {}
     def addSvc(_,svc,name):
         # do some dependency injection
         svc.name = name       
@@ -65,4 +61,4 @@ class WebSocketServices:
                 pass
             pass
         return wu
-    pass
+    pass # end class WebSocketServices
