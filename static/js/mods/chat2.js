@@ -59,17 +59,21 @@ function Chat(){
 	    })
 	LOG(" >> " + n + " user(s).")
     }
-    self._name=function(){return self.userInfo.channels[2]}
+    self._channel=function(){return self.userInfo.channels[0]}
+    self._sid    =function(){return self.userInfo.channels[1]}
+    self._name   =function(){return self.userInfo.channels[2]}
     self.execCmd=function(cmd){
 	LOG("CHAT EXEC CMD"+str(cmd))
 	var ch=cmd[0]
 	var cmd_ch=cmd[1]
 	if(ch=="\""||ch=="\'"){
 	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),
-			    channel:self.userInfo.channels[0]}})
+					       from:{name:self._name(),id:self._sid()},
+					       channel:self._channel()}})
 	}else if(ch==":"||ch==";"){
 	    self.sendEnc({method:'pub',params:{msg:cmd.substr(1),
-			    channel:self.userInfo.channels[0]}})
+					       from:{name:self._name(),id:self._sid()},
+					       channel:self._channel()}})
 	}else if(ch!="."){
 	    LOG("BAD COMMAND:"+cmd)
 
@@ -77,24 +81,20 @@ function Chat(){
 	    self.sendEnc({method:'whoList',params:{}})
 	}else if(cmd_ch=="y") {
 	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),channel:'y',
-					       from:{name:self._name()}
-		    }})
+					       from:{name:self._name(),id:self._sid()}}})
 	}else if(cmd_ch=="p") {
 	    var sub_cmd = cmd.substr(2)
 	    LOG("SUBCMD " + str(sub_cmd))
 	    var arr = sub_cmd.split(',',2)
 	    LOG("ARR " + str(arr))
 	    self.sendEnc({method:'pub',params:{msg:arr[1],channel:arr[0],
-					       from:{name:self._name()}
-		    }})
+					       from:{name:self._name(),id:self._sid()}}})
 	}else if(cmd_ch=="s") {
 	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),channel:'s',
-					       from:{name:self._name()}
-		    }})
+					       from:{name:self._name(),id:self._sid()}}})
 	}else if(cmd_ch=="q") {
-	    self.sendEnc({method:'quit',params:{msg:cmd.substr(2),
-						from:{name:self._name()}
-		    }})
+	    self.sendEnc({method:'disconnect',params:{msg:cmd.substr(2),
+						      from:{name:self._name(),id:self._sid()}}})
 	}else{
 	    LOG("BAD COMMAND:"+cmd)
 	}

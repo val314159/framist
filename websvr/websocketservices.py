@@ -39,7 +39,11 @@ class WebSocketServices:
                 pass
 
             def send(_,d):
-                ws.send(json.dumps(d))
+                try:
+                    ws.send(json.dumps(d))
+                except:
+                    print "pretend everything's fine"
+                    pass
                 pass
 
             def sid(_): return 's%d'%id(_)
