@@ -18,7 +18,7 @@ class ChatSvc:
                 print ":::: WHAT TO SEND :::::",_.wu
                 print ":::: WHAT TO SEND :::::",_.wu.send_method
                 print ":::: WHAT TO SEND :::::"
-                #_.wu.send(data)
+                _.wu.send(data)
                 pass
 
             def __init__(_): _.channels = None
@@ -71,6 +71,7 @@ class ChatSvc:
                 pass
             def h_pub(_,d):
                 print "CHAT H_PUB", d, id(_.wu)
+                d['params']['from']['id']=_.sid()
                 svc.pub(d, _.sid())
                 pass
             def not_found(_,d):

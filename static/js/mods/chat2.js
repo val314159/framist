@@ -23,14 +23,16 @@ function Chat(){
     }
     self.$unknown=function(a,b,c){ LOG("CHAT $UNKNOWN:"+[str(b),c]) }
     self.pub=function(websock,msg){
+	var name = msg.from.name.substr(1);
+	LOG("PUB:"+str(name)+" *) "+msg.msg)
 	if(msg.channel=='y'){
-	    LOG("(* "+str(msg.from.name)+" *) "+msg.msg)
+	    LOG("(* "+name+" *) "+msg.msg)
 	}else if(msg.channel=='s'){
 	    LOG("*> "+msg.msg)
 	}else if(msg.channel[0]=='s'){
-	    LOG("(~p, "+str(msg.from.name)+"~) "+msg.msg)
+	    LOG("(~p, "+name+"~) "+msg.msg)
 	}else if(msg.channel[0]=='~'){
-	    LOG("( "+str(msg.from.name)+" ) "+msg.msg)
+	    LOG("( "+name+" ) "+msg.msg)
 	}else{
 	    LOG("WTF:"+msg)
 	}
@@ -57,6 +59,7 @@ function Chat(){
 	    })
 	LOG(" >> " + n + " user(s).")
     }
+    self._name=function(){return self.userInfo.channels[2]}
     self.execCmd=function(cmd){
 	LOG("CHAT EXEC CMD"+str(cmd))
 	var ch=cmd[0]
@@ -73,17 +76,25 @@ function Chat(){
 	}else if(cmd_ch=="w") {
 	    self.sendEnc({method:'whoList',params:{}})
 	}else if(cmd_ch=="y") {
-	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),channel:'y'}})
+	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),channel:'y',
+					       from:{name:self._name()}
+		    }})
 	}else if(cmd_ch=="p") {
 	    var sub_cmd = cmd.substr(2)
 	    LOG("SUBCMD " + str(sub_cmd))
 	    var arr = sub_cmd.split(',',2)
 	    LOG("ARR " + str(arr))
-	    self.sendEnc({method:'pub',params:{msg:arr[1],channel:arr[0]}})
+	    self.sendEnc({method:'pub',params:{msg:arr[1],channel:arr[0],
+					       from:{name:self._name()}
+		    }})
 	}else if(cmd_ch=="s") {
-	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),channel:'s'}})
+	    self.sendEnc({method:'pub',params:{msg:cmd.substr(2),channel:'s',
+					       from:{name:self._name()}
+		    }})
 	}else if(cmd_ch=="q") {
-	    self.sendEnc({method:'quit',params:{msg:cmd.substr(2)}})
+	    self.sendEnc({method:'quit',params:{msg:cmd.substr(2),
+						from:{name:self._name()}
+		    }})
 	}else{
 	    LOG("BAD COMMAND:"+cmd)
 	}
