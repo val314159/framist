@@ -8,7 +8,7 @@ function Chat(){
     initial_msg='HEY I JUST ARRIVED IM A NEWBIE PLEASE HELP ME IM SO SADD'
 
     self.$open =function(k,v,msg){
-	LOG("CHAT $OPEN");
+	LOG("CHAT $OPEN"+str(k)+str(v)+msg);
 	self.sendEnc({method:'intro',params:{}})
     };
     self.$close=function(){ LOG("CHAT $CLOSE");
@@ -20,13 +20,13 @@ function Chat(){
  };
     self.$error=function(){ LOG("CHAT $ERROR"); };
     self.intro=function(a,b){
- LOG("CHAT INTRO"+str(b));
- LOG("CHAT INTRO"+str(b.message));
- LOG("Intro:<hr><pre>"+(b.message)+"</pre><hr>");
- };
+	LOG("Intro:<hr><pre>"+(b.message)+"</pre><hr>");
+	self.sendEnc({method:'connect',params:{
+	    channels:['1','2','3']
+	}})
+    };
     self.$unknown=function(a,b,c){ LOG("CHAT $UNKNOWN:"+[str(b),c]); };
     self.say=function(websock,msg){
-	//LOG("CHAT SAY"+str(msg));
 	if(msg.channel=='y'){
 	    LOG("(* "+str(msg.from.name)+" *) "+msg.msg);
 	}else if(msg.channel=='s'){
@@ -44,15 +44,13 @@ function Chat(){
 	}
     };
     self.connect=function(websock,msg){
+	LOG("CHAT CONNECT");
 	LOG(">> New Connection ("+msg.name+") on "+str(msg.channels[0]));
+	if(msg.from.sid==self.userInfo.sid) {
+	    LOG(">> HEY ITS ME!!!!!!");
+	   //LOG("CHAT SAY"+str(msg.from.sid)+self.userInfo.sid);
+	}
 	self.users[msg.sid] = msg;
-	/*
-	self.sendEnc({method:'say',params:{msg:initial_msg,channel:self.userInfo.channels[0]}})
-	self.sendEnc({method:'say',params:{msg:initial_msg,channel:'y'}})
-	self.sendEnc({method:'say',params:{msg:initial_msg,channel:'s'}})
-	self.sendEnc({method:'say',params:{msg:initial_msg,channel:'noway'}})
-	self.sendEnc({method:'whoList',params:{}})
-	*/
     };
     self.whoList=function(websock,msg){
 	LOG(">> Who list:");
@@ -69,31 +67,25 @@ function Chat(){
 	var ch=cmd[0];
 	var cmd_ch=cmd[1];
 	if(ch=="\""||ch=="\'"){
-	    //LOG("SEND A SAY");
 	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),
 			    channel:self.userInfo.channels[0]}})
 	}else if(ch==":"||ch==";"){
-	    //LOG("SEND A EMOTE");
 	    self.sendEnc({method:'say',params:{msg:cmd.substr(1),
 			    channel:self.userInfo.channels[0]}})
 	}else if(ch!="."){
 	    LOG("BAD COMMAND:"+cmd);
 
 	}else if(cmd_ch=="w") {
-	    //LOG("SEND A WHO");
 	    self.sendEnc({method:'whoList',params:{}})
 	}else if(cmd_ch=="y") {
-	    //LOG("SEND A YELL");
 	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:'y'}})
 	}else if(cmd_ch=="p") {
-	    //LOG("SEND A WHISPER");
 	    var sub_cmd = cmd.substr(2);
 	    LOG("SUBCMD " + str(sub_cmd));
 	    var arr = sub_cmd.split(',',2);
 	    LOG("ARR " + str(arr));
 	    self.sendEnc({method:'say',params:{msg:arr[1],channel:arr[0]}})
 	}else if(cmd_ch=="s") {
-	    //LOG("SEND A SYSTEM MSG");
 	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:'s'}})
 	}else if(cmd_ch=="q") {
 	    //LOG("SEND A QUIT MSG");
@@ -106,7 +98,9 @@ function Chat(){
     self.hello=function(websock,msg){
 	LOG("CHAT HELLO"+str(msg));
 	self.userInfo = msg;
-	self.sendEnc({method:'connect',params:{}})
+	self.sendEnc({method:'connect',params:{
+	    channels:['1','2','3']
+	}})
     };
     self.websock=function(_ws){ws=_ws;return self}}
 //e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)
