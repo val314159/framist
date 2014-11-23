@@ -19,6 +19,11 @@ function Chat(){
 
  };
     self.$error=function(){ LOG("CHAT $ERROR"); };
+    self.intro=function(a,b){
+ LOG("CHAT INTRO"+str(b));
+ LOG("CHAT INTRO"+str(b.message));
+ LOG("Intro:<hr><pre>"+(b.message)+"</pre><hr>");
+ };
     self.$unknown=function(a,b,c){ LOG("CHAT $UNKNOWN:"+[str(b),c]); };
     self.say=function(websock,msg){
 	//LOG("CHAT SAY"+str(msg));
