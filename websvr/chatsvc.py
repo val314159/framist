@@ -4,7 +4,7 @@ class ChatSvc:
             def sid(_): return _.wu.sid()
             def connect(_):
                 print "CHAT CONNECT", _.sid()
-                channels=['~x',_.sid(),'nGuest','y','s','*']
+                channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
                 d2=dict(method='hello',params=dict(channels=channels))
                 print "D2", d2
                 return d2
@@ -18,7 +18,6 @@ class ChatSvc:
                 print "CHAT INTRO",d
                 txt = open('intro.txt').read()
                 print "TXT", txt
-                print 
                 return dict(message=txt)
                 pass
             pass

@@ -14,16 +14,12 @@ function Chat(){
     self.$close=function(){ LOG("CHAT $CLOSE");
 			    LOG("reloading page in 5 secs...");
 			    setTimeout(function(){
-			    location.reload();
-				},5000);
-
- };
+				location.reload();
+			    },5000);
+			  };
     self.$error=function(){ LOG("CHAT $ERROR"); };
     self.intro=function(a,b){
 	LOG("Intro:<hr><pre>"+(b.message)+"</pre><hr>");
-	self.sendEnc({method:'connect',params:{
-	    channels:['1','2','3']
-	}})
     };
     self.$unknown=function(a,b,c){ LOG("CHAT $UNKNOWN:"+[str(b),c]); };
     self.say=function(websock,msg){
@@ -88,8 +84,6 @@ function Chat(){
 	}else if(cmd_ch=="s") {
 	    self.sendEnc({method:'say',params:{msg:cmd.substr(2),channel:'s'}})
 	}else if(cmd_ch=="q") {
-	    //LOG("SEND A QUIT MSG");
-	    //LOG("what's quit mean right now?");
 	    self.sendEnc({method:'quit',params:{msg:cmd.substr(2)}})
 	}else{
 	    LOG("BAD COMMAND:"+cmd);
@@ -98,8 +92,12 @@ function Chat(){
     self.hello=function(websock,msg){
 	LOG("CHAT HELLO"+str(msg));
 	self.userInfo = msg;
+	self.$connect();
+    };
+    self.$connect=function(){
+	LOG("CHAT RECONNECT);
 	self.sendEnc({method:'connect',params:{
-	    channels:['1','2','3']
+	    channels:self.userInfo.channels
 	}})
     };
     self.websock=function(_ws){ws=_ws;return self}}
