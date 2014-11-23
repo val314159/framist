@@ -1,6 +1,6 @@
 import gevent.monkey;gevent.monkey.patch_all()
 from bottle import route, run, template
-import time
+import time,sys
 from os import system
 
 @route('/')
@@ -9,12 +9,27 @@ def index():
 <li><a href="/ps"     >ps     </a></li>
 <li><a href="/restart">restart</a></li>
 <li><a href="/stop"   >stop   </a></li>
+<hr>
+<li><a href="//localhost:8080">web server</a></li>
 ''']
 
 @route('/ps')
 def ps():
-    ret = system('ps auxww|grep python|grep -v grep')
-    print "PS RET", ret
+    from subprocess import Popen,PIPE
+    try:
+        p = Popen('ps auxww|grep python|grep -v grep',
+                        shell=True,stdout=PIPE)
+        output = p.communicate()[0]
+        retcode = p.returncode
+        if retcode < 0:
+            print >>sys.stderr, "Child was terminated by signal", -retcode
+        else:
+            print >>sys.stderr, "Child returned", retcode
+            pass
+        return dict(response=output.split('\n'))
+    except OSError as e:
+        print >>sys.stderr, "Execution failed:", e
+        pass
     return 'I dunno yet'
 
 @route('/restart')
@@ -26,9 +41,7 @@ def restart():
 
 @route('/stop')
 def stop():
-    print '-'*80,1
-    ret = system('ps auxww|grep python|grep -v grep')
-    print '-'*80
+    print "STOP THE WORLD IN 2 SECS"
     system('(sleep 2;killall -9 python)&')
     return 'I dunno yet'
 
