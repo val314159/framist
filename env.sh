@@ -1,8 +1,36 @@
 export AUTH_PORT=1234
 export DS_PORT=1236
 
+test1 () {
+ echo TEST ONE
+}
+
+realclean () {
+  echo REAL CLEAN 0
+  rm -fr .venv .db
+  find . -name \*~ | xargs rm
+  find . -name \*.pyc | xargs rm
+  find . -name \#\*\# | xargs rm
+  find . -name .\#\*  | xargs rm
+  echo REAL CLEAN 9
+}
+
 freeze() {
   pip freeze >requirements.txt
+}
+
+loop_procsvr() {
+  while true; do
+      echo qq 11
+    run_procsvr
+      echo qq 22
+    sleep 2
+      echo qq 33
+  done
+}
+
+run_procsvr() {
+  python -m procsvr
 }
 
 run_websvr() {
@@ -27,16 +55,16 @@ pysleep () {
 }
 
 run_both() {
-  trap ctrl_c 2
-  echo '>> Starting 0.'
+  trap ctrl_c SIGINT
+  echo '>> Starting AuthSvr...'
   run_authsvr &
   pysleep 0.2
-  echo '>> Starting 1.'
+  echo '>> Starting WebSvr...'
   run_websvr &
   pysleep 0.2
   echo '>> Started.'
   wait
-  echo '>> Loop complete.  Kill kids...'
+  echo '>> Loop complete.  Kill kids...' $? QQQ
   kill %1 %2
   echo '>> waiting 1/2 of a second...'
   pysleep 0.5
@@ -44,7 +72,7 @@ run_both() {
   killall -9 python 2>/dev/null
   pysleep 0.05 # just to let the output sync up
   echo '>> Done.'
-  trap 2
+  trap SIGINT
 }
 
 clt_auth_login1() {
@@ -59,6 +87,8 @@ clt_auth_login3() {
   zerorpc --client --connect tcp://127.0.0.1:$AUTH_PORT login_user v not
 }
 
-. .venv/bin/activate
+if [ -d .venv ]
+then . .venv/bin/activate
+fi
 
 $*
