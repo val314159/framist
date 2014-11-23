@@ -64,7 +64,7 @@ function WebSock(){
 	ws.onerror=function(evt){on('','$error',evt)}
 	return self}
     self.sendEnc=function(msg,ns){
-	LOG("S S SEND ENC" + str([msg,ns]))
+	//LOG("S S SEND ENC" + str([msg,ns]))
 	if(ns)msg.ns=ns
 	ws.send(str(msg))
 	return self}

@@ -74,6 +74,18 @@ class ChatSvc:
                 d['params']['from']['id']=_.sid()
                 svc.pub(d, _.sid())
                 pass
+            def h_whoList(_,d):
+                svc.Users[_.sid()] = _
+                d = dict(method='whoList',params=dict(
+                        results=svc.Users))
+                print "WHO D", d
+                arr = []
+                for k,user in svc.Users.iteritems():
+                    print "XWHO D", k,user.channels
+                    arr.append(user.channels)
+                    pass
+                return dict(method='whoList',params=dict(
+                        results=arr))
             def not_found(_,d):
                 print "CHAT NOT FOUND", d, id(_.wu)
                 pass

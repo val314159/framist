@@ -29,13 +29,15 @@ function Chat(){
     self.$unknown=function(a,b,c){ LOG("CHAT $UNKNOWN:"+[str(b),c]) }
     self.pub=function(websock,msg){
 	var name = msg.from.name.substr(1)
-	LOG("PUB:"+str(name)+" *) "+msg.msg)
+	//LOG("PUB:"+str(name)+" *) "+msg.msg)
 	if(msg.channel=='y'){
 	    LOG("(* "+name+" *) "+msg.msg)
 	}else if(msg.channel=='s'){
 	    LOG("*> "+msg.msg)
 	}else if(msg.channel[0]=='s'){
 	    LOG("(~p, "+name+"~) "+msg.msg)
+	}else if(msg.channel[0]=='n'){
+	    LOG("(~n, "+name+"~) "+msg.msg)
 	}else if(msg.channel[0]=='~'){
 	    LOG("( "+name+" ) "+msg.msg)
 	}else{
@@ -47,7 +49,7 @@ function Chat(){
 	}
     }
     self.connect=function(websock,msg){
-	LOG("CHAT CONNECT")
+	//LOG("CHAT CONNECT")
 	LOG(">> New Connection ("+msg.name+") on "+str(msg.channels[0]))
 	if(msg.from.sid==self.userInfo.sid) {
 	    LOG(">> HEY ITS ME!!!!!!")
@@ -56,22 +58,27 @@ function Chat(){
     }
     self.whoList=function(websock,msg){
 	LOG(">> Who list:")
-	var n=0
-	loop(msg['whoList'],function(k,v){
-		n++
-		LOG(" -- "+str(v))
-		self.sendEnc({method:'say',params:{msg:initial_msg,channel:v.sid}})
-	    })
-	LOG(" >> " + n + " user(s).")
+	//LOG(">> Who list:"+str(msg))
+	var results=msg.params.results;
+	//LOG(">> results:"+str(results))
+	for (var i=0; i<results.length; i++) {
+	    LOG(" &nbsp;&nbsp;- "+i+": "+str(results[i]))
+	}
+	//var n=0	
+	//loop(msg['whoList'],function(k,v){
+	//n++
+	//LOG(" -- "+str(v))
+	//self.sendEnc({method:'say',params:{msg:initial_msg,channel:v.sid}})
+	//})
+	//LOG(" >> " + n + " user(s).")
+	LOG(" >> " + i + " user(s).")
     }
     ////////////////////////////////////////////////////////////////////////////
     self._channel=function(){return self.userInfo.channels[0]}
     self._sid    =function(){return self.userInfo.channels[1]}
     self._name   =function(){return self.userInfo.channels[2]}
     self.Writer  =function(){
-	LOG("w 00"+str(self));
 	if (this===self) return new self.Writer()
-	LOG("w 11" + this + str(this));
 	this.whoList=function(){ self.sendEnc({method:'whoList',params:{}}) }
 	this.pub=function(ch,msg){	    self.sendEnc({method:'pub',params:{msg:msg,channel:ch,from:{name:self._name(),id:self._sid()}}})	}
 	this.quit   =function(msg){	    self.sendEnc({method:'disconnect',params:{msg:msg,from:{name:self._name(),id:self._sid()}}})	}
@@ -84,11 +91,10 @@ function Chat(){
 	    LOG("CHAT MAKE CONNECTION")
 	    self.sendEnc({method:'connect',params:{channels:self.userInfo.channels}})
 	}
-	LOG("w 99");
     }
-
-   self._execCmd=function(cmd){
-	LOG("CHAT EXEC CMD"+str(cmd))
+    
+    self._execCmd=function(cmd){
+	//LOG("CHAT EXEC CMD"+str(cmd))
 	var ch=cmd[0]
 	var cmd_ch=cmd[1]
 	if(ch=="\""||ch=="\'"){
@@ -102,17 +108,11 @@ function Chat(){
 	}else if(cmd_ch=="y") {
 	    self.Writer().yell(cmd.substr(2))
 	}else if(cmd_ch=="p") {
-	    LOG("1:"+cmd);
 	    var subcmd = cmd.substr(2);
-	    LOG("2:"+subcmd);
 	    var ndx = subcmd.indexOf(' ')
-	    LOG("3:"+ndx);
 	    var to = subcmd.substr(0,ndx)
-	    LOG("4:"+to);
 	    var rest = subcmd.substr(ndx+1)
-	    LOG("5:"+rest);
 	    self.Writer().whisper(to,rest)
-	    LOG("6:");
 	}else if(cmd_ch=="s") {
 	    self.Writer().sysmsg(cmd.substr(2))
 	}else if(cmd_ch=="q") {
