@@ -1,15 +1,15 @@
 <input style="width:100%" id="input" onchange="EXC(this)">
 <div id="out"></div>
 <script src="js/mods/util.js"></script>
-<script src="js/mods/websock.js"></script>
+<script src="js/mods/websock2.js"></script>
 <script src="js/mods/cmd.js"></script>
-<script src="js/mods/chat.js"></script>
+<script src="js/mods/chat2.js"></script>
 <script>
 var ws=WebSock()
   .loginInfo("v","pass")
   .loginSuccess(function(self,at){
     LOG("LOGIN SUCCESS1");
-    self.url("ws://localhost:8080/ws"+
+    self.url("ws://localhost:8080/ws2"+
       "?accessToken=",at).connect();
     LOG("LOGIN SUCCESS2");
   })
