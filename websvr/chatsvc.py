@@ -73,6 +73,7 @@ class ChatSvc:
                 pass
             def h_disconnect(_,d):
                 print "CHAT H_UNSUBALL", d, id(_.wu)
+                svc.pub(d)
                 _.deactivate()
                 _.channels = None
                 print "CHAT H_UNSUBALL2", d, id(_.wu)

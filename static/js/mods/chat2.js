@@ -26,6 +26,7 @@ function Chat(){
     self.intro=function(a,b){
 	LOG("Intro:<hr><pre>"+(b.message)+"</pre><hr>")
     }
+    self.disconnect=function(a,b,c){ LOG("CHAT DISCONNECT:"+[str(a),'BBB',str(b),'CCC',c]) }
     self.$unknown=function(a,b,c){ LOG("CHAT $UNKNOWN:"+[str(b),c]) }
     self.pub=function(websock,msg){
 	var name = msg.from.name.substr(1)
