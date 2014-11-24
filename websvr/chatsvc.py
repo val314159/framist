@@ -31,10 +31,6 @@ class ChatSvc:
                 print "CHAT CONNECT", _.sid(), svc.Users
                 channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
                 return dict(method='hello',params=dict(channels=channels))
-            def disconnect(_):
-                print "CHAT DISCONNECT", _.sid(), svc.Users
-                channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
-                return dict(method='hello',params=dict(channels=channels))
             def activate(_):
                 svc.Users[_.sid()] = _
                 pass
