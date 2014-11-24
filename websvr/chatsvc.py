@@ -1,5 +1,9 @@
 class ChatSvc:
     def __init__(_): _.Users={}
+    def disconnect(_,sid):
+        print "CHAT DISCONNECT", sid, _.Users
+        _.pub(dict(method='disconnect',params={'sid':sid,'channel':'s'}))
+        pass
     def pub(_,data,id=None):
         print "PUB DATA", data, id
         if id: data['id'] = id
@@ -25,6 +29,10 @@ class ChatSvc:
             def sid(_): return _.wu.sid()
             def connect(_):
                 print "CHAT CONNECT", _.sid(), svc.Users
+                channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
+                return dict(method='hello',params=dict(channels=channels))
+            def disconnect(_):
+                print "CHAT DISCONNECT", _.sid(), svc.Users
                 channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
                 return dict(method='hello',params=dict(channels=channels))
             def activate(_):

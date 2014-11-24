@@ -51,6 +51,11 @@ class WebSocketServices:
                 print "TIME TO RUN THIS THING"
                 while 1:
                     z = ws.receive()
+                    print "OK I GOT Z", repr(z)
+                    if not z:
+                        print "GUESS IM DONE"
+                        break
+                        pass
                     d = json.loads(z)
                     name = d.get('ns')
                     if not name:
@@ -58,9 +63,21 @@ class WebSocketServices:
                         continue
                     _._dispatch(d)
                     pass
+                print "EOF (should probably tell all the services)"
+
+
+
+                for name,svc in wss.svc.iteritems():
+                    print "NAME,SVC = ", repr((name, svc))
+                    print "SEND DISCONNECT SOMEWHERE"
+                    svc.disconnect(_.sid())
+                    pass
+
+
+
                 pass
             pass
-        wu = WebSocketUser()
+        wu = WebSocketUser() 
         for name,svc in wss.svc.iteritems():
             sub_wu = svc.WebUser()
             print "SUB_WU", sub_wu
