@@ -26,24 +26,23 @@ function Chat(){
     self.intro=function(a,b){
 	LOG("Intro:<hr><pre>"+(b.message)+"</pre><hr>")
     }
-    self.disconnect=function(a,b,c){ LOG("CHAT DISCONNECT:"+[str(a),'BBB',str(b),'CCC',c]) }
+    self.disconnect=function(a,b,c){ LOG("CHAT DISCONNECT:"+str(b)) }
     self.$unknown=function(a,b,c){ LOG("CHAT $UNKNOWN:"+[str(b),c]) }
     self.pub=function(websock,msg){
 	var name = msg.from.name.substr(1)
 	//LOG("PUB:"+str(name)+" *) "+msg.msg)
-	if(msg.channel=='y'){
+	if(msg.channel=='y')
 	    LOG("(* "+name+" *) "+msg.msg)
-	}else if(msg.channel=='s'){
+	else if(msg.channel=='s')
 	    LOG("*> "+msg.msg)
-	}else if(msg.channel[0]=='s'){
+	else if(msg.channel[0]=='s')
 	    LOG("(~p, "+name+"~) "+msg.msg)
-	}else if(msg.channel[0]=='n'){
+	else if(msg.channel[0]=='n')
 	    LOG("(~n, "+name+"~) "+msg.msg)
-	}else if(msg.channel[0]=='~'){
+	else if(msg.channel[0]=='~')
 	    LOG("( "+name+" ) "+msg.msg)
-	}else{
-	    LOG("WTF:"+msg)
-	}
+	else
+	    LOG("WTF:"+msg)	
 	if(msg.from.sid==self.userInfo.sid) {
 	    //LOG("CHAT PUB"+str(msg.from.sid)+self.userInfo.sid)
 	    //websock.close()
@@ -59,19 +58,10 @@ function Chat(){
     }
     self.whoList=function(websock,msg){
 	LOG(">> Who list:")
-	//LOG(">> Who list:"+str(msg))
 	var results=msg.params.results;
-	//LOG(">> results:"+str(results))
 	for (var i=0; i<results.length; i++) {
 	    LOG(" &nbsp;&nbsp;- "+i+": "+str(results[i]))
 	}
-	//var n=0	
-	//loop(msg['whoList'],function(k,v){
-	//n++
-	//LOG(" -- "+str(v))
-	//self.sendEnc({method:'say',params:{msg:initial_msg,channel:v.sid}})
-	//})
-	//LOG(" >> " + n + " user(s).")
 	LOG(" >> " + i + " user(s).")
     }
     ////////////////////////////////////////////////////////////////////////////
@@ -93,7 +83,6 @@ function Chat(){
 	    self.sendEnc({method:'connect',params:{channels:self.userInfo.channels}})
 	}
     }
-    
     self._execCmd=function(cmd){
 	//LOG("CHAT EXEC CMD"+str(cmd))
 	var ch=cmd[0]
