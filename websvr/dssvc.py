@@ -1,3 +1,10 @@
+def DB(__=[]):
+    if not __:
+        import leveldb
+        __.append( leveldb.LevelDB('.ds') )
+        pass
+    return __[0]
+
 class DatastoreSvc:
     def __init__(_): _.Users={}
     def disconnect(_,sid):
@@ -77,13 +84,23 @@ class DatastoreSvc:
                 pass
             def h_pub(_,d):
                 print "CHAT H_PUB", d, id(_.wu)
+                k=d['params']['channel']
+                v=d['params']['msg']
+                print "CSET %s ==> %s", d['params']['channel']
+                print "MSET %s ==> %s", d['params']['msg']
+
+                import json
+                DB().Put(k,(v))
+
                 d['params']['from']['id']=_.sid()
                 svc.pub(d, _.sid())
                 pass
             def h_whoList(_,d):
                 print "WH","o"*5000
-                channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
-                _.wu.send( dict(method='hello',params=dict(channels=channels)) )
+                db=list(DB().RangeIter())
+                channels=['shycats','~Porn Store',_.sid(),'nNewbie','y','s','*']
+                _.wu.send( dict(method='hello',params=dict(channels=channels,db=db)) )
+                return
                 svc.Users[_.sid()] = _
                 d = dict(method='whoList',params=dict(
                         results=svc.Users))
