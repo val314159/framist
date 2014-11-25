@@ -99,7 +99,11 @@ class DatastoreSvc:
                 print "WH2","o"*5000, d
                 db=list(DB().RangeIter())
                 channels=['shycats','~Porn Store',_.sid(),'nNewbie','y','s','*']
-                _.wu.send( dict(method='hello',params=dict(channels=channels,db=db)) )
+                key=d['params']['key']
+                try   : result=DB().Get(key)
+                except: result=None
+                _.wu.send( dict(method='hello',params=dict(channels=channels,
+                                                           key=key,result=result)) )
                 return
             def h_whoList(_,d):
                 print "WH","o"*5000
