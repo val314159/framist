@@ -10,7 +10,7 @@ class DatastoreSvc:
     def WebUser(svc):
         class DatastoreUser:
             def connect(_):
-                print "DATASTORE CONNECT"
+                print ">> DATASTORE CONNECT"
                 return
                 _.wu.send( dict(method='hello',params=dict(channels=[])) )
                 return
@@ -27,7 +27,7 @@ class DatastoreSvc:
                 db=list(DB().RangeIter(key))
                 try   : result=DB().Get(key)
                 except: result=None
-                _.wu.send( dict(method='get',params=dict(key=key,result=result)))
+                _.wu.send(dict(method='get',params=dict(key=key,result=result)))
                 return
             def h_range(_,d):
                 print "DATASTORE H_RANGE",d
@@ -39,7 +39,7 @@ class DatastoreSvc:
                 _.wu.send( dict(method='range',params=dict(key=key,keyn=keyn,resultset=rs)))
                 return
             def not_found(_,d):
-                print "CHAT NOT FOUND", d, id(_.wu)
+                print "DATASTORE NOT FOUND", d, id(_.wu)
                 pass
             pass
         return DatastoreUser()

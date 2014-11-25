@@ -17,18 +17,20 @@ class ChatSvc:
         class ChatUser:
 
             def send(_,data):
+                '''
                 print ":::: WHAT TO SEND :::::",_
                 print ":::: WHAT TO SEND :::::",data
                 print ":::: WHAT TO SEND :::::",_.wu
                 print ":::: WHAT TO SEND :::::",_.wu.send_method
                 print ":::: WHAT TO SEND :::::"
+                '''
                 _.wu.send(data)
                 pass
 
             def __init__(_): _.channels = None
             def sid(_): return _.wu.sid()
             def connect(_):
-                print "CHAT CONNECT", _.sid(), svc.Users
+                print ">> CHAT CONNECT", _.sid(), svc.Users
                 channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
                 return dict(method='hello',params=dict(channels=channels))
             def activate(_):
@@ -92,10 +94,9 @@ class ChatSvc:
                 return dict(method='whoList',params=dict(
                         results=arr))
             def not_found(_,d):
-                print "CHAT NOT FOUND", d, id(_.wu)
+                print ">> CHAT NOT FOUND", d, id(_.wu)
                 pass
             def h_intro(_,d):
-                print "CHAT INTRO",d
                 txt = open('intro.txt').read()
                 print "TXT", txt
                 return dict(message=txt)
