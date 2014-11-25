@@ -2,9 +2,12 @@
 <div id="out"></div>
 <script src="js/mods/util.js"></script>
 <script src="js/mods/websock2.js"></script>
-<script src="js/mods/cmd3.js"></script>
 <script src="js/mods/ps2.js"></script>
 <script>
+function CMD(x){
+  LOG("XCMD:"+x)
+  ws.listeners.ps._execCmd(x)
+}
 var ws=WebSock()
   .loginInfo("v","pass")
   .loginSuccess(function(self,at){

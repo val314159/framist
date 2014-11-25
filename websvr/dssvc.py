@@ -12,22 +12,25 @@ class DatastoreSvc:
             def connect(_):
                 print ">> DATASTORE CONNECT"
                 return
-                _.wu.send( dict(method='hello',params=dict(channels=[])) )
+            def h_put(_,d):
+                print "DATASTORE H_PUT", d, id(_.wu)
+                p=d['params']
+                DB().Put(p['key'],p['val'])
+                _.wu.send( dict(method='put',params=dict(key=p['key'])))
                 return
-                return dict(method='hello',params=dict(channels=[]))
             def h_set(_,d):
                 print "DATASTORE H_SET", d, id(_.wu)
                 p=d['params']
                 DB().Put(p['key'],p['val'])
                 _.wu.send( dict(method='set',params=dict(key=p['key'])))
-                pass
+                return
             def h_get(_,d):
                 print "DATASTORE H_GET", d
                 key=d['params']['key']
                 db=list(DB().RangeIter(key))
-                try   : result=DB().Get(key)
-                except: result=None
-                _.wu.send(dict(method='get',params=dict(key=key,result=result)))
+                try   : ret=DB().Get(key)
+                except: ret=None
+                _.wu.send(dict(method='get',params=dict(key=key,result=ret)))
                 return
             def h_range(_,d):
                 print "DATASTORE H_RANGE",d
@@ -39,8 +42,8 @@ class DatastoreSvc:
                 _.wu.send( dict(method='range',params=dict(key=key,keyn=keyn,resultset=rs)))
                 return
             def not_found(_,d):
-                print "DATASTORE NOT FOUND", d, id(_.wu)
-                pass
+                print "DATASTORE: METHOD NOT FOUND", d, id(_.wu)
+                return
             pass
         return DatastoreUser()
     pass

@@ -1,5 +1,8 @@
 class PubSubSvc:
-    def __init__(_): _.Users={}
+    def __init__(_):
+        _.Users={}
+        _.channels = {}
+        pass
     def WebUser(svc):
         class PubSubUser:
             def connect(_):
