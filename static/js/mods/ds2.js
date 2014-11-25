@@ -56,6 +56,7 @@ function Datastore(){
 	}
 	self.users[msg.sid] = msg
     }
+    /*
     self.whoList=function(websock,msg){
 	LOG(">> Who list:")
 	var results=msg.params.results;
@@ -64,6 +65,15 @@ function Datastore(){
 	}
 	LOG(" >> " + i + " user(s).")
     }
+    self.whoList2=function(websock,msg){
+	LOG(">> Who list2:")
+	var results=msg.params.results;
+	for (var i=0; i<results.length; i++) {
+	    LOG(" &nbsp;&nbsp;- "+i+": "+str(results[i]))
+	}
+	LOG(" >> " + i + " user(s).")
+    }
+    */
     ////////////////////////////////////////////////////////////////////////////
     self._channel=function(){return self.userInfo.channels[0]}
     self._sid    =function(){return self.userInfo.channels[1]}
@@ -71,6 +81,7 @@ function Datastore(){
     self.Writer  =function(){
 	if (this===self) return new self.Writer()
 	this.whoList=function(){ self.sendEnc({method:'whoList',params:{}}) }
+	this.whoList2=function(key){ self.sendEnc({method:'whoList2',params:{key:key}}) }
 	this.pub=function(ch,msg){	    self.sendEnc({method:'pub',params:{msg:msg,channel:ch,from:{name:self._name(),id:self._sid()}}})	}
 	this.quit   =function(msg){	    self.sendEnc({method:'disconnect',params:{msg:msg,from:{name:self._name(),id:self._sid()}}})	}
 	this.whisper=function(to,msg){	    this.pub(to,msg)	}
@@ -95,6 +106,8 @@ function Datastore(){
 	    LOG("BAD COMMAND:"+cmd)
 	}else if(cmd_ch=="w") {
 	    self.Writer().whoList()
+	}else if(cmd_ch=="W") {
+	    self.Writer().whoList2(cmd.substr(2))
 	}else if(cmd_ch=="y") {
 	    self.Writer().yell(cmd.substr(2))
 	}else if(cmd_ch=="p") {

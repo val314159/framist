@@ -95,6 +95,12 @@ class DatastoreSvc:
                 d['params']['from']['id']=_.sid()
                 svc.pub(d, _.sid())
                 pass
+            def h_whoList2(_,d):
+                print "WH2","o"*5000, d
+                db=list(DB().RangeIter())
+                channels=['shycats','~Porn Store',_.sid(),'nNewbie','y','s','*']
+                _.wu.send( dict(method='hello',params=dict(channels=channels,db=db)) )
+                return
             def h_whoList(_,d):
                 print "WH","o"*5000
                 db=list(DB().RangeIter())
