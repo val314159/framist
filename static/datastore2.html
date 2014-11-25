@@ -2,7 +2,7 @@
 <div id="out"></div>
 <script src="js/mods/util.js"></script>
 <script src="js/mods/websock2.js"></script>
-<script src="js/mods/cmd.js"></script>
+<script src="js/mods/cmd2.js"></script>
 <script src="js/mods/ds2.js"></script>
 <script>
 var ws=WebSock()
@@ -18,7 +18,7 @@ var ws=WebSock()
     self.url("");
     self.login();
   })
-  .addPlugin(Datastore(),"chat")
+  .addPlugin(Datastore(),"ds")
   .login();
 $E('#input').focus();
 </script>

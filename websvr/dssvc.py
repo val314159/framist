@@ -30,6 +30,7 @@ class DatastoreSvc:
             def connect(_):
                 print "CHAT CONNECT", _.sid(), svc.Users
                 channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
+                _.wu.send( dict(method='hello',params=dict(channels=channels)) )
                 return dict(method='hello',params=dict(channels=channels))
             def activate(_):
                 svc.Users[_.sid()] = _
@@ -81,6 +82,8 @@ class DatastoreSvc:
                 pass
             def h_whoList(_,d):
                 print "WH","o"*5000
+                channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
+                _.wu.send( dict(method='hello',params=dict(channels=channels)) )
                 svc.Users[_.sid()] = _
                 d = dict(method='whoList',params=dict(
                         results=svc.Users))
