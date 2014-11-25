@@ -3,14 +3,14 @@ class PubSubSvc:
         _.Users={}
         _.channels = {}
         pass
+    def disconnect(_,*a,**kw):
+        print ">> PUBSUB DISCONNECT", repr((a,kw))
+        return
     def WebUser(svc):
         class PubSubUser:
             def connect(_):
                 print ">> PUBSUB CONNECT"
                 return
-                _.wu.send( dict(method='hello',params=dict(channels=[])) )
-                return
-                return dict(method='hello',params=dict(channels=[]))
             def h_sub(_,d):
                 print "PUBSUB H_SUB", d
                 return

@@ -7,6 +7,9 @@ def DB(__=[]):
 
 class DatastoreSvc:
     def __init__(_): _.Users={}
+    def disconnect(_,*a,**kw):
+        print ">> DATASTORE DISCONNECT", repr((a,kw))
+        return
     def WebUser(svc):
         class DatastoreUser:
             def connect(_):
