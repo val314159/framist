@@ -1,6 +1,6 @@
 LOG("Loading ds2.js")
-function Datastore(){
-    if(this===window)return new Datastore()
+function Chat(){
+    if(this===window)return new Chat()
     var self=this
     var ws
     self.userInfo = {}

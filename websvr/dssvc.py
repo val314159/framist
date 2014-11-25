@@ -1,18 +1,18 @@
 class DatastoreSvc:
     def __init__(_): _.Users={}
-    #def disconnect(_,sid):
-    #    print "CHAT DISCONNECT", sid, _.Users
-    #    _.pub(dict(method='disconnect',params={'sid':sid,'channel':'s'}))
-    #    pass
-    #def pub(_,data,id=None):
-    #    print "PUB DATA", data, id
-    #    if id: data['id'] = id
-    #    print "PUB DATA", data, id
-    #    for sid,user in _.Users.iteritems():
-    #        print "SUD USER", sid, user
-    #        user.send(data)
-    #        pass
-    #    pass
+    def disconnect(_,sid):
+        print "CHAT DISCONNECT", sid, _.Users
+        _.pub(dict(method='disconnect',params={'sid':sid,'channel':'s'}))
+        pass
+    def pub(_,data,id=None):
+        print "PUB DATA", data, id
+        if id: data['id'] = id
+        print "PUB DATA", data, id
+        for sid,user in _.Users.iteritems():
+            print "SUD USER", sid, user
+            user.send(data)
+            pass
+        pass
     def WebUser(svc):
         class DatastoreUser:
 
@@ -31,42 +31,42 @@ class DatastoreSvc:
                 print "CHAT CONNECT", _.sid(), svc.Users
                 channels=['~Porn Store',_.sid(),'nNewbie','y','s','*']
                 return dict(method='hello',params=dict(channels=channels))
-            #def activate(_):
-            #    svc.Users[_.sid()] = _
-            #    pass
-            #def deactivate(_):
-            #    try   : del svc.Users[_.sid()]
-            #    except: pass
-            #    pass
-            #def h_connect(_,d):
-            #    print "CHAT H_CONNECT", d, id(_.wu)
-            #    _.channels = d['params']['channels']
-            #    _.activate()
-            #    print "CHAT H_CONNECT2", d, id(_.wu)
-            #    pass
-            #def h_sub(_,d):
-            #    print "CHAT H_SUB", d, id(_.wu)
-            #    _.activate()
-            #    add_channels = d['params'].get('add_channels')
-            #    del_channels = d['params'].get('del_channels')
-            #    len_add_channels=len(add_channels)
-            #    len_del_channels=len(del_channels)
-            #    min_len = min(len_add_channels,len_del_channels)
-            #    for i in xrange(min_len):
-            #        a = add_channels[i]
-            #        d = del_channels[i]
-            #        n = _.channels.index(d)
-            #        _.channels[n] = a
-            #        pass
-            #    if len_add_channels>len_del_channels:
-            #        _.channels.extend(add_channels[min_len:])
-            #    elif len_add_channels<len_del_channels:
-            #        for ch in del_channels[min_len:]:
-            #            _.channels.remove(ch)
-            #            pass
-            #        pass
-            #    print "CHAT H_SUB2", d, id(_.wu)
-            #    pass
+            def activate(_):
+                svc.Users[_.sid()] = _
+                pass
+            def deactivate(_):
+                try   : del svc.Users[_.sid()]
+                except: pass
+                pass
+            def h_connect(_,d):
+                print "CHAT H_CONNECT", d, id(_.wu)
+                _.channels = d['params']['channels']
+                _.activate()
+                print "CHAT H_CONNECT2", d, id(_.wu)
+                pass
+            def h_sub(_,d):
+                print "CHAT H_SUB", d, id(_.wu)
+                _.activate()
+                add_channels = d['params'].get('add_channels')
+                del_channels = d['params'].get('del_channels')
+                len_add_channels=len(add_channels)
+                len_del_channels=len(del_channels)
+                min_len = min(len_add_channels,len_del_channels)
+                for i in xrange(min_len):
+                    a = add_channels[i]
+                    d = del_channels[i]
+                    n = _.channels.index(d)
+                    _.channels[n] = a
+                    pass
+                if len_add_channels>len_del_channels:
+                    _.channels.extend(add_channels[min_len:])
+                elif len_add_channels<len_del_channels:
+                    for ch in del_channels[min_len:]:
+                        _.channels.remove(ch)
+                        pass
+                    pass
+                print "CHAT H_SUB2", d, id(_.wu)
+                pass
             def h_disconnect(_,d):
                 print "CHAT H_UNSUBALL", d, id(_.wu)
                 svc.pub(d)
@@ -81,7 +81,6 @@ class DatastoreSvc:
                 pass
             def h_whoList(_,d):
                 print "WH","o"*5000
-                return
                 svc.Users[_.sid()] = _
                 d = dict(method='whoList',params=dict(
                         results=svc.Users))
