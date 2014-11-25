@@ -22,14 +22,6 @@ def r_login():
     print "RRR /login"
     return LOGIN()
 
-@app.route('/ws')
-def r_websocket():
-    from webuser import WebUser
-    print "RRR /ws"
-    wu=WebUser(AUTH(),WEB_SOCKET())
-    print "RRR3 /ws"
-    wu.run()
-
 def WSS(_=[]):
     if not _:
         from websocketservices import WebSocketServices
