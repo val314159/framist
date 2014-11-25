@@ -2,9 +2,12 @@
 <div id="out"></div>
 <script src="js/mods/util.js"></script>
 <script src="js/mods/websock2.js"></script>
-<script src="js/mods/cmd2.js"></script>
 <script src="js/mods/ds2.js"></script>
 <script>
+function CMD(x){
+  LOG("DSCMD:"+x)
+  ws.listeners.ds._execCmd(x)
+}
 var ws=WebSock()
   .loginInfo("v","pass")
   .loginSuccess(function(self,at){

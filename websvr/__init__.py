@@ -22,22 +22,16 @@ def r_login():
     print "RRR /login"
     return LOGIN()
 
-@app.route('/ws')
-def r_websocket():
-    from webuser import WebUser
-    print "RRR /ws"
-    wu=WebUser(AUTH(),WEB_SOCKET())
-    print "RRR3 /ws"
-    wu.run()
-
 def WSS(_=[]):
     if not _:
         from websocketservices import WebSocketServices
         from chatsvc import ChatSvc
         from dssvc import DatastoreSvc
+        from pssvc import PubSubSvc
         _.append( WebSocketServices()
                   .addSvc(ChatSvc(), 'chat')
                   .addSvc(DatastoreSvc(), 'ds')
+                  .addSvc(PubSubSvc(), 'ps')
                   )
         pass
     return _[0]
@@ -46,7 +40,7 @@ def WSS(_=[]):
 def r_websocket2():
     print "RRR /ws2"
     wu = WSS().WebUser(AUTH(),WEB_SOCKET())
-    print "RRR3 /ws2"
+    print "RRR3 /ws2..... run"
     wu.run()
 ###################################
 from gevent.pywsgi import WSGIServer
