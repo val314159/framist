@@ -18,7 +18,7 @@ CMD=function(x){
 	var ch = x[0]
 	var chars = ".\"\':;"
 	if (ch=="."||ch=="\""||ch=="\'"||ch==":"||ch==";"){
-	    var module = ws.listeners.chat
+	    var module = ws.listeners.ds
 	    module._execCmd(x)
 	    return}
 	var arr = x.split()
