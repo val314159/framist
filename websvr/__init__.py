@@ -34,8 +34,11 @@ def WSS(_=[]):
     if not _:
         from websocketservices import WebSocketServices
         from chatsvc import ChatSvc
+        from dssvc import DatastoreSvc
         _.append( WebSocketServices()
-                  .addSvc(ChatSvc(), 'chat') )
+                  .addSvc(ChatSvc(), 'chat')
+                  .addSvc(DatastoreSvc(), 'ds')
+                  )
         pass
     return _[0]
 
