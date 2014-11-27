@@ -1,9 +1,11 @@
 export AUTH_PORT=1234
 export DS_PORT=1236
 
-test1 () {
- echo TEST ONE
+restart () {
+  curl localhost:8282/restart
 }
+
+alias rs='restart;fg'
 
 realclean () {
   echo REAL CLEAN 0

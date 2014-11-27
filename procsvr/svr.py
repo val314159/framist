@@ -47,7 +47,7 @@ def stop():
 
 def main():
     restart()
-    run(host='localhost', port=8282,
+    run(host='', port=8282,
         server='gevent', debug=True)
 
 if __name__=='__main__':main()

@@ -42,6 +42,75 @@ def r_websocket2():
     wu = WSS().WebUser(AUTH(),WEB_SOCKET())
     print "RRR3 /ws2..... run"
     wu.run()
+    pass
+
+from collections import defaultdict
+
+class PubSubMixin:
+    ch=defaultdict(dict)
+    @classmethod
+    def ps_reset(_): _.ch=defaultdict(dict)
+    def h_pub(_,channel,data):
+        ch=_.ch[channel]
+        msg=dict( method='pub', params=dict(
+                channel=channel,data=data))
+        for k,v in ch.iteritems(): _.ws.send(json.dumps(msg))
+        return dict( method='pub', result=None )
+    def h_sub(_,add,dlt):
+        for ch in add:     _.ch[ch][_]=_
+        for ch in dlt: del _.ch[ch][_]
+        return dict( method='sub', result=None )
+    pass
+
+class DatastoreMixin:
+    def ds_reset(_): _.ds={}
+    def h_put(_,key,value):
+        print "H PUT", key,value
+        _.ds[key]=value
+        return dict( method='put', result=None )
+    def h_get(_,key):
+        ret = _.ds.get(key)
+        print "H GET", ret
+        return dict( method='get', result=ret )
+    def h_range(_,key=''):
+        ret=[(k,v) for k,v in _.ds.iteritems() if k>=key]
+        return dict( method='range', result=ret )
+    pass
+
+class App(PubSubMixin,DatastoreMixin):
+    def __init__(_,ws): _.ws=ws ; _.h_reset()
+    def h_reset(_): _.ps_reset() ; _.ds_reset()
+    def run(_):
+        _.ws.send(json.dumps(dict( method='hello',params=[1,2,3] )))
+        while 1:
+            message = _.ws.receive()
+            print "MESSAGE", message
+            if not message:
+                break
+            msg = json.loads(message)
+            params = msg['params']
+            fn = getattr(_,'h_'+msg['method'])
+            if   type(params)==type([]): ret=fn(*params)
+            elif type(params)==type({}): ret=fn(**params)
+            else: raise "HELL"
+            print "ZZZ, RET=", ret
+            if 'id' in msg:
+                ret['id'] = msg['id']
+                _.ws.send(json.dumps(ret))
+                pass
+            pass
+        pass
+    pass
+
+@app.route('/websock')
+def r_websocket2():
+    print "RRR1 /websock"
+    at,ws=AUTH(),WEB_SOCKET()
+    print "RRR2 /websock", at, ws
+    app = App(ws)
+    app.run()
+    pass
+
 ###################################
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler

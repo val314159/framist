@@ -10,4 +10,3 @@ echo '>> Installing requirements.txt...'
 
 echo '>> Executing env.sh...'
 . env.sh $*
-test1
