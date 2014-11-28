@@ -1,49 +1,16 @@
-from bottle import Bottle, static_file
 import json
-app = Bottle()
-
-@app.route('/')
-def index():
-    return static_file('main.html', root='./static')
-
-@app.route('/js/<filename>')
-def server_static(filename):
-    return static_file(filename, root='./static/js')
-
-@app.route('/static/<filepath:path>')
-def server_static(filepath):
-    return static_file(filepath, root='./static')
-###################################
+from bottle import static_file, route
 from auth.misc import LOGIN,AUTH
 from webutil import WEB_SOCKET
 
-@app.route('/login')
-def r_login():
-    print "RRR /login"
-    return LOGIN()
-
-def WSS(_=[]):
-    if not _:
-        from websocketservices import WebSocketServices
-        from chatsvc import ChatSvc
-        from dssvc import DatastoreSvc
-        from pssvc import PubSubSvc
-        _.append( WebSocketServices()
-                  .addSvc(ChatSvc(), 'chat')
-                  .addSvc(DatastoreSvc(), 'ds')
-                  .addSvc(PubSubSvc(), 'ps')
-                  )
-        pass
-    return _[0]
-
-@app.route('/ws2')
-def r_websocket2():
-    print "RRR /ws2"
-    wu = WSS().WebUser(AUTH(),WEB_SOCKET())
-    print "RRR3 /ws2..... run"
-    wu.run()
-    pass
-
+@route('/static/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='./static')
+@route('/login')
+def r_login(): return LOGIN()
+@route('/websock2')
+def r_websocket2(): App(WEB_SOCKET(),AUTH()).run()
+###################################
 from collections import defaultdict
 class PubSubMixin:
     ch=defaultdict(dict)
@@ -89,7 +56,7 @@ class DatastoreMixin:
         return dict( method='dlt', result=None )
     def h_put  (_,key,value):        return _.h_rput  (key,value,json.dumps)
 	def h_get  (_,key):              return _.h_rget  (key,      json.loads)
-    def h_range(_,key='',keyn=None): return _.h_rrange(key,keyn, json.loads)
+    def h_range(_,key0='',keyn=None):return _.h_rrange(key0,keyn,json.loads)
     pass
 class App(PubSubMixin,DatastoreMixin):
     def __init__(_,ws,at=''): _.ws=ws
@@ -109,22 +76,9 @@ class App(PubSubMixin,DatastoreMixin):
             else: raise "HELL"
             print "ZZZ, RET=", ret
             if 'id' in msg: ret['id']=msg['id']; _.ws.send(json.dumps(ret))
-@app.route('/websock2')
-def r_websocket2(): App(WEB_SOCKET(),AUTH()).run()
-
-@app.route('/websock')
-def r_websocket2():
-    print "RRR1 /websock"
-    at,ws=AUTH(),WEB_SOCKET()
-    print "RRR2 /websock", at, ws
-    app = App(ws)
-    app.run()
-    pass
-
 ###################################
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler
-
 def launch():
     from auth.misc import POPULATE
     POPULATE()
