@@ -88,7 +88,7 @@ class DatastoreMixin:
         for key in keys: _.DS().Delete(key)
         return dict( method='dlt', result=None )
     def h_put  (_,key,value):        return _.h_rput  (key,value,json.dumps)
-	def h_get  (_,key):              return _.h_rget  (key,      json.loads)
+    def h_get  (_,key):              return _.h_rget  (key,      json.loads)
     def h_range(_,key='',keyn=None): return _.h_rrange(key,keyn, json.loads)
     pass
 class App(PubSubMixin,DatastoreMixin):
