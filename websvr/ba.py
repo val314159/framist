@@ -19,4 +19,3 @@ class BaseApp:
             if 'id' in msg: ret['id']=msg['id']; _.ws.send(json.dumps(ret))
             pass
         _.h_close()
-class App(BaseApp,PubSubMixin,DatastoreMixin): pass
