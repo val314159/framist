@@ -14,6 +14,8 @@ function App(){
 	    var newobj = JSON.parse(arr.join(' '))
 	    LOG.fmt("[[{0}||{1}||{2}]]", cmd, channel, newobj);
 	    d={method:cmd,params:{channel:channel,data:newobj},id:self.id}
+	} else if (startsWith(cmd,'.y')) {
+	    LOG.fmt("YELL");
 	} else if (cmd=='sub') {
 	    LOG.fmt("[[{0}||{1}]]", cmd, str(arr));
 	    var add=[], dlt=[];
@@ -61,6 +63,7 @@ function App(){
 	LOG("XO"+str(e));
 	LOG("XO=====");
 	//ws.send(str({method:'pub',params:{channel:'_open',data:[]}}));
+	ws.send(str({method:'sub',params:{add:['c0','n?','s','y','.']}}));
     }
     ws.onmessage=function(e){
 	LOG("ONMESSAGE:"+str(e));

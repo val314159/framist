@@ -23,3 +23,4 @@ function __format__() {
     return theString}
 fmt=__format__;
 LOG.fmt=function(){LOG(fmt.apply($undef,arguments));}
+function startsWith(a,b){return(a.substr(0,b.length)==b)}

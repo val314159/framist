@@ -16,7 +16,7 @@ class PubSubMixin:
                 d=dict(method='unsubscribe',params=[ch,'close'])
                 _.pub('.'+ch,d).pub('.',d)
                 del _.ch[ch][_]
-    def h_sub(_,add,dlt):
+    def h_sub(_,add=[],dlt=[]):
         for ch in add:
             _.ch[ch][_] = _;  d=dict(method='subscribe',params=[ch])
             _.pub('.'+ch,d).pub('.',d)
