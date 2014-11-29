@@ -5,7 +5,7 @@ class PubSubMixin:
     def pub(_,channel,data):
         ch=_.ch[channel]
         msg=dict( method='pub', params=dict(channel=channel,data=data))
-        for k,v in ch.iteritems(): _.ws.send(json.dumps(msg))
+        for k,v in ch.iteritems(): v.ws.send(json.dumps(msg))
         return _
     def h_pub(_,channel,data):
         _.pub(channel,data)

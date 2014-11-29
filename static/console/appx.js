@@ -59,7 +59,8 @@ function App(){
     var ws = new WebSocket("ws://localhost:8080/websock?accessToken=vat");
     ws.onopen=function(e){
 	LOG("XO"+str(e));
-	ws.send(str({method:'pub',params:{channel:'_open',data:[]}}));
+	LOG("XO=====");
+	//ws.send(str({method:'pub',params:{channel:'_open',data:[]}}));
     }
     ws.onmessage=function(e){
 	LOG("ONMESSAGE:"+str(e));

@@ -68,8 +68,8 @@ run_both() {
   wait
   echo '>> Loop complete.  Kill kids...' $? QQQ
   kill %1 %2
-  echo '>> waiting 1/2 of a second...'
-  pysleep 0.5
+  echo '>> waiting 1/10 of a second...'
+  pysleep 0.1
   echo '>> killall python'
   killall -9 python 2>/dev/null
   pysleep 0.05 # just to let the output sync up
