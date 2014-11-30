@@ -15,7 +15,10 @@ class BaseApp:
             if   type(params)==type([]): ret = fn( *params)
             elif type(params)==type({}): ret = fn(**params)
             else: raise "HELL"
+            print "OK RET1", ret
             if 'id' in msg: ret['id']=msg['id']
+            print "OK RET2", ret
             _.ws.send(json.dumps(ret))
+            print "OK RET3", ret
             pass
         _.h_close()

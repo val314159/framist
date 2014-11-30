@@ -68,13 +68,24 @@ function App(){
 		    }
 		}
 	    }
-	}
+	} else if (msg.method=='get') {
+	    var key=msg.result[0];
+	    if (key=="intro") {
+		var val=msg.result[1];
+		LOG(">> " + val);
+	    } else
+		LOG("ON GET UNKNOWN KEY " + str(msg));
+	} else
+	    LOG("ON MSG UNKNOWN " + str(msg));
     }
     App.onchange = function(x){
 	LOG(x.value)
 	var cmd=x.value
 	x.value=''
 	self.execCmd(cmd)
+    }
+    self.get=function(key){
+	ws.send(str({method:'get',params:{key:key}}));
     }
     self.sub=function(add,dlt){
 	ws.send(str({method:'sub',params:{add:add,dlt:dlt}}));
@@ -95,6 +106,7 @@ function App(){
 	LOG(">> Socket opened..."+str(e))
 	self.channels=channels=['n?','c0','.c','a','s','y']
 	self.sub (channels)
+	self.get ('intro')
 	self.pub2('a',  'Hi everyone','announce')
 	self.pub2('.c', '',           'join')
 	self.pub2('.c0','',           'join')

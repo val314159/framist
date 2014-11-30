@@ -3,10 +3,16 @@ def pushv(a,v): a.append(v); return v
 def identity(x): return x
 class DatastoreMixin:
     @staticmethod
-    def DS(__=[]): return(__[0] if __ else pushv(__,leveldb.LevelDB('.xdb')))
+    def DS(__=[]): return(__[0] if __ else pushv(__,leveldb.LevelDB('.ds')))
     def h_put(_,key,value,encode=json.dumps):
         _.DS().Put(key,encode(value))
         print "PUT", key, value
+
+        print '%'*80
+        for x in _.DS().RangeIter():
+            print "X", x
+        print '%'*80
+        
         return dict( method='put', result=None )
     def h_get(_,key,decode=json.loads):
         print "GET", key, _.DS().Get(key)
@@ -17,5 +23,5 @@ class DatastoreMixin:
         rng = ((k,decode(v)) for k,v in _.DS().RangeIter(key0,keyn))
         return dict( method='range', result=list(rng) )
     def h_dlt(_,keys):
-        return dict( method='dlt', result=len(_.DS().Delete(key) for key in keys))
+        return dict(method='dlt',result=len(_.DS().Delete(key)for key in keys))
     pass
