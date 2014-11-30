@@ -35,15 +35,15 @@ def ps():
 @route('/restart')
 def restart():
     print "QQQQ RESTART"
-    ret = system('sh install.sh run_both&')
+    ret = system('sh env.sh run_both&')
     print "START RET", ret
-    return 'I dunno yet'
+    return '{}'
 
 @route('/stop')
 def stop():
-    print "STOP THE WORLD IN 2 SECS"
-    system('(sleep 2;killall -9 python)&')
-    return 'I dunno yet'
+    print "STOP THE WORLD IN 1 SEC"
+    system('(sleep 1;killall -9 python)&')
+    return '{}'
 
 def main():
     restart()
