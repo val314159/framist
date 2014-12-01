@@ -105,12 +105,16 @@ function App(){
     self.onopen=function(e){
 	LOG(">> Socket opened..."+str(e))
 	self.channels=channels=['n?','c0','.c','a','s','y']
-	self.sub (channels)
 	self.get ('intro')
+	self.sub (channels)
+	//self.pub2('a',  'Hi everyone','announce')
+
+	/*
 	self.pub2('a',  'Hi everyone','announce')
 	self.pub2('.c', '',           'join')
 	self.pub2('.c0','',           'join')
-	self.pub ('y',  'HI',         'yell')
+	*/
+	//self.pub ('y',  'HI',         'yell')
     }
     var ws = new WebSocket("ws://localhost:8080/websock?accessToken=vat")
     ws.onopen=function(e){self.onopen(e)}
