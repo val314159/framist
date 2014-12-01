@@ -3,6 +3,9 @@ app=Bottle()
 @app.route('/static/<filepath:path>')
 def server_static(filepath):
   return static_file(filepath, root='./static')
+@app.route('/')
+def server_static():
+  return static_file('index.html', root='./static')
 from auth.misc import LOGIN,AUTH,POPULATE
 @app.route('/login')
 def r_login(): return LOGIN()
