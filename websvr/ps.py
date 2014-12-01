@@ -1,5 +1,6 @@
 import json
 from pprint import pprint
+from geventwebsocket import WebSocketError
 
 class PSX:
     def __init__(_):
@@ -18,7 +19,11 @@ class PSX:
     def PUB(_,name,data):
         for ws in _.Name2Socks[name]:
             print "DATA", (json.dumps(data))
-            ws.send(json.dumps(dict(method='pub',params=data)))
+            try:
+                ws.send(json.dumps(dict(method='pub',params=data)))
+            except geventwebsocket.WebSocketError,e:
+                print "WRITE ERR, IGNORING", e
+                pass
     def CLS(_,ws):
         for name in _.Sock2Names.pop( hex(id(ws)) ):
             _._UNS(name,ws)
