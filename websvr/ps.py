@@ -17,7 +17,8 @@ class PSX:
         _.Name2Socks.setdefault(name,       []).append(ws)
     def PUB(_,name,data):
         for ws in _.Name2Socks[name]:
-            ws.send(data)
+            print "DATA", (json.dumps(data))
+            ws.send(json.dumps(dict(method='pub',params=data)))
     def CLS(_,ws):
         for name in _.Sock2Names.pop( hex(id(ws)) ):
             _._UNS(name,ws)
@@ -26,6 +27,7 @@ psx=PSX()
 
 class PubSubMixin:
     def h_pub(_,channel,data):
+        print "H_PUB", repr((channel,data))
         psx.PUB(channel,data)
         return dict( method='pub', result=None )
     def h_close(_):  psx.CLS(_.ws)

@@ -11,6 +11,17 @@ function App(){
 	    var newobj = JSON.parse(arr.join(' '))
 	    LOG.fmt("[[{0}||{1}||{2}]]", cmd, channel, newobj)
 	    d={method:cmd,params:{channel:channel,data:newobj},id:self.id}
+	} else if (startsWith(cmd,'.n')) {
+	    arr.unshift(cmd.substr(1))
+	    var name = arr.join(' ')
+	    self.channels[0] = name
+	    self.pub(self.channels[1],name,'name')
+	} else if (startsWith(cmd,'.c')) {
+	    arr.unshift(cmd.substr(1))
+	    var newName = arr.join(' ')
+	    var oldName = self.channels[1]
+	    self.channels[1] = newName
+	    self.sub([newName][oldName])
 	} else if (startsWith(cmd,'.y')) {
 	    arr.unshift(cmd.substr(2));
 	    var msg = arr.join(' ')
@@ -53,9 +64,12 @@ function App(){
     /////////////////////////////////////////////////////////
     self.onMsg=function(msg){
 	if (msg.method=='pub') {
+	    //LOG("101");
 	    if (msg.params) {
-		var data = msg.params.data
+		//LOG("102");
+		var data = msg.params
 		if (data) {
+		    //LOG("103");
 		    if (data.typ=='yell') {
 			LOG.fmt("<b>(*{0}*) {1}</b>", data.from, data.msg)
 		    } else if (data.typ=='talk') {
@@ -102,23 +116,40 @@ function App(){
 			     data:{msg:msg,
 				   from:self.channels,typ:typ}}}));
     }
+    self.$name=function(name){
+	self.channels[0] = 'n'+name;
+    }
     self.onopen=function(e){
 	LOG(">> Socket opened..."+str(e))
 	self.channels=channels=['n?','c0','.c','a','s','y']
 	self.get ('intro')
 	self.sub (channels)
 	//self.pub2('a',  'Hi everyone','announce')
-
 	/*
 	self.pub2('a',  'Hi everyone','announce')
 	self.pub2('.c', '',           'join')
 	self.pub2('.c0','',           'join')
 	*/
-	//self.pub ('y',  'HI',         'yell')
+	self.pub ('y',  'HI',         'yell')
     }
     var ws = new WebSocket("ws://localhost:8080/websock?accessToken=vat")
     ws.onopen=function(e){self.onopen(e)}
-    ws.onmessage=function(e){self.onMsg(JSON.parse(e.data))}
+    ws.onmessage=function(e){
+	//LOG("ON MESSAGE:"+str(e));
+	var data=JSON.parse(e.data);
+	//LOG("ON MESSAGE DATA:"+str(data));
+	if (data.result) {
+	    LOG("ON MESSAGE RESULT:"+str(data));
+	} else if (data.result===null) {
+	    LOG("ON MESSAGE RESULT NULL:"+str(data));
+	} else if (data.id) {
+	    LOG("ON MESSAGE ID:"+str(data));
+	} else if (data.params) {
+	    LOG("ON MESSAGE PARAMS:"+str(data));
+	    self.onMsg((data));
+	} else
+	    LOG("WHAAAAA:"+str(data));
+    }
     ws.onclose=function(e){LOG("XC"+e)}
     ws.onerror=function(e){LOG("XE"+e)}
 }
