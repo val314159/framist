@@ -1,0 +1,53 @@
+<style>
+.edit {
+  background: yellow;
+}
+</style>
+<div class=edit id=edit contentEditable="true">EDIT</div>
+<div>
+<button onclick=savex()>Save</button>
+<button onclick=loadx()>Load</button>
+</div>
+<script>
+function str(x){return JSON.stringify(x)}
+function $E(x){return document.getElementById(x.substr(1))}
+function $H(x){return $E(x).innerHTML}
+function LOG(x){document.body.innerHTML+="<li>"+x+"</li>"}
+var ws = new WebSocket("ws://localhost:8383/ws/fs");
+ws.onopen=function(e){
+  LOG("OPN:"+e);
+  loadx();
+  LOG("OPN2:"+e);
+}
+function send(x){
+  try{
+    LOG("- before send -");
+    ws.send(x)
+    LOG("- after send -");
+  } catch (e) {
+    LOG("SEND ERR:"+e)
+  }
+}
+ws.onmessage=function(x){
+  LOG("MSG:"+x.data);
+  m=JSON.parse(x.data);
+  LOG(m.result[1]);
+  $E(m.result[2]).innerHTML = m.result[1];
+}
+ws.onclose=function(x){
+  LOG("CLS:"+x);
+}
+ws.onerror=function(x){
+  LOG("ERR:"+x);
+}
+
+function fs_get(fname,eltName){
+  send(str({"method":"fs_get","params":[fname,eltName]}))
+}
+function fs_put(fname,data){
+  send(str({"method":"fs_put","params":[fname,data]}))
+}
+
+function savex(){ fs_put("hello.txt",[$H("#edit")]); }
+function loadx(){ fs_get("hello.txt","#edit"); }
+</script>
