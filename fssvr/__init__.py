@@ -2,9 +2,6 @@ from bottle import static_file, abort, Bottle, request
 import os,json
 app=Bottle()
 @app.route('/')
-@app.route('/f')
-def server_static():
-  return static_file('fs/index.html', root='./static')
 @app.route('/d')
 def server_static():
   return static_file('fs/dir.html', root='./static')
@@ -25,9 +22,8 @@ def r_websock():
         eltName = msg['params'][1]
         from stat import S_ISDIR
         if S_ISDIR(os.stat(path).st_mode):
-          print "DIR"
-          #data = [(p,S_ISDIR(os.stat(p))) for p in os.listdir(path)]
-          data = [(p,) for p in os.listdir(path)]
+          data = [(p,S_ISDIR(os.stat(path+'/'+p).st_mode))
+                  for p in os.listdir(path)]
         else:
           print "FILE"
           data = open(path).read()

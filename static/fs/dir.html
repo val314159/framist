@@ -23,40 +23,38 @@ ws.onopen=function(e){
 }
 function send(x){
   try{
-    LOG("- before send -");
     ws.send(x)
-    LOG("- after send -");
   } catch (e) {
     LOG("SEND ERR:"+e)
   }
 }
 function go_to(x){    
-    LOG(x);
+    LOG("Go To " +x);
     $E("#path").value = x;
     loadx();
 }
 ws.onmessage=function(x){
   LOG("MSG:"+x.data);
   m=JSON.parse(x.data);
-  LOG(m.result[1]);
+  //LOG(m.result[1]);
   var text=m.result[1];
-  LOG("TYPE:"+typeof(text));
   var elt = $E(m.result[2]);
   if(typeof(text)=="string"){
-    LOG("text10:"+str(text));
     text = text.replace(/  /g,' &nbsp;');
     text = text.replace(/\n/g,'<br>');
-    LOG("text11:"+str(text));
     elt.innerHTML = text;
     elt.contentEditable=true;
   }else{
     elt.innerHTML = "";
     for (var n=0;n<text.length;n++) {
-      var v=text[n];
-      LOG("<a href='/f?path="+v+"'>"+v+"</a>");
-      APPEND(elt,"<a xhref='/f?path="+v+"' onclick=go_to('"+v+"') >"+v+"</a>");
+      var v=text[n][0];
+      var v2=v;
+      if (text[n][1])
+	  v2 += '/';
+      //LOG("<a href='/f?path="+v+"'>"+v+"</a>");
+      var s = "<a xhref='/f?path="+v+"' onclick=go_to('"+v+"') >"+v2+"</a>";
+      APPEND(elt,s);
     }
-    LOG("text10:"+str(text));
     elt.contentEditable=false;
   }
 }
@@ -69,12 +67,10 @@ function fs_put(path,data){
   send(str({"method":"fs_put","params":[path,data]}))}
 function savex(){
   var text = $H("#edit");
-  LOG("text20:"+escape(text));
   text = text.replace(/\<\/div\>/g,'');
   text = text.replace(/\<div\>/g,'\n');
   text = text.replace(/\<br\>/g,'\n');
   text = text.replace(/&nbsp;/g,' ');
-  LOG("text21:"+str(text));
   fs_put($V("#path"),[text]); }
 function loadx(){ fs_get($V("#path"),"#edit"); }
 function listx(){ go_to('.'); }
