@@ -29,6 +29,7 @@ def r_websock():
         for x in data:
           f.write(x)
           pass
+        f.close()
         pass
       else:
         print "UNKNOWN"

@@ -39,6 +39,10 @@ run_websvr() {
   python -m websvr
 }
 
+run_fssvr() {
+  python -m fssvr
+}
+
 run_authsvr() {
   zerorpc --server --bind tcp://*:$AUTH_PORT auth.ds.levelds.DS
 }
@@ -65,6 +69,34 @@ run_both() {
   run_websvr &
   pysleep 0.2
   echo '>> Started.'
+  wait
+  echo '>> Loop complete.  Kill kids...' $? QQQ
+  kill %1 %2
+  echo '>> waiting 1/10 of a second...'
+  pysleep 0.1
+  echo '>> killall python'
+  killall -9 python 2>/dev/null
+  pysleep 0.05 # just to let the output sync up
+  echo '>> Done.'
+  trap SIGINT
+}
+
+run_all() {
+  trap ctrl_c SIGINT
+  echo '>> Starting ALL...'
+  echo '>> Starting AuthSvr...'
+  run_authsvr &
+  pysleep 0.12
+  echo '>> Started AuthSvr.'
+  echo '>> Starting WebSvr...'
+  run_websvr &
+  pysleep 0.12
+  echo '>> Started WebSvr...'
+  echo '>> Starting FsSvr...'
+  run_fssvr &
+  pysleep 0.12
+  echo '>> Started FaSvr...'
+  echo '>> Started ALL.'
   wait
   echo '>> Loop complete.  Kill kids...' $? QQQ
   kill %1 %2
