@@ -12,9 +12,10 @@
 function str(x){return JSON.stringify(x)}
 function $E(x){return document.getElementById(x.substr(1))}
 function $H(x){return $E(x).innerHTML} 
+function $I(e,y){e.innerHTML=y;return e} 
 function $T(x){return $E(x).textContent}  
 function $TC(x){return $E(x).innerText}  
-function LOG(x){document.body.innerHTML+="<li>"+x+"</li>"}
+function LOG(x){document.body.appendChild($I(document.createElement("li"),x))}
 var ws = new WebSocket("ws://localhost:8383/ws/fs");
 ws.onopen=function(e){
   LOG("OPN:"+e);
@@ -36,8 +37,8 @@ ws.onmessage=function(x){
   LOG(m.result[1]);
   var text=m.result[1];
   LOG("text10:"+str(text));
-text = text.replace(/  /g,' &nbsp;');
-text = text.replace(/\n/g,'<br>');
+  text = text.replace(/  /g,' &nbsp;');
+  text = text.replace(/\n/g,'<br>');
   LOG("text11:"+str(text));
   $E(m.result[2]).innerHTML = text;
 }
@@ -57,10 +58,10 @@ function fs_put(fname,data){
 
 function savex(){
 var text = $H("#edit");
-LOG("text20:"+str(text));
+LOG("text20:"+escape(text));
   text = text.replace(/\<\/div\>/g,'');
   text = text.replace(/\<div\>/g,'\n');
-  text = text.replace(/\<br\>/g,'');
+  text = text.replace(/\<br\>/g,'\n');
   text = text.replace(/&nbsp;/g,' ');
 LOG("text21:"+str(text));
   fs_put("hello.txt",[text]); }
