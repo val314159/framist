@@ -2,6 +2,7 @@ import gevent.monkey;gevent.monkey.patch_all()
 from bottle import route, run, template
 import time,sys
 from os import system
+import gevent
 
 @route('/')
 def index():
@@ -32,6 +33,30 @@ def ps():
         pass
     return 'I dunno yet'
 
+@route('/killall')
+def killall():
+    print "QQQQ KA1"
+    ret = system('killall -9 python')
+    print "QQQQ KA9"
+    return '{}'
+
+@route('/start')
+def start():
+    print "QQQQ START1"
+    ret = system('sh env.sh run_all&')
+    print "QQQQ START9"
+    print "START RET", ret
+    return '{}'
+
+@route('/bounce')
+def bounce():
+    print "QQQQ BOUNCE"
+    killall()
+    print "QQQQ BOUNCE5"
+    gevent.time(0.25)
+    print "QQQQ BOUNCE6"
+    return start()
+
 @route('/restart')
 def restart():
     print "QQQQ RESTART"
@@ -46,7 +71,7 @@ def stop():
     return '{}'
 
 def main():
-    restart()
+    start()
     run(host='', port=8282,
         server='gevent', debug=True)
 

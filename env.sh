@@ -32,6 +32,8 @@ loop_procsvr() {
 }
 
 run_procsvr() {
+  killall -9 python
+  sleep 1
   python -m procsvr
 }
 
