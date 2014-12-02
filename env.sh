@@ -86,15 +86,15 @@ run_all() {
   echo '>> Starting ALL...'
   echo '>> Starting AuthSvr...'
   run_authsvr &
-  pysleep 0.12
+  pysleep 0.1
   echo '>> Started AuthSvr.'
   echo '>> Starting WebSvr...'
   run_websvr &
-  pysleep 0.12
+  pysleep 0.1
   echo '>> Started WebSvr...'
   echo '>> Starting FsSvr...'
   run_fssvr &
-  pysleep 0.12
+  pysleep 0.1
   echo '>> Started FaSvr...'
   echo '>> Started ALL.'
   wait
