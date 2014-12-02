@@ -1,5 +1,11 @@
-Path:<input id="path" value=".">
-<div id="content">
+<div>
+  Path:<input id="path" value="hello.txt">
+  <div>
+    <button onclick="go_to('.')">List</button>
+    <button onclick="savex()">Save</button>
+    <button onclick="loadx()">Load</button>
+  </div>
+  <div id="edit" style="border:1px solid blue">EDIT</div>
 </div>
 <script>
 function str(x){return JSON.stringify(x)}
@@ -7,9 +13,8 @@ function $E(x){return document.getElementById(x.substr(1))}
 function $H(x){return $E(x).innerHTML} 
 function $V(x){return $E(x).value} 
 function $I(e,y){e.innerHTML=y;return e} 
-function $T(x){return $E(x).textContent}  
-function $TC(x){return $E(x).innerText}  
 function LOG(x){document.body.appendChild($I(document.createElement("li"),x))}
+function APPEND(e,x){e.appendChild($I(document.createElement("li"),x))}
 var ws = new WebSocket("ws://localhost:8383/ws/fs");
 ws.onopen=function(e){
   LOG("OPN:"+e);
@@ -25,24 +30,52 @@ function send(x){
     LOG("SEND ERR:"+e)
   }
 }
+function go_to(x){    
+    LOG(x);
+    $E("#path").value = x;
+    loadx();
+}
 ws.onmessage=function(x){
   LOG("MSG:"+x.data);
   m=JSON.parse(x.data);
   LOG(m.result[1]);
   var text=m.result[1];
-  for (var n=0;n<text.length;n++) {
-    var v=text[n];
-    LOG("text5:"+str(v));
-    LOG("<a href='/f?path="+v+"'>"+v+"</a>");
+  LOG("TYPE:"+typeof(text));
+  var elt = $E(m.result[2]);
+  if(typeof(text)=="string"){
+    LOG("text10:"+str(text));
+    text = text.replace(/  /g,' &nbsp;');
+    text = text.replace(/\n/g,'<br>');
+    LOG("text11:"+str(text));
+    elt.innerHTML = text;
+    elt.contentEditable=true;
+  }else{
+    elt.innerHTML = "";
+    for (var n=0;n<text.length;n++) {
+      var v=text[n];
+      LOG("<a href='/f?path="+v+"'>"+v+"</a>");
+      APPEND(elt,"<a xhref='/f?path="+v+"' onclick=go_to('"+v+"') >"+v+"</a>");
+    }
+    LOG("text10:"+str(text));
+    elt.contentEditable=false;
   }
-  LOG("text10:"+str(text));
 }
 ws.onclose=function(x){  LOG("CLS:"+x); }
 ws.onerror=function(x){  LOG("ERR:"+x); }
 
-function fs_ls(path){
-  send(str({"method":"fs_ls","params":[path]}))
-}
-
-function loadx(){ fs_ls($V("#path")); }
-</script>
+function fs_get(path,eltName){
+  send(str({"method":"fs_get","params":[path,eltName]}))}
+function fs_put(path,data){
+  send(str({"method":"fs_put","params":[path,data]}))}
+function savex(){
+  var text = $H("#edit");
+  LOG("text20:"+escape(text));
+  text = text.replace(/\<\/div\>/g,'');
+  text = text.replace(/\<div\>/g,'\n');
+  text = text.replace(/\<br\>/g,'\n');
+  text = text.replace(/&nbsp;/g,' ');
+  LOG("text21:"+str(text));
+  fs_put($V("#path"),[text]); }
+function loadx(){ fs_get($V("#path"),"#edit"); }
+function listx(){ go_to('.'); }
+//</script>

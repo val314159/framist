@@ -21,15 +21,18 @@ def r_websock():
       msg=json.loads(message)
       if msg['method']=='fs_get':
         print "GETTTT", msg['params'][0]
-        fname = 'fs/'+msg['params'][0]
-        data = open(fname).read()
-        eltName = msg['params'][1]
-        ws.send(json.dumps({"result":[fname,data,eltName]}))
-      elif msg['method']=='fs_ls':
-        print "LSSSSS", msg['params'][0]
         path = 'fs/'+msg['params'][0]
-        data=os.listdir(path)
-        ws.send(json.dumps({"result":[path,data]}))
+        eltName = msg['params'][1]
+        from stat import S_ISDIR
+        if S_ISDIR(os.stat(path).st_mode):
+          print "DIR"
+          #data = [(p,S_ISDIR(os.stat(p))) for p in os.listdir(path)]
+          data = [(p,) for p in os.listdir(path)]
+        else:
+          print "FILE"
+          data = open(path).read()
+          pass
+        ws.send(json.dumps({"result":[path,data,eltName]}))
       elif msg['method']=='fs_put':
         print "PUTTTT", msg['params'][0], msg['params'][1]
         fname = 'fs/'+msg['params'][0]
