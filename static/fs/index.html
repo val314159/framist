@@ -34,7 +34,12 @@ ws.onmessage=function(x){
   LOG("MSG:"+x.data);
   m=JSON.parse(x.data);
   LOG(m.result[1]);
-  $E(m.result[2]).innerText = m.result[1];
+  var text=m.result[1];
+  LOG("text10:"+str(text));
+text = text.replace(/  /g,' &nbsp;');
+text = text.replace(/\n/g,'<br>');
+  LOG("text11:"+str(text));
+  $E(m.result[2]).innerHTML = text;
 }
 ws.onclose=function(x){
   LOG("CLS:"+x);
@@ -51,11 +56,13 @@ function fs_put(fname,data){
 }
 
 function savex(){
-  var text = $H("#edit");
+var text = $H("#edit");
+LOG("text20:"+str(text));
   text = text.replace(/\<\/div\>/g,'');
   text = text.replace(/\<div\>/g,'\n');
   text = text.replace(/\<br\>/g,'');
   text = text.replace(/&nbsp;/g,' ');
+LOG("text21:"+str(text));
   fs_put("hello.txt",[text]); }
 function loadx(){ fs_get("hello.txt","#edit"); }
 </script>
