@@ -1,7 +1,7 @@
 <div>
   Path:<input id="path" value="hello.txt">
   <div>
-    <button onclick="go_to('.')">List</button>
+    <button onclick="go_to('.')">Root</button>
     <button onclick="savex()">Save</button>
     <button onclick="loadx()">Load</button>
   </div>
@@ -28,6 +28,9 @@ function send(x){
     LOG("SEND ERR:"+e)
   }
 }
+function go_to2(x){
+  go_to($E("#path").value + '/' + x);
+}
 function go_to(x){    
     LOG("Go To " +x);
     $E("#path").value = x;
@@ -52,7 +55,7 @@ ws.onmessage=function(x){
       if (text[n][1])
 	  v2 += '/';
       //LOG("<a href='/f?path="+v+"'>"+v+"</a>");
-      var s = "<a xhref='/f?path="+v+"' onclick=go_to('"+v+"') >"+v2+"</a>";
+      var s = "<a xhref='/f?path="+v+"' onclick=go_to2('"+v+"') >"+v2+"</a>";
       APPEND(elt,s);
     }
     elt.contentEditable=false;

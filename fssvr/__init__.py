@@ -25,7 +25,6 @@ def r_websock():
           data = [(p,S_ISDIR(os.stat(path+'/'+p).st_mode))
                   for p in os.listdir(path)]
         else:
-          print "FILE"
           data = open(path).read()
           pass
         ws.send(json.dumps({"result":[path,data,eltName]}))
