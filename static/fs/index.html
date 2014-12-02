@@ -12,7 +12,8 @@
 function str(x){return JSON.stringify(x)}
 function $E(x){return document.getElementById(x.substr(1))}
 function $H(x){return $E(x).innerHTML} 
-function $T(x){return $E(x).textContent} 
+function $T(x){return $E(x).textContent}  
+function $TC(x){return $E(x).innerText}  
 function LOG(x){document.body.innerHTML+="<li>"+x+"</li>"}
 var ws = new WebSocket("ws://localhost:8383/ws/fs");
 ws.onopen=function(e){
@@ -33,7 +34,7 @@ ws.onmessage=function(x){
   LOG("MSG:"+x.data);
   m=JSON.parse(x.data);
   LOG(m.result[1]);
-  $E(m.result[2]).textContent = m.result[1];
+  $E(m.result[2]).innerText = m.result[1];
 }
 ws.onclose=function(x){
   LOG("CLS:"+x);
@@ -49,6 +50,12 @@ function fs_put(fname,data){
   send(str({"method":"fs_put","params":[fname,data]}))
 }
 
-function savex(){ fs_put("hello.txt",[$T("#edit")]); }
+function savex(){
+  var text = $H("#edit");
+  text = text.replace(/\<\/div\>/g,'');
+  text = text.replace(/\<div\>/g,'\n');
+  text = text.replace(/\<br\>/g,'');
+  text = text.replace(/&nbsp;/g,' ');
+  fs_put("hello.txt",[text]); }
 function loadx(){ fs_get("hello.txt","#edit"); }
 </script>
