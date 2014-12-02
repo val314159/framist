@@ -7,6 +7,7 @@ import gevent
 @route('/')
 def index():
     return ['''proc svr<hr>
+<li><a href="/bounce" >bounce </a></li>
 <li><a href="/ps"     >ps     </a></li>
 <li><a href="/restart">restart</a></li>
 <li><a href="/stop"   >stop   </a></li>
@@ -64,10 +65,14 @@ def restart():
     print "START RET", ret
     return '{}'
 
+def xstop():
+    print "BYE!"
+    system('killall -9 python')
+
 @route('/stop')
 def stop():
     print "STOP THE WORLD IN 1 SEC"
-    system('(sleep 1;killall -9 python)&')
+    gevent.spawn_later(0.1,xstop)
     return '{}'
 
 def main():
