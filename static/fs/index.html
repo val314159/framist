@@ -1,17 +1,22 @@
+<!doctype html>
 <style>
 .edit {
   background: yellow;
 }
 </style>
+</head>
+<body>
+Filename:<input id="filename" value="hello.txt">
 <div class=edit id=edit contentEditable="true">EDIT</div>
 <div>
-<button onclick=savex()>Save</button>
-<button onclick=loadx()>Load</button>
+  <button onclick=savex()>Save</button>
+  <button onclick=loadx()>Load</button>
 </div>
 <script>
 function str(x){return JSON.stringify(x)}
 function $E(x){return document.getElementById(x.substr(1))}
 function $H(x){return $E(x).innerHTML} 
+function $V(x){return $E(x).value} 
 function $I(e,y){e.innerHTML=y;return e} 
 function $T(x){return $E(x).textContent}  
 function $TC(x){return $E(x).innerText}  
@@ -42,12 +47,8 @@ ws.onmessage=function(x){
   LOG("text11:"+str(text));
   $E(m.result[2]).innerHTML = text;
 }
-ws.onclose=function(x){
-  LOG("CLS:"+x);
-}
-ws.onerror=function(x){
-  LOG("ERR:"+x);
-}
+ws.onclose=function(x){ LOG("CLS:"+x); }
+ws.onerror=function(x){ LOG("ERR:"+x); }
 
 function fs_get(fname,eltName){
   send(str({"method":"fs_get","params":[fname,eltName]}))
@@ -57,13 +58,13 @@ function fs_put(fname,data){
 }
 
 function savex(){
-var text = $H("#edit");
-LOG("text20:"+escape(text));
+  var text = $H("#edit");
+  LOG("text20:"+escape(text));
   text = text.replace(/\<\/div\>/g,'');
   text = text.replace(/\<div\>/g,'\n');
   text = text.replace(/\<br\>/g,'\n');
   text = text.replace(/&nbsp;/g,' ');
-LOG("text21:"+str(text));
-  fs_put("hello.txt",[text]); }
-function loadx(){ fs_get("hello.txt","#edit"); }
-</script>
+  LOG("text21:"+str(text));
+  fs_put($V("#filename"),[text]); }
+function loadx(){ fs_get($V("#filename"),"#edit"); }
+//</script>

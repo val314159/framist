@@ -1,0 +1,48 @@
+Path:<input id="path" value=".">
+<div id="content">
+</div>
+<script>
+function str(x){return JSON.stringify(x)}
+function $E(x){return document.getElementById(x.substr(1))}
+function $H(x){return $E(x).innerHTML} 
+function $V(x){return $E(x).value} 
+function $I(e,y){e.innerHTML=y;return e} 
+function $T(x){return $E(x).textContent}  
+function $TC(x){return $E(x).innerText}  
+function LOG(x){document.body.appendChild($I(document.createElement("li"),x))}
+var ws = new WebSocket("ws://localhost:8383/ws/fs");
+ws.onopen=function(e){
+  LOG("OPN:"+e);
+  loadx();
+  LOG("OPN2:"+e);
+}
+function send(x){
+  try{
+    LOG("- before send -");
+    ws.send(x)
+    LOG("- after send -");
+  } catch (e) {
+    LOG("SEND ERR:"+e)
+  }
+}
+ws.onmessage=function(x){
+  LOG("MSG:"+x.data);
+  m=JSON.parse(x.data);
+  LOG(m.result[1]);
+  var text=m.result[1];
+  for (var n=0;n<text.length;n++) {
+    var v=text[n];
+    LOG("text5:"+str(v));
+    LOG("<a href='/f?path="+v+"'>"+v+"</a>");
+  }
+  LOG("text10:"+str(text));
+}
+ws.onclose=function(x){  LOG("CLS:"+x); }
+ws.onerror=function(x){  LOG("ERR:"+x); }
+
+function fs_ls(path){
+  send(str({"method":"fs_ls","params":[path]}))
+}
+
+function loadx(){ fs_ls($V("#path")); }
+</script>
