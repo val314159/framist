@@ -18,7 +18,8 @@ def r_websock():
 from ba import BaseApp
 from ps import PubSubMixin
 from ds import DatastoreMixin
-class App(BaseApp,PubSubMixin,DatastoreMixin): pass
+from fssvr.fs import FilesystemMixin
+class App(BaseApp,PubSubMixin,DatastoreMixin,FilesystemMixin): pass
 ###################################
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler as WSH

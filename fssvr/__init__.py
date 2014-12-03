@@ -5,44 +5,33 @@ app=Bottle()
 @app.route('/d')
 def server_static():
   return static_file('fs/dir.html', root='./static')
+
+from fs import *
+
 @app.route('/ws/fs')
 def r_websock():
     ws = request.environ.get('wsgi.websocket')
     if not ws: abort(499,errmsg("Expected WebSocket req."))
     print "OPENED"
+    app=FsApp(ws)
     while 1:
-      message=ws.receive()
-      print "MESSAGE", repr(message)
-      if not message:
-        break
-      msg=json.loads(message)
-      if msg['method']=='fs_get':
-        print "GETTTT", msg['params'][0]
-        path = 'fs/'+msg['params'][0]
-        eltName = msg['params'][1]
-        from stat import S_ISDIR
-        if S_ISDIR(os.stat(path).st_mode):
-          data = [(p,S_ISDIR(os.stat(path+'/'+p).st_mode))
-                  for p in os.listdir(path)]
+        message=ws.receive()
+        print "MESSAGE", repr(message)
+        if not message:
+            break
+        msg=json.loads(message)
+        if msg['method']=='fs_get':
+            path = 'fs/'+msg['params'][0]
+            app.h_fs_get(path,msg['params'][1])
+        elif msg['method']=='fs_put':
+            fname = 'fs/'+msg['params'][0]
+            app.h_fs_put(path,msg['params'][1])
         else:
-          data = open(path).read()
-          pass
-        ws.send(json.dumps({"result":[path,data,eltName]}))
-      elif msg['method']=='fs_put':
-        print "PUTTTT", msg['params'][0], msg['params'][1]
-        fname = 'fs/'+msg['params'][0]
-        data = msg['params'][1]
-        f=open(fname,'w')
-        for x in data:
-          f.write(x)
-          pass
-        f.close()
+            print "UNKNOWN"
+            pass
         pass
-      else:
-        print "UNKNOWN"
-        pass
-      pass
     print "CLOSED"
+    pass
 
 ###################################
 ###################################

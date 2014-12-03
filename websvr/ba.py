@@ -7,7 +7,6 @@ class BaseApp:
         _.DS().Put('intro',json.dumps(['intro',intro]))
     def step(_):
         message = _.ws.receive()
-        #print "xMESSAGE", message
         if not message:
             return True
         msg = json.loads(message)
@@ -19,14 +18,10 @@ class BaseApp:
         if 'id' in msg: ret['id']=msg['id']
         _.ws.send(json.dumps(ret))
     def run(_):
-        print "##### START  NEWC #####"        
-        print "##### FINISH NEWC #####"
+        print "##### OPEN NEW CONNECTION #####"
         while 1:
             try:
-                #_.who()
                 r=_.step()
-                #if _.step(): break
-                #_.who()
                 if r: break
             except:
                 print "##### START  PROBLEM #####"
@@ -37,5 +32,3 @@ class BaseApp:
         print "##### START  CLOSE #####"
         _.h_close()
         print "##### FINISH CLOSE #####"
-        #_.who()
-        print "##### FINISH CLOSE2 #####"
