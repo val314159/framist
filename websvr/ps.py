@@ -14,6 +14,7 @@ class PSX:
         _.UNS(name,ws)
         _.Sock2Names[hex(id(ws))].remove(name)
     def SUB(_,name,ws):
+        if name == '0x': name=hex(id(ws))
         _.Sock2Names.setdefault(hex(id(ws)),[]).append(name)
         _.Name2Socks.setdefault(name,       []).append(ws)
     def PUB(_,name,data):
@@ -49,7 +50,7 @@ class PubSubMixin:
         print "s2n", psx.Sock2Names
         for k,v in psx.Sock2Names.iteritems():
             print [k]+v
-            wholist.append([k]+v)
+            wholist.append(v)
             #print '--', psx.Sock2Names, '--'
             #print psx.Sock2Names[h]
             pass

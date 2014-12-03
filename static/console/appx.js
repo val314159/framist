@@ -14,13 +14,13 @@ function App(){
 	} else if (startsWith(cmd,'.n')) {
 	    arr.unshift(cmd.substr(1))
 	    var name = arr.join(' ')
-	    self.channels[0] = name
-	    self.pub(self.channels[1],name,'name')
+	    self.channels[1] = name
+	    self.pub(self.channels[2],name,'name')
 	} else if (startsWith(cmd,'.c')) {
 	    arr.unshift(cmd.substr(1))
 	    var newName = arr.join(' ')
-	    var oldName = self.channels[1]
-	    self.channels[1] = newName
+	    var oldName = self.channels[2]
+	    self.channels[2] = newName
 	    self.sub([newName][oldName])
 	} else if (startsWith(cmd,'.y')) {
 	    arr.unshift(cmd.substr(2));
@@ -33,8 +33,8 @@ function App(){
 	} else if (startsWith(cmd,'.w')) {
 	    self.who()
 	} else if (startsWith(cmd,'\"')) {
-	    var who=self.channels[0];
-	    var whom=self.channels[1];
+	    var who=self.channels[1];
+	    var whom=self.channels[2];
 	    arr.unshift(cmd.substr(1));
 	    var msg = arr.join(' ')
 	    self.pub(whom,msg,'talk')
@@ -114,7 +114,7 @@ function App(){
 	ws.send(str({method:'pub',
 		     params:{channel:channel,
 			     data:{msg:msg,
-				   from:[self.channels[0]],typ:typ}}}));
+				   from:[self.channels[1]],typ:typ}}}));
     }
     self.pub2=function(channel,msg,typ){
 	ws.send(str({method:'pub',
@@ -123,11 +123,11 @@ function App(){
 				   from:self.channels,typ:typ}}}));
     }
     self.$name=function(name){
-	self.channels[0] = 'n'+name;
+	self.channels[1] = 'n'+name;
     }
     self.onopen=function(e){
 	LOG(">> Socket opened..."+str(e))
-	self.channels=channels=['n?','c0','.c','a','s','y']
+	self.channels=channels=['0x','n?','c0','.c','a','s','y']
 	self.get ('intro')
 	self.sub (channels)
 	//self.pub2('a',  'Hi everyone','announce')
