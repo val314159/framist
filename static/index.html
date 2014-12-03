@@ -1,41 +1,8 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <script src="/js/u.js"></script>
-    <script src="/js/wu.js"></script>
-    <script src="/js/app.js"></script>
-  </head>
-  <body id="app" onload="main();app=App({autoStart:true})">
-    <button onclick="app.wu.toggleCxn()">
-      Toggle Connection</button>
-    <br>Name:
-    <input id="name"    onchange="app.wu.$name(this.value)">
-    <br>Channel:
-    <input id="channel" onchange="app.wu.$channel(this.value)">
-    <br>Say Message:
-    <input onchange="app.say( this.value);this.value='';this.focus()">
-    <br>Yell Message:
-    <input onchange="app.yell(this.value);this.value='';this.focus()">
-    <br>Whisper To:
-    <input id="whisperTo" onchange="app.whisper()">
-    <br>Whisper Message:
-    <input id="whisperMsg"
-	   onchange="app.whisper();this.value='';this.focus();">
-    <br>
-    <button onclick="app.wu.whoList()">
-      Who List</button>
-
-    <hr>
-
-    <div id="out_meta">
-      <div id="out_prologue">
-	<button onclick="$E('#out').innerHTML='';">Clear</button>
-      </div>
-      <div id="out">
-      </div>
-    </div>
-    
-    <hr>
-    
-  </body>
-</html>
+Apps:
+<li><a href="http://localhost:8080/static/console/index.html">Console</a></li>
+<li><a href="http://localhost:8383/d">FsSvr</a></li>
+<li><a href="http://localhost:8282">ProcSvr</a></li>
+<hr>
+<li><a href="/static/fs/dir.html">Directory Tool</a></li>
+<li><a href="/static/console/index.html">Console Tool</a></li>
+<li><a href="/static/procsvr/procsvr.html">Proc Tool</a></li>

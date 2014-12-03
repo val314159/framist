@@ -2,10 +2,12 @@ import gevent.monkey;gevent.monkey.patch_all()
 from bottle import route, run, template
 import time,sys
 from os import system
+import gevent
 
 @route('/')
 def index():
     return ['''proc svr<hr>
+<li><a href="/bounce" >bounce </a></li>
 <li><a href="/ps"     >ps     </a></li>
 <li><a href="/restart">restart</a></li>
 <li><a href="/stop"   >stop   </a></li>
@@ -32,21 +34,49 @@ def ps():
         pass
     return 'I dunno yet'
 
+@route('/killall')
+def killall():
+    print "QQQQ KA1"
+    ret = system('killall -9 python')
+    print "QQQQ KA9"
+    return '{}'
+
+@route('/start')
+def start():
+    print "QQQQ START1"
+    ret = system('sh env.sh run_all&')
+    print "QQQQ START9"
+    print "START RET", ret
+    return '{}'
+
+@route('/bounce')
+def bounce():
+    print "QQQQ BOUNCE"
+    killall()
+    print "QQQQ BOUNCE5"
+    gevent.time(0.25)
+    print "QQQQ BOUNCE6"
+    return start()
+
 @route('/restart')
 def restart():
     print "QQQQ RESTART"
-    ret = system('sh install.sh run_both&')
+    ret = system('sh env.sh run_both&')
     print "START RET", ret
-    return 'I dunno yet'
+    return '{}'
+
+def xstop():
+    print "BYE!"
+    system('killall -9 python')
 
 @route('/stop')
 def stop():
-    print "STOP THE WORLD IN 2 SECS"
-    system('(sleep 2;killall -9 python)&')
-    return 'I dunno yet'
+    print "STOP THE WORLD IN 1 SEC"
+    gevent.spawn_later(0.1,xstop)
+    return '{}'
 
 def main():
-    restart()
+    start()
     run(host='', port=8282,
         server='gevent', debug=True)
 

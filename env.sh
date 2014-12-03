@@ -23,20 +23,23 @@ freeze() {
 
 loop_procsvr() {
   while true; do
-      echo qq 11
     run_procsvr
-      echo qq 22
-    sleep 2
-      echo qq 33
+    pysleep 0.2
   done
 }
 
 run_procsvr() {
+  killall -9 python
+  pysleep 0.2
   python -m procsvr
 }
 
 run_websvr() {
   python -m websvr
+}
+
+run_fssvr() {
+  python -m fssvr
 }
 
 run_authsvr() {
@@ -56,20 +59,27 @@ pysleep () {
   python -c"import sys,time;time.sleep(float($1))"
 }
 
-run_both() {
+run_all() {
   trap ctrl_c SIGINT
+  echo '>> Starting ALL...'
   echo '>> Starting AuthSvr...'
   run_authsvr &
-  pysleep 0.2
+  pysleep 0.1
+  echo '>> Started AuthSvr.'
   echo '>> Starting WebSvr...'
   run_websvr &
-  pysleep 0.2
-  echo '>> Started.'
+  pysleep 0.1
+  echo '>> Started WebSvr...'
+  echo '>> Starting FsSvr...'
+  run_fssvr &
+  pysleep 0.1
+  echo '>> Started FsSvr...'
+  echo '>> Started ALL.'
   wait
   echo '>> Loop complete.  Kill kids...' $? QQQ
   kill %1 %2
-  echo '>> waiting 1/2 of a second...'
-  pysleep 0.5
+  echo '>> waiting 1/10 of a second...'
+  pysleep 0.1
   echo '>> killall python'
   killall -9 python 2>/dev/null
   pysleep 0.05 # just to let the output sync up

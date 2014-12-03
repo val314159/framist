@@ -1,5 +1,6 @@
 function $E(x){return document.getElementById(x.substr(1));}
 function ScrollToBottom(e){e.scrollTop=e.scrollHeight}
+function LOOP(a,f){for(var k in a){f(a[k],k,a)}}
 var LOG=function(x){
     var e=$E('#out');
     e.innerHTML += "<li>"+x+"</li>";
@@ -23,3 +24,4 @@ function __format__() {
     return theString}
 fmt=__format__;
 LOG.fmt=function(){LOG(fmt.apply($undef,arguments));}
+function startsWith(a,b){return(a.substr(0,b.length)==b)}

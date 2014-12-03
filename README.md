@@ -3,9 +3,14 @@ framist
 
 cool framework
 
-##### Quickstart:
+##### Quickstart (dev):
 ```
-(git clone https://github.com/val314159/framist;cd framist;sh install.sh loop_procsvr)
+(git clone https://github.com/val314159/framist;cd framist;git checkout dev;sh install.sh;sh env.sh loop_procsvr)
+```
+
+##### Quickstart (prod):
+```
+(git clone https://github.com/val314159/framist;cd framist;sh install.sh;sh env.sh loop_procsvr)
 ```
 
 ##### To download:
