@@ -30,6 +30,8 @@ function App(){
 	    var who = arr.shift()
 	    var msg = arr.join(' ')
 	    self.pub(who,msg,'whisper')
+	} else if (startsWith(cmd,'.w')) {
+	    self.who()
 	} else if (startsWith(cmd,'\"')) {
 	    var who=self.channels[0];
 	    var whom=self.channels[1];
@@ -65,12 +67,9 @@ function App(){
     /////////////////////////////////////////////////////////
     self.onMsg=function(msg){
 	if (msg.method=='pub') {
-	    //LOG("101");
 	    if (msg.params) {
-		//LOG("102");
 		var data = msg.params
 		if (data) {
-		    //LOG("103");
 		    if (data.typ=='yell') {
 			LOG.fmt("<b>(*{0}*) {1}</b>", data.from, data.msg)
 		    } else if (data.typ=='talk') {
@@ -78,7 +77,8 @@ function App(){
 		    } else if (data.typ=='whisper') {
 			LOG.fmt("<b><i>(p,{0}) {1}</i></b>",data.from,data.msg)
 		    } else if (data.typ=='name') {
-			LOG.fmt(">> {0} changed thier name to {1}",data.from.substr(1),data.msg.substr(1))
+			LOG.fmt(">> ({0}) changed thier name to {1}",
+				data.from[0].substr(1),data.msg.substr(1))
 		    } else {
 			LOG.fmt("<b>Unknown Data Type: {0}</b><i>{1}</i>",
 				data.typ, str(data))
@@ -103,6 +103,9 @@ function App(){
     }
     self.get=function(key){
 	ws.send(str({method:'get',params:{key:key}}));
+    }
+    self.who=function(){
+	ws.send(str({method:'who',params:{}}));
     }
     self.sub=function(add,dlt){
 	ws.send(str({method:'sub',params:{add:add,dlt:dlt}}));
@@ -138,9 +141,9 @@ function App(){
     var ws = new WebSocket("ws://localhost:8080/websock?accessToken=vat")
     ws.onopen=function(e){self.onopen(e)}
     ws.onmessage=function(e){
-	//LOG("ON MESSAGE:"+str(e));
+	LOG("ON MESSAGE:"+str(e));
 	var data=JSON.parse(e.data);
-	//LOG("ON MESSAGE DATA:"+str(data));
+	LOG("ON MESSAGE DATA:"+str(data));
 	if (data.result) {
 	    LOG("ON MESSAGE RESULT:"+str(data));
 	} else if (data.result===null) {

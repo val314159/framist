@@ -42,3 +42,15 @@ class PubSubMixin:
         for name in dlt: psx.UNS(name,_.ws)
         return dict( method='sub', result=None )
 
+    def h_who(_):
+        print "WHO?", psx
+        wholist = []
+        print "n2s", psx.Name2Socks
+        print "s2n", psx.Sock2Names
+        for k,v in psx.Sock2Names.iteritems():
+            print [k]+v
+            wholist.append([k]+v)
+            #print '--', psx.Sock2Names, '--'
+            #print psx.Sock2Names[h]
+            pass
+        return dict( method='who', result=wholist )
