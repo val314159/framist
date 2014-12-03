@@ -17,6 +17,7 @@ class PSX:
         _.Sock2Names.setdefault(hex(id(ws)),[]).append(name)
         _.Name2Socks.setdefault(name,       []).append(ws)
     def PUB(_,name,data):
+        if name not in _.Name2Socks: return
         for ws in _.Name2Socks[name]:
             print "DATA", (json.dumps(data))
             try:

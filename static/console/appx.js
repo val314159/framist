@@ -32,9 +32,10 @@ function App(){
 	    self.pub(who,msg,'whisper')
 	} else if (startsWith(cmd,'\"')) {
 	    var who=self.channels[0];
+	    var whom=self.channels[1];
 	    arr.unshift(cmd.substr(1));
 	    var msg = arr.join(' ')
-	    self.pub(who,msg,'talk')
+	    self.pub(whom,msg,'talk')
 	} else if (cmd=='sub') {
 	    LOG.fmt("[[{0}||{1}]]", cmd, str(arr))
 	    var add=[], dlt=[];
@@ -76,6 +77,8 @@ function App(){
 			LOG.fmt("({0}) {1}", data.from, data.msg)
 		    } else if (data.typ=='whisper') {
 			LOG.fmt("<b><i>(p,{0}) {1}</i></b>",data.from,data.msg)
+		    } else if (data.typ=='name') {
+			LOG.fmt(">> {0} changed thier name to {1}",data.from.substr(1),data.msg.substr(1))
 		    } else {
 			LOG.fmt("<b>Unknown Data Type: {0}</b><i>{1}</i>",
 				data.typ, str(data))
