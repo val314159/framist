@@ -13,5 +13,10 @@ class FilesystemMixin:
         for x in data: f.write(x)
         f.close()
         pass
+    def h_fs_mkdir (_,path): os.mkdir(path)
+    def h_fs_rmdir (_,path): os.rmdir(path)
+    def h_fs_touch (_,path): open(path,'w').close()
+    def h_fs_unlink(_,path): os.unlink(path)
+    pass
 class FsApp(FilesystemMixin):
     def __init__(_,ws):_.ws=ws

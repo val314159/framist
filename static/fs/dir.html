@@ -16,6 +16,10 @@ function $I(e,y){e.innerHTML=y;return e}
 function LOG(x){document.body.appendChild($I(document.createElement("li"),x))}
 function APPEND(e,x){e.appendChild($I(document.createElement("li"),x))}
 var ws = new WebSocket("ws://localhost:8383/ws/fs");
+var getId = function(){
+  var _id=1000;
+  return function(){return _id++;}
+}();
 ws.onopen=function(e){
   LOG("OPN:"+e);
   loadx();
@@ -36,6 +40,29 @@ function go_to(x){
     $E("#path").value = x;
     loadx();
 }
+function mkdir(){
+LOG("MKDIR");
+  var dirname = prompt("Enter directory name to create:","");
+LOG("MKDIR:"+str(dirname));
+  var path=$V("#path");
+  fs_mkdir(path+'/'+dirname);
+  setTimeout(function(){loadx()},50);
+}
+function touch(){
+LOG("TOUCH");
+  var dirname = prompt("Enter filename to create:","");
+LOG("TOUCH:"+str(dirname));
+  var path=$V("#path");
+  fs_touch(path+'/'+dirname);
+  setTimeout(function(){loadx()},50);
+}
+function rmdir(){
+  LOG("RMDIR");
+  var dirname = prompt("Enter name to remove:","");
+  var path=$V("#path");
+  fs_rmdir(path+'/'+dirname);
+  setTimeout(function(){loadx()},50);
+}
 ws.onmessage=function(x){
   LOG("MSG:"+x.data);
   m=JSON.parse(x.data);
@@ -49,12 +76,17 @@ ws.onmessage=function(x){
     elt.contentEditable=true;
   }else{
     elt.innerHTML = "";
+    var s0 = '<a onclick="touch()">touch</a>';
+    var s1 = '<a onclick="mkdir()">mkdir</a>';
+    var s2 = '<a onclick="rmdir()">rmdir</a>';
+    APPEND(elt,s0);
+    APPEND(elt,s1);
+    APPEND(elt,s2);
     for (var n=0;n<text.length;n++) {
       var v=text[n][0];
       var v2=v;
       if (text[n][1])
 	  v2 += '/';
-      //LOG("<a href='/f?path="+v+"'>"+v+"</a>");
       var s = "<a xhref='/f?path="+v+"' onclick=go_to2('"+v+"') >"+v2+"</a>";
       APPEND(elt,s);
     }
@@ -68,6 +100,14 @@ function fs_get(path,eltName){
   send(str({"method":"fs_get","params":[path,eltName]}))}
 function fs_put(path,data){
   send(str({"method":"fs_put","params":[path,data]}))}
+function fs_mkdir(path){
+  send(str({"method":"fs_mkdir","params":[path]}))}
+function fs_rmdir(path){
+  send(str({"method":"fs_rmdir","params":[path]}))}
+function fs_touch(path){
+  send(str({"method":"fs_touch","params":[path]}))}
+function fs_unlink(path){
+  send(str({"method":"fs_unlink","params":[path]}))}
 function savex(){
   var text = $H("#edit");
   text = text.replace(/\<\/div\>/g,'');
@@ -75,6 +115,6 @@ function savex(){
   text = text.replace(/\<br\>/g,'\n');
   text = text.replace(/&nbsp;/g,' ');
   fs_put($V("#path"),[text]); }
-function loadx(){ fs_get($V("#path"),"#edit"); }
+function loadx(){ fs_get($V("#path"),"#edit"); }}
 function listx(){ go_to('.'); }
 //</script>
