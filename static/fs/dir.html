@@ -1,5 +1,5 @@
 <div>
-  Path:<input id="path" value="hello.txt">
+  Path:<input id="path" value=".">
   <div>
     <button onclick="go_to('.')">Root</button>
     <button onclick="savex()">Save</button>
@@ -115,6 +115,6 @@ function savex(){
   text = text.replace(/\<br\>/g,'\n');
   text = text.replace(/&nbsp;/g,' ');
   fs_put($V("#path"),[text]); }
-function loadx(){ fs_get($V("#path"),"#edit"); }}
+function loadx(){ fs_get($V("#path"),"#edit"); }
 function listx(){ go_to('.'); }
 //</script>

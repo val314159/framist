@@ -74,6 +74,14 @@ run_all() {
   run_fssvr &
   pysleep 0.1
   echo '>> Started FsSvr...'
+  echo '>> Starting StaticSvr...'
+  (cd fs/static ; python -mSimpleHTTPServer 4040)&
+  pysleep 0.1
+  echo '>> Started StaticSvr...'
+  echo '>> Starting WebsockSvr...'
+  (cd fs ; PYTHONPATH=.:.. python -mwebsock 4444)&
+  pysleep 0.1
+  echo '>> Started WebsockSvr...'
   echo '>> Started ALL.'
   wait
   echo '>> Loop complete.  Kill kids...' $? QQQ
