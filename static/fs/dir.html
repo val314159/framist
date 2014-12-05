@@ -5,6 +5,7 @@
     <button onclick="savex()">Save</button>
     <button onclick="loadx()">Load</button>
     <button onclick="rebootx()">Reboot</button>
+    <button onclick="system()">System</button>
   </div>
   <div id="edit" style="border:1px solid blue; white-space: pre">	EDIT</div>
 </div>
@@ -45,6 +46,13 @@ function go_to(x){
 function updir(){
   go_to2('..');
 }
+function system(){
+	LOG("SYSTEM");
+	var cmd = prompt("Enter directory name to create:","");
+	LOG("SYSTEM:"+str(cmd));
+        var path=$V("#path");
+	fs_system(cmd,"#edit",path);
+}
 function mkdir(){
 LOG("MKDIR");
   var dirname = prompt("Enter directory name to create:","");
@@ -74,7 +82,11 @@ ws.onmessage=function(x){
   //LOG(m.result[1]);
   var text=m.result[1];
   var elt = $E(m.result[2]);
-  if(typeof(text)=="string"){
+  if(m.method=="fs_system"){
+    LOG("ITS A SYSTEM THANG" + str(m.result));
+   elt.innerHTML = text[0] + '<hr>' + text[1];
+  }else if(m.method=="fs_getx") {
+  }else if(typeof(text)=="string"){
     text = text.replace(/  /g,' &nbsp;');
     text = text.replace(/\n/g,'<br>');
     elt.innerHTML = text;
@@ -115,6 +127,8 @@ function fs_put(path,data){
   send(str({"method":"fs_put","params":[path,data]}))}
 function fs_mkdir(path){
   send(str({"method":"fs_mkdir","params":[path]}))}
+function fs_system(path,eltName,cwd){
+  send(str({"method":"fs_system","params":[path,eltName,cwd]}))}
 function fs_rmdir(path){
   send(str({"method":"fs_rmdir","params":[path]}))}
 function fs_touch(path){
@@ -122,24 +136,18 @@ function fs_touch(path){
 function fs_unlink(path){
   send(str({"method":"fs_unlink","params":[path]}))}
 function savex(){
-  var text = $H("#edit");
-  text = text.replace(/\<\/div\>/g,'');
-  text = text.replace(/\<div\>/g,'\n');
-  text = text.replace(/\<br\>/g,'\n');
-  text = text.replace(/&nbsp;/g,' ');
-  fs_put($V("#path"),[text]); }
+	var text = $H("#edit");
+	text = text.replace(/\<\/div\>/g,'');
+	text = text.replace(/\<div\>/g,'\n');
+	text = text.replace(/\<br\>/g,'\n');
+	text = text.replace(/&nbsp;/g,' ');
+	fs_put($V("#path"),[text]); }
 function loadx(){ fs_get($V("#path"),"#edit"); }
 function rebootx(){
-    var cfg = {
-	url: 'http://localhost:8282/stop'
-    };
-  $.ajax(cfg).then(function(){
-	  LOG("YES");
-	  ;
-  },function(){
-	  LOG("NO");
-	  ;
-  });
-  LOG("sent");
- }
+	var cfg = {url: 'http://localhost:8282/stop'};
+	$.ajax(cfg).then(function(){
+		LOG("YES");
+	},function(){
+		LOG("NO");
+	})}
 //</script>
