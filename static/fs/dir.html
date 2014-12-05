@@ -5,9 +5,12 @@
     <button onclick="savex()">Save</button>
     <button onclick="loadx()">Load</button>
   </div>
-  <div id="edit" style="border:1px solid blue">EDIT</div>
+  <div id="edit" style="border:1px solid blue; white-space: pre">	EDIT</div>
 </div>
 <script>
+
+
+
 function str(x){return JSON.stringify(x)}
 function $E(x){return document.getElementById(x.substr(1))}
 function $H(x){return $E(x).innerHTML} 
@@ -74,6 +77,12 @@ ws.onmessage=function(x){
     text = text.replace(/\n/g,'<br>');
     elt.innerHTML = text;
     elt.contentEditable=true;
+    elt.onkeydown=function(e){
+        if(e.keyCode==9){
+           e.preventDefault();
+           document.execCommand("InsertHTML",false,"&#09;");
+        }
+    }
   }else{
     elt.innerHTML = "";
     var s0 = '<a onclick="touch()">touch</a>';
