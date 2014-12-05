@@ -42,6 +42,9 @@ function go_to(x){
     $E("#path").value = x;
     loadx();
 }
+function updir(){
+  go_to2('..');
+}
 function mkdir(){
 LOG("MKDIR");
   var dirname = prompt("Enter directory name to create:","");
@@ -87,9 +90,11 @@ ws.onmessage=function(x){
     var s0 = '<a onclick="touch()">touch</a>';
     var s1 = '<a onclick="mkdir()">mkdir</a>';
     var s2 = '<a onclick="rmdir()">rmdir</a>';
+    var s3 = '<a onclick="updir()">..</a>';
     APPEND(elt,s0);
     APPEND(elt,s1);
     APPEND(elt,s2);
+	APPEND(elt,s3);
     for (var n=0;n<text.length;n++) {
       var v=text[n][0];
       var v2=v;
