@@ -38,6 +38,11 @@ def r_websock():
         elif msg['method']=='fs_unlink':
             path = 'fs/'+msg['params'][0]
             app.h_fs_unlink(path)
+        elif msg['method']=='fs_system':
+            path = msg['params'][0]
+            eltName = msg['params'][1]
+            cwd = msg['params'][2]
+            app.h_fs_system(path,eltName,cwd)
         else:
             print "UNKNOWN"
             pass
