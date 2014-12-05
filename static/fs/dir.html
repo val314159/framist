@@ -4,13 +4,12 @@
     <button onclick="go_to('.')">Root</button>
     <button onclick="savex()">Save</button>
     <button onclick="loadx()">Load</button>
+    <button onclick="rebootx()">Reboot</button>
   </div>
   <div id="edit" style="border:1px solid blue; white-space: pre">	EDIT</div>
 </div>
+<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 <script>
-
-
-
 function str(x){return JSON.stringify(x)}
 function $E(x){return document.getElementById(x.substr(1))}
 function $H(x){return $E(x).innerHTML} 
@@ -125,5 +124,17 @@ function savex(){
   text = text.replace(/&nbsp;/g,' ');
   fs_put($V("#path"),[text]); }
 function loadx(){ fs_get($V("#path"),"#edit"); }
-function listx(){ go_to('.'); }
+function rebootx(){
+    var cfg = {
+	url: 'http://localhost:8282/stop'
+    };
+  $.ajax(cfg).then(function(){
+	  LOG("YES");
+	  ;
+  },function(){
+	  LOG("NO");
+	  ;
+  });
+  LOG("sent");
+ }
 //</script>

@@ -62,6 +62,12 @@ pysleep () {
   python -c"import sys,time;time.sleep(float($1))"
 }
 
+kill_all() {
+  killall -9 python
+  killall -9 sh env.sh
+  pysleep 0.1
+}
+
 run_all() {
   trap ctrl_c SIGINT
   echo '>> Starting ALL...'
