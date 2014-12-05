@@ -31,6 +31,7 @@ loop_procsvr() {
 run_procsvr() {
   killall -9 python
   pysleep 0.2
+  trap ctrl_c SIGINT
   python -m procsvr
 }
 
@@ -53,6 +54,8 @@ run_dssvr() {
 ctrl_c() {
   echo
   echo '>> *CTRL_C* Intercepted'
+  killall -9 python
+  pysleep 0.3
 }
 
 pysleep () {
@@ -91,8 +94,7 @@ run_all() {
   echo '>> killall python'
   killall -9 python 2>/dev/null
   pysleep 0.05 # just to let the output sync up
-  echo '>> Done.'
-  trap SIGINT
+  #echo '>> Done.'
 }
 
 clt_auth_login1() {
