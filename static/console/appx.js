@@ -14,13 +14,13 @@ function App(){
 	} else if (startsWith(cmd,'.n')) {
 	    arr.unshift(cmd.substr(1))
 	    var name = arr.join(' ')
-	    self.channels[0] = name
-	    self.pub(self.channels[1],name,'name')
+	    self.channels[1] = name
+	    self.pub(self.channels[2],name,'name')
 	} else if (startsWith(cmd,'.c')) {
 	    arr.unshift(cmd.substr(1))
 	    var newName = arr.join(' ')
-	    var oldName = self.channels[1]
-	    self.channels[1] = newName
+	    var oldName = self.channels[2]
+	    self.channels[2] = newName
 	    self.sub([newName][oldName])
 	} else if (startsWith(cmd,'.y')) {
 	    arr.unshift(cmd.substr(2));
@@ -30,11 +30,14 @@ function App(){
 	    var who = arr.shift()
 	    var msg = arr.join(' ')
 	    self.pub(who,msg,'whisper')
+	} else if (startsWith(cmd,'.w')) {
+	    self.who()
 	} else if (startsWith(cmd,'\"')) {
-	    var who=self.channels[0];
+	    var who=self.channels[1];
+	    var whom=self.channels[2];
 	    arr.unshift(cmd.substr(1));
 	    var msg = arr.join(' ')
-	    self.pub(who,msg,'talk')
+	    self.pub(whom,msg,'talk')
 	} else if (cmd=='sub') {
 	    LOG.fmt("[[{0}||{1}]]", cmd, str(arr))
 	    var add=[], dlt=[];
@@ -64,18 +67,18 @@ function App(){
     /////////////////////////////////////////////////////////
     self.onMsg=function(msg){
 	if (msg.method=='pub') {
-	    //LOG("101");
 	    if (msg.params) {
-		//LOG("102");
 		var data = msg.params
 		if (data) {
-		    //LOG("103");
 		    if (data.typ=='yell') {
 			LOG.fmt("<b>(*{0}*) {1}</b>", data.from, data.msg)
 		    } else if (data.typ=='talk') {
 			LOG.fmt("({0}) {1}", data.from, data.msg)
 		    } else if (data.typ=='whisper') {
 			LOG.fmt("<b><i>(p,{0}) {1}</i></b>",data.from,data.msg)
+		    } else if (data.typ=='name') {
+			LOG.fmt(">> ({0}) changed thier name to {1}",
+				data.from[0].substr(1),data.msg.substr(1))
 		    } else {
 			LOG.fmt("<b>Unknown Data Type: {0}</b><i>{1}</i>",
 				data.typ, str(data))
@@ -101,6 +104,9 @@ function App(){
     self.get=function(key){
 	ws.send(str({method:'get',params:{key:key}}));
     }
+    self.who=function(){
+	ws.send(str({method:'who',params:{}}));
+    }
     self.sub=function(add,dlt){
 	ws.send(str({method:'sub',params:{add:add,dlt:dlt}}));
     }
@@ -108,7 +114,7 @@ function App(){
 	ws.send(str({method:'pub',
 		     params:{channel:channel,
 			     data:{msg:msg,
-				   from:[self.channels[0]],typ:typ}}}));
+				   from:[self.channels[1]],typ:typ}}}));
     }
     self.pub2=function(channel,msg,typ){
 	ws.send(str({method:'pub',
@@ -117,11 +123,11 @@ function App(){
 				   from:self.channels,typ:typ}}}));
     }
     self.$name=function(name){
-	self.channels[0] = 'n'+name;
+	self.channels[1] = 'n'+name;
     }
     self.onopen=function(e){
 	LOG(">> Socket opened..."+str(e))
-	self.channels=channels=['n?','c0','.c','a','s','y']
+	self.channels=channels=['0x','n?','c0','.c','a','s','y']
 	self.get ('intro')
 	self.sub (channels)
 	//self.pub2('a',  'Hi everyone','announce')
@@ -135,9 +141,9 @@ function App(){
     var ws = new WebSocket("ws://localhost:8080/websock?accessToken=vat")
     ws.onopen=function(e){self.onopen(e)}
     ws.onmessage=function(e){
-	//LOG("ON MESSAGE:"+str(e));
+	LOG("ON MESSAGE:"+str(e));
 	var data=JSON.parse(e.data);
-	//LOG("ON MESSAGE DATA:"+str(data));
+	LOG("ON MESSAGE DATA:"+str(data));
 	if (data.result) {
 	    LOG("ON MESSAGE RESULT:"+str(data));
 	} else if (data.result===null) {

@@ -1,8 +1,10 @@
 import gevent.monkey;gevent.monkey.patch_all()
-from bottle import route, run, template
+from bottle import route, run, template, default_app, response
 import time,sys
 from os import system
 import gevent
+
+from cors import enable_cors; enable_cors()
 
 @route('/')
 def index():
@@ -61,13 +63,14 @@ def bounce():
 @route('/restart')
 def restart():
     print "QQQQ RESTART"
-    ret = system('sh env.sh run_both&')
+    ret = system('sh env.sh run_all&')
     print "START RET", ret
     return '{}'
 
 def xstop():
     print "BYE!"
-    system('killall -9 python')
+    ret = system('sh env.sh kill_all&')
+    #system('killall -9 python')
 
 @route('/stop')
 def stop():

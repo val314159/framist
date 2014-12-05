@@ -24,8 +24,20 @@ def r_websock():
             path = 'fs/'+msg['params'][0]
             app.h_fs_get(path,msg['params'][1])
         elif msg['method']=='fs_put':
-            fname = 'fs/'+msg['params'][0]
+            path = 'fs/'+msg['params'][0]
             app.h_fs_put(path,msg['params'][1])
+        elif msg['method']=='fs_mkdir':
+            path = 'fs/'+msg['params'][0]
+            app.h_fs_mkdir(path)
+        elif msg['method']=='fs_rmdir':
+            path = 'fs/'+msg['params'][0]
+            app.h_fs_rmdir(path)
+        elif msg['method']=='fs_touch':
+            path = 'fs/'+msg['params'][0]
+            app.h_fs_touch(path)
+        elif msg['method']=='fs_unlink':
+            path = 'fs/'+msg['params'][0]
+            app.h_fs_unlink(path)
         else:
             print "UNKNOWN"
             pass

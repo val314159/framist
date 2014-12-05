@@ -31,6 +31,7 @@ loop_procsvr() {
 run_procsvr() {
   killall -9 python
   pysleep 0.2
+  trap ctrl_c SIGINT
   python -m procsvr
 }
 
@@ -53,10 +54,18 @@ run_dssvr() {
 ctrl_c() {
   echo
   echo '>> *CTRL_C* Intercepted'
+  killall -9 python
+  pysleep 0.3
 }
 
 pysleep () {
   python -c"import sys,time;time.sleep(float($1))"
+}
+
+kill_all() {
+  killall -9 python
+  killall -9 sh env.sh
+  pysleep 0.1
 }
 
 run_all() {
@@ -74,6 +83,14 @@ run_all() {
   run_fssvr &
   pysleep 0.1
   echo '>> Started FsSvr...'
+  echo '>> Starting StaticSvr...'
+  (cd fs/static ; python -mSimpleHTTPServer 4040)&
+  pysleep 0.1
+  echo '>> Started StaticSvr...'
+  echo '>> Starting WebsockSvr...'
+  (cd fs ; PYTHONPATH=.:.. python -mwebsock 4444)&
+  pysleep 0.1
+  echo '>> Started WebsockSvr...'
   echo '>> Started ALL.'
   wait
   echo '>> Loop complete.  Kill kids...' $? QQQ
@@ -83,8 +100,7 @@ run_all() {
   echo '>> killall python'
   killall -9 python 2>/dev/null
   pysleep 0.05 # just to let the output sync up
-  echo '>> Done.'
-  trap SIGINT
+  #echo '>> Done.'
 }
 
 clt_auth_login1() {

@@ -14,9 +14,11 @@ class PSX:
         _.UNS(name,ws)
         _.Sock2Names[hex(id(ws))].remove(name)
     def SUB(_,name,ws):
+        if name == '0x': name=hex(id(ws))
         _.Sock2Names.setdefault(hex(id(ws)),[]).append(name)
         _.Name2Socks.setdefault(name,       []).append(ws)
     def PUB(_,name,data):
+        if name not in _.Name2Socks: return
         for ws in _.Name2Socks[name]:
             print "DATA", (json.dumps(data))
             try:
@@ -41,3 +43,15 @@ class PubSubMixin:
         for name in dlt: psx.UNS(name,_.ws)
         return dict( method='sub', result=None )
 
+    def h_who(_):
+        print "WHO?", psx
+        wholist = []
+        print "n2s", psx.Name2Socks
+        print "s2n", psx.Sock2Names
+        for k,v in psx.Sock2Names.iteritems():
+            print [k]+v
+            wholist.append(v)
+            #print '--', psx.Sock2Names, '--'
+            #print psx.Sock2Names[h]
+            pass
+        return dict( method='who', result=wholist )
