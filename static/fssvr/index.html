@@ -198,14 +198,14 @@ ws.onmessage=function(x){
     }
   }else{
     elt.innerHTML = "";
-    var s0 = '<a onclick="touch()">touch</a>';
-    var s1 = '<a onclick="mkdir()">mkdir</a>';
-    var s2 = '<a onclick="rmdir()">rmdir</a>';
+//    var s0 = '<a onclick="touch()">touch</a>';
+//    var s1 = '<a onclick="mkdir()">mkdir</a>';
+//    var s2 = '<a onclick="rmdir()">rmdir</a>';
+//    APPEND(elt,s0);
+//    APPEND(elt,s1);
+//    APPEND(elt,s2);
     var s3 = '<a onclick="updir()">..</a>';
-    APPEND(elt,s0);
-    APPEND(elt,s1);
-    APPEND(elt,s2);
-	APPEND(elt,s3);
+APPEND(elt,s3);
     for (var n=0;n<text.length;n++) {
       var v=text[n][0];
       var v2=v;
