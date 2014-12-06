@@ -21,28 +21,19 @@ def r_websock():
             break
         msg=json.loads(message)
         if msg['method']=='fs_get':
-            path = 'fs/'+msg['params'][0]
-            app.h_fs_get(path,msg['params'][1])
+            app.h_fs_get(msg['params'][0],msg['params'][1])
         elif msg['method']=='fs_put':
-            path = 'fs/'+msg['params'][0]
-            app.h_fs_put(path,msg['params'][1])
+            app.h_fs_put(msg['params'][0],msg['params'][1])
         elif msg['method']=='fs_mkdir':
-            path = 'fs/'+msg['params'][0]
-            app.h_fs_mkdir(path)
+            app.h_fs_mkdir(msg['params'][0])
         elif msg['method']=='fs_rmdir':
-            path = 'fs/'+msg['params'][0]
-            app.h_fs_rmdir(path)
+            app.h_fs_rmdir(msg['params'][0])
         elif msg['method']=='fs_touch':
-            path = 'fs/'+msg['params'][0]
-            app.h_fs_touch(path)
+            app.h_fs_touch(msg['params'][0])
         elif msg['method']=='fs_unlink':
-            path = 'fs/'+msg['params'][0]
-            app.h_fs_unlink(path)
+            app.h_fs_unlink(msg['params'][0])
         elif msg['method']=='fs_system':
-            path = msg['params'][0]
-            eltName = msg['params'][1]
-            cwd = msg['params'][2]
-            app.h_fs_system(path,eltName,cwd)
+            app.h_fs_system(msg['params'][0],msg['params'][1],msg['params'][2])
         else:
             print "UNKNOWN"
             pass
