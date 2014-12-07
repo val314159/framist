@@ -138,7 +138,7 @@ function App(){
 	*/
 	self.pub ('y',  'HI',         'yell')
     }
-    var ws = new WebSocket("ws://localhost:8080/websock?accessToken=vat")
+    var ws = new WebSocket("ws://"+location.host+"/websock?accessToken=vat")
     ws.onopen=function(e){self.onopen(e)}
     ws.onmessage=function(e){
 	LOG("ON MESSAGE:"+str(e));
