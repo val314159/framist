@@ -9,6 +9,9 @@ $(document).keydown(function(evt){
 	} else if (inside && evt.keyCode==49 && evt.shiftKey) {
 		evt.preventDefault();
 		system();
+	} else if (evt.keyCode==65 && evt.ctrlKey) {
+		LOG("EAT IT MAYBE");
+
 	}
 });
 function LOG(x){console.log(x)}
