@@ -1,34 +1,29 @@
 //<script>
+var inside=true;
 $(document).keydown(function(evt){
-	if (evt.keyCode==83 && (evt.ctrlKey)){
-	evt.preventDefault();
-	alert('worked1');
-savex();
-alert("worked2");
-/*
-    } else if (evt.keyCode==9) {
-        evt.preventDefault();
-                  document.execCommand("InsertHTML",false,"&#09;");
-*/
-  }
+	LOG("KK" + evt.keyCode);
+	if (evt.keyCode==83 && evt.ctrlKey){
+		evt.preventDefault();
+		savex();
+		alert("save kicked off");
+	} else if (inside && evt.keyCode==49 && evt.shiftKey) {
+		evt.preventDefault();
+		system();
+	}
 });
 function LOG(x){console.log(x)}
-var elt = $("#edit");
- elt.keydown(function(e){
-        if(e.keyCode==9){
-LOG("O NOES " + e.ctrlKey + e.altKey + e.metaKey);
+$("#edit").focus(function(){inside=true })
+$("#edit").blur( function(){inside=false})
+$("#edit").keydown(function(e){
+	if(e.keyCode==9){
+	LOG("O NOES " + e.ctrlKey + e.altKey + e.metaKey);
 		if (e.altKey  || e.metaKey) {
-	           e.preventDefault();
-        	   document.execCommand("InsertHTML",false,"&#09;");
-	        }
+			e.preventDefault();
+			document.execCommand("InsertHTML",false,"&#09;");
+		}
 	}
 })
-
-
-
-
-
-
+//////////////////////////////////////////////////////////////////
 function str(x){return JSON.stringify(x)}
 function $E(x){return document.getElementById(x.substr(1))}
 function $H(x){return $E(x).innerHTML} 
@@ -66,15 +61,15 @@ function updir(){
 }
 function system(){
 	LOG("SYSTEM");
-	var cmd = prompt("Enter directory name to create:","");
+	var cmd = prompt("Enter system command:","");
 	LOG("SYSTEM:"+str(cmd));
         var path=$V("#path");
 	fs_system(cmd,"#edit",path);
 }
 function mkdir(){
-LOG("MKDIR");
+  LOG("MKDIR");
   var dirname = prompt("Enter directory name to create:","");
-LOG("MKDIR:"+str(dirname));
+  LOG("MKDIR:"+str(dirname));
   var path=$V("#path");
   fs_mkdir(path+'/'+dirname);
   setTimeout(function(){loadx()},50);
@@ -117,14 +112,8 @@ ws.onmessage=function(x){
     }
   }else{
     elt.innerHTML = "";
-//    var s0 = '<a onclick="touch()">touch</a>';
-//    var s1 = '<a onclick="mkdir()">mkdir</a>';
-//    var s2 = '<a onclick="rmdir()">rmdir</a>';
-//    APPEND(elt,s0);
-//    APPEND(elt,s1);
-//    APPEND(elt,s2);
     var s3 = '<a onclick="updir()">..</a>';
-APPEND(elt,s3);
+    APPEND(elt,s3);
     for (var n=0;n<text.length;n++) {
       var v=text[n][0];
       var v2=v;
