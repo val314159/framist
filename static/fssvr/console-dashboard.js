@@ -122,14 +122,12 @@ function reconnectx(){
 			text = text.replace(/\n/g,'<br>');
 			elt.innerHTML = text;
 			elt.contentEditable=true;
-/*
 			elt.onkeydown=function(e){
 				if(e.keyCode==9){
 					e.preventDefault();
 					document.execCommand("InsertHTML",false,"&#09;");
 				}
 			}
-*/
 		} else {
 			elt.innerHTML = "";
 			var s3 = '<a onclick="updir()">..</a>';
@@ -162,4 +160,6 @@ function rebootx(){
 	},function(){
 		LOG("NO");
 	})}
+
+reconnectx();
 //</script>
