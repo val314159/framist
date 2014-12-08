@@ -10,6 +10,7 @@ class BaseApp:
         if not message:
             return True
         msg = json.loads(message)
+	print "====MSG", repr(msg)
         params = msg['params']
         fn = getattr(_,'h_'+msg['method'])
         if   type(params)==type([]): ret = fn( *params)

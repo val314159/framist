@@ -39,6 +39,7 @@ class PubSubMixin:
         return dict( method='pub', result=None )
     def h_close(_):  psx.CLS(_.ws)
     def h_sub(_,add=[],dlt=[]):
+	print "QQQQQ", repr((add,dlt))
         for name in add: psx.SUB(name,_.ws)
         for name in dlt: psx.UNS(name,_.ws)
         return dict( method='sub', result=None )

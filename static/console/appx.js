@@ -5,7 +5,6 @@ function App(){
     self.execCmd=function(cmdstr){
 	var arr = cmdstr.split(' ')
 	var cmd = arr.shift()
-	var d
 	if (cmd=='pub') {
 	    var channel = arr.shift()
 	    var newobj = JSON.parse(arr.join(' '))
@@ -21,7 +20,7 @@ function App(){
 	    var newName = arr.join(' ')
 	    var oldName = self.channels[2]
 	    self.channels[2] = newName
-	    self.sub([newName][oldName])
+	    self.sub([newName],[oldName])
 	} else if (startsWith(cmd,'.y')) {
 	    arr.unshift(cmd.substr(2));
 	    var msg = arr.join(' ')
@@ -61,7 +60,7 @@ function App(){
 	    LOG.fmt("[[{0}||{1}||{2}]]", cmd, key0, keyn)
 	    ws.send(str({method:cmd,params:{key0:key0,keyn:keyn},id:self.id}))
 	} else {
-	    LOG("UNKNOWN CMD")
+	    LOG(">> Unknown command: "+cmd)
 	}
     }
     /////////////////////////////////////////////////////////
