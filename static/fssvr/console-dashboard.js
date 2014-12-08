@@ -100,7 +100,7 @@ function fs_touch(path){               send(str({"method":"fs_touch","params":[p
 function fs_unlink(path){              send(str({"method":"fs_unlink","params":[path]}))}
 
 function reconnectx(){
-	ws = new WebSocket("ws://localhost:8383/ws/fs");
+	ws = new WebSocket("ws://"+location.hostname+":8383/ws/fs");
 	ws.onopen=function(e){
 		LOG("OPN:"+e);
 		loadx();

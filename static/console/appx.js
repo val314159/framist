@@ -139,6 +139,8 @@ function App(){
     }
     var ws = new WebSocket("ws://"+location.host+"/websock?accessToken=vat")
     ws.onopen=function(e){self.onopen(e)}
+    ws.onclose=function(e){LOG("XC"+e)}
+    ws.onerror=function(e){LOG("XE"+e)}
     ws.onmessage=function(e){
 	LOG("ON MESSAGE:"+str(e));
 	var data=JSON.parse(e.data);
@@ -155,6 +157,4 @@ function App(){
 	} else
 	    LOG("WHAAAAA:"+str(data));
     }
-    ws.onclose=function(e){LOG("XC"+e)}
-    ws.onerror=function(e){LOG("XE"+e)}
 }
